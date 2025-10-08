@@ -2,7 +2,7 @@
 
 # --- КОНСТАНТЫ И НАСТРОЙКИ ---
 TOTAL_BOOKS=122
-TOTAL_WEEKS=122
+TOTAL_WEEKS=244
 README_FILE="src/README.md"
 PERC_DIR="img/perc"
 PERC_SRC_DIR="src/img/perc"
