@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- КОНСТАНТЫ И НАСТРОЙКИ ---
-TOTAL_BOOKS=122
+TOTAL_BOOKS=118
 TOTAL_WEEKS=244
 README_FILE="src/README.md"
 PERC_DIR="img/perc"

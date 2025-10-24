@@ -5,10 +5,12 @@ src = "src"
 title = "Computer Science Bookshelf"
 
 
+
+
 [output.html]
 smart-punctuation = false
 no-section-label = false
- 
+additional-js = ["js/mermaid.min.js", "js/mermaid-init.js"]
 
 [output.html.print]
 enable = false    
@@ -40,3 +42,9 @@ no-css = false
 include-src = false
 block-delimiter = { left = "$$", right = "$$" }
 inline-delimiter = { left = "$", right = "$" }
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
+[output.html.highlight]
+exclude = ["mermaid"]
