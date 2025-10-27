@@ -5,12 +5,10 @@ src = "src"
 title = "Computer Science Bookshelf"
 
 
-
-
 [output.html]
 smart-punctuation = false
 no-section-label = false
-additional-js = ["js/mermaid.min.js", "js/mermaid-init.js"]
+additional-js = ["js/mermaid.min.js", "js/mermaid-init.js", "js/general.js"]
 
 [output.html.print]
 enable = false    
