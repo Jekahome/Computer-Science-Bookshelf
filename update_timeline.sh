@@ -7,7 +7,7 @@ README_FILE="src/README.md"
 PERC_DIR="img/perc"
 PERC_SRC_DIR="src/img/perc"
 
-# Установите дату начала (Год-Месяц-День)
+# Дата начала (Год-Месяц-День)
 START_DATE="2025-09-30"
 
 # --- ФУНКЦИИ ---
