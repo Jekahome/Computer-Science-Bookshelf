@@ -1,1 +1,1 @@
-# Robert Martin - Clean Architecture - A Craftsman's Guide to Software Structure and Design - 2018 ENG.pdf
+# Гради Буч - Объектно-ориентированный анализ и проектирование с примерами приложений на С++

@@ -1,1 +1,1 @@
-# Martin. The Clean Coder - A Code of Conduct for Professional Programmers. 2011.pdf
+# Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008
