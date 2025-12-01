@@ -6,7 +6,7 @@
 
   <rect rx="4" x="0" width="90" height="20" fill="#428bca"/>
   <rect rx="4" x="0" width="90" height="20" fill="#555"/>
-  <rect rx="4" x="0" width="10.0" height="20" fill="#db7645"/>
+  <rect rx="4" x="0" width="11.0" height="20" fill="#db7645"/>
   
   <rect rx="4" width="90" height="20" fill="url(#a)"/>
 
@@ -14,10 +14,10 @@
 
   <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
     <text x="45.0" y="15" fill="#010101" fill-opacity=".3">
-      10%
+      11%
     </text>
     <text x="45.0" y="14">
-      10%
+      11%
     </text>
   </g>
 </svg>
