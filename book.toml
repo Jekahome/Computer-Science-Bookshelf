@@ -23,6 +23,7 @@ build-dir = "book"
 create-missing = true
 
 [preprocessor.katex]
+command = "bin/mdbook-katex"
 enabled = true
 trust = true
 after = ["links"]
@@ -42,7 +43,10 @@ block-delimiter = { left = "$$", right = "$$" }
 inline-delimiter = { left = "$", right = "$" }
 
 [preprocessor.mermaid]
-command = "mdbook-mermaid"
+command = "bin/mdbook-mermaid"
 
 [output.html.highlight]
 exclude = ["mermaid"]
+
+[preprocessor.callouts]
+command = "bin/mdbook-callouts"
