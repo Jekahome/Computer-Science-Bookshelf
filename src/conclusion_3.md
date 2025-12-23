@@ -105,7 +105,7 @@
 | 0  | 1 | 1 |
 | 1  | 1 | 0 |
 
-[Из AND можно получить NAND и наоборот](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgwEIUUaQUEhENkJ5+gqP0kIOlfr3AoxIsWCWSU1GQA9+hPoSTYwBsXwUBBAHIARNrsya0RmlTRn+fK9bsBZWmBCamY0qupu0DL+KuJCNKGxGpFsADLghFSsmlngapIQAGYAhgA2AM4M1JCp6Znxudn1mSDF5ZVI1QDutQ3gxNl5XfJ8OWD9vUNjA9njvFRDPOaufU7Lkxng9WAYQU1s3du7Izv8GJoLCo7gJ1cXI1snJnzVAJLCoopmgZ+SMEgyQA):
+[Из AND можно получить NAND и наоборот](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgwEIUUaQUEhENkJ5+gqP0kIOlfr3AoxIsWCWSU1GQA9+hPoSTYwBsXwUBBAHIARNrsya0SGmDFoz-Ples2AOgDOfgAOgVYA8gAqbACywqKKZjSq6lQo0DJxrkICQjTJ4kJpGWwAMuCEVKya1eBqkhAAZgCGADYBDNSQZRVV+XU1-VUgLe2dSN0A7r0D4MQ19VPyfLVg87NLaws167xUSzzmNFW7x1Bs02CV4P1gGEImfJv3NysvjufTh-wYNe+-n2Wr3AL0e5wAkvF3BJsoVJDAkDIgA):
 * `A && B ≡ !(A NAND B)`
 
 
