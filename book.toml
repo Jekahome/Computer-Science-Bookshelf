@@ -9,6 +9,8 @@ title = "Computer Science Bookshelf"
 smart-punctuation = false
 no-section-label = false
 additional-js = ["js/mermaid.min.js", "js/mermaid-init.js", "js/general.js"]
+additional-css = ["css/circuitjs.css"]
+
 
 [output.html.print]
 enable = false    
@@ -23,6 +25,7 @@ build-dir = "book"
 create-missing = true
 
 [preprocessor.katex]
+macros = {}
 command = "bin/mdbook-katex"
 enabled = true
 trust = true
@@ -41,6 +44,8 @@ no-css = false
 include-src = false
 block-delimiter = { left = "$$", right = "$$" }
 inline-delimiter = { left = "$", right = "$" }
+#block-delimiter = { left = "\\[", right = "\\]" }
+#inline-delimiter = { left = "\\(", right = "\\)" }
 
 [preprocessor.mermaid]
 command = "bin/mdbook-mermaid"

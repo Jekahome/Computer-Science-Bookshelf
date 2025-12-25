@@ -1,0 +1,48 @@
+/* 
+---------- 
+circuitjs
+---------- 
+*/
+.sim-wrapper {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  border: 1px solid #aaa;
+}
+
+/* iframe */
+.sim-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* кнопка */
+.sim-fullscreen-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+}
+
+/* Вместо body.sim-fullscreen .sim-wrapper */
+.sim-wrapper.sim-fullscreen {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    background: #fff;
+    z-index: 9999;
+}
+
+.sim-wrapper.sim-fullscreen .sim-iframe {
+    width: 100%;
+    height: 100%;
+}
+
+body.sim-fullscreen nav,
+body.sim-fullscreen header,
+body.sim-fullscreen footer {
+  display: none;
+}
+
+

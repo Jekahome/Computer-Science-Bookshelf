@@ -40,13 +40,27 @@
 
 [Логика и переключатели (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgB3WsQ2uCwlRr9IbAG7dewqrhp8qCvtUUwEbHigEyEmhIPkhNAEwYAzAIYBXADYAXJtYZHwUVzEjsATiFkGwGKRFkODYAZx80Hx1JKM0qCAtrUIY2AA8opGxsPB8MGRoIORQ5QHIQMPAAwwxNFDwczDjXROTy-15saLaqxqpmlK4u6Qr26NF0sBpiHzApnnaUTSK5QEIQTmHu9Zm41sqtwzrwYkaE8ySU8NqcniEecH14kD61y7uqF73RLnej-friqDWBV4eyBhn+YzB9BQxF4xSQ0KmSxAgDQQNJg+FgeE0IpgHJIwA4IGjsNjwDRMghZjQ8YY5IBEECJNHIxRy2EINQQhRpIHp6WJTImPkIUP8tC5gAIQNgAZV+G1Z9WqrhOZ1cKDWXQ6mmwkQ1AIuBwWclBBsVj1OLS4em0i1uOs+MRecpldtBe0th22Fv0rv0tsBt2uMQ+fth-yNB1EQA)
 
+<div class="sim-wrapper" data-circuit-id="1">
+  <button class="sim-fullscreen-btn" data-circuit-id="1">⛶</button>
+  <iframe 
+      id="1"
+      data-circuit-id="1"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/1_logic_and_switches.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
 ## Глава 11. Логические вентили
+
+[Turing Complete](https://turingcomplete.game/) — это игра о компьютерных науках.
 
 Логические вентили можно комбинировать для решения более сложных задач, например для выполнения простых арифметических операций.
 
 ![Логические вентили](img/Логические_вентили.png)
 
 [Логические вентили OR, AND, XOR (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgAPEJwjYimkh4p+CGnlogUNEADkA8gBU2YDBKY1ihChm1NsCFDu3aIqKFFhIw8eJchG09ozERQ2Ac24GjhfN8MQQhoqULYAJW5NbQRdKK0KMBcLEOpQywQ2ACdvSBkEP1yZQmkLG0hPIqDS-Tyg1LCuHjx6bGx1QmwIbBoIGVKADXlwzm5eIxYSMew9MEJtfplh0eaZMB7ptexyRZAAQVkAERUS7jAaGSY8KhYLqIkjABMGADMAQwBXABsAFyYvhiPcAWUKwdhzCZgYhGc6XKEw6FSEDPd7fP4AoFmEFgk4TaRUGbqfG0OZIlGfX7-QHA9KucFqMY1WHcMRwu6mSxY1zWWxwZwUUEOeyQJAVVTqOiQu76QK3Yo06BcqzIXn8yj81wi9zi7goApnaWqWbshVKrXlWxqwUuWBaiqRYRsy6EfVykG0Kii7GZLxMVlnJIs6XXEGVGWQwPh7ghsK+o0ByFxK60tgAd0ZcMjLtmgYq6Y02AjExowQT7nzepzeLw6lYLjYABkxq66829IX3e8vgBnBhpRtRUssSMly4d9Jd3v9ptMFA1suz+f6ZJUSd90VsACyBrhc+4CRYe6oKGgmRybsPteD6XKYeZGivY5XESiHYvo537tSXtBmQdlc-RdHy-T13RgTJ839S8WUjJIJDzGDIT3P1YMRBCUMhRFlxueFy28JwWCwwscKPNN8JI9QfDOUj82Is4sPvXD0MYhjDRos4kzgwCuPQlBSgPXCEgqONEVwwjHH8MJz0E2ZRLuKhb23cSQAEu4hKkU8B30GZwEjNpTDQiw12ne4FJHEMmKMt4e3XdwZxKNYs1KSzV2sqcN1oupW200xczIjRxF04sLL8yDRKcxz619PjIt1Zz5PcX1CSC7xCAkZlY0QlKMPABL0NwGQQ1qGQhP85KDwKlTtHQi4JCK2qqrwnKDwa0qHQQREiuCKgYxSUDaU0nVipAIqYpGqgORgM0eVVVwjHVObhQ3IaGqK5KQ0mxVsXNXlrQFDVbWWhk-U6m4EEDDbTW2mbLUWhbYBtNwKiU4k6OUujj006LUl6PRiUlUNz1egjXrSso4DKpw3uBsIZznCQqKA2hx2BYyNxnWJtERzHkeSCA0aaujEfhkAqPQ-1sbiMmw1+0nZVp5LMoChH6cCxn3Hau43pxj6+rSb1-Ia-SolJSqarZuoNFFnSxWOomCIZpxNrMWBSDV9X1YwFB6G5FVboe-bFs1awVGOimFbZpWrtcDXbdILWdeVC07DuvbjfALToiCfwTt8SSrJs-sIQCebCmGgpj2RV4KXRakuXsdglMqiPdX1FPPsyHViVbOjW2V+w7dth37Bul2DfuoV3fpBG8Fij88+t1XC817WS71suhQrx7zRfbPA1w1t0m-MDNPTXO93aNZ2MnlKZ54sj673Qx0tIrxc65px40y+u7nruIwnTbO7jQdL5LIueucCDKBxP3L+n8MaFJAAmKibKjmSox-Ubc2znpALWepUF0HVdIJ5M6nHGONf+TgQxPGjmiKkmIR6QHYF4ABd9oEKUKFJTBUD0EZRVC+ZejViEoyoMPAaPogha3AHuSBcwUw6mIQkSBLCFQ2mkHgDABQUBgDwMQEUFxKCOx2rNA2TgjaHQ9lwKEEAxBSA6joSQpRZAHGOOmYhw4jBey0XhYWLA4iaK3ufHSuj9HGLHpLHOpjB4vlptBGe0Eh79QFm-Wu+4sbuMmGUZ+P8TJiQSGJUkT8X4L1JEwBIjjSqHxqIErCpUvA6ISDo0smVKoRKxpLVJHMpBMj3EEo8fMfwZFNhIexXEdFcXzjbZuati662dnyV2B03DV1ybuBGVi6GN0gLUuprcGm7StC0nuMi8CyWPNgfgLAuHKJkAoEYTCw7MgwFYk0KsOHRC4fwlB2xcCQFSU7IZi0JEGyrpUVZmYjCXOjCmSIKc3QPNvs4-mv5sj-1lAwj5Ex1K3jQbKBI3CJi9TFKcG5kwgGfMKHA1ElIMQ0m2onb5ZxCjXBwtgjSEEKDIVbA82xGicWGJxX5LOqQqLCyovnbAioxAHK1qoPZcxiDMCSI9UuTTy5uykbLMppZyVg0pT0vp9sBlHLEZ3LlrSTFYx0slRm0rSYCoFTLXuZLAi3zJkUkeVCKXuOFiEFMa8BV6rBga0Mh8yXuI1e4hCH4Z5exnq-KQ-gZ63w-BOPx6NaCRPcV7d139A4eVoHywIFNAgVByGG+au8mmEK8P6BqCaQW4gEDIM1CbAowpjoghFgp2AyJwFIcZUgaCOH4XMkAAwFmlOMKTJw6C6KbU2eMyAuBeDEA6lgJI5BBniokiMk2aCoaBAbTanJPMnA40wCuD0rySk5GAaTOoi72Z-P-kqiQK6x2guuVDZdAq6hZoQfC+OdItzrs6YVUWdQM5kSjbW6mYB1TeK4oEwpyRMjbjfafKe8FMVaVJPeUsBD8aersii7KwHcwBvctqKF1EJACXfRYT9jVoKMXfZpGc4SgNOh8aE7DVYxhXPw2BioAAjMY85APQuwWwSjXzwlpWmbwjcX7wowjyGZZIYCBzjN-SNQDhTQOBvA-xxqeBSS-N8aJsU50RpQaMKQGE0GP3nuUwh5AqQnH-qbDWHCdwWhShkCEsjfGiqtiM2WUzsn1OeLWFzMdvGZwdjNTwNNsbXK2Zc0YZK7nFV-pE7Bij4BCgpNmXqfgIXGOmHwPQWcT73AMehfqGw7jEvRbC4E-A-R9SZfIQeNK2h6VwafKTdxPqTNIg+AAOxRAASxq9STOCB6D6c0xpnTRhasNaa0CTIABJfC3tEMmH9uBCgdmRu0IkH4P9znhtzeI9Nj1tmgA)
+
 
 ### Законы де Моргана: Позволяют упрощать и инвертировать сложные условия.
 
@@ -61,7 +75,7 @@
     * `A || B` ≡ `!(!A && !B)`
 
 
-### AND `A && B`
+### AND — `A && B`
 
 **AND** в логике и программировании означает И (логическое умножение или конъюнкция). Это логическая операция, которая выдает истину (True), только если оба операнда истинны. Если хотя бы один из операндов ложен, то результат — ложь. Так же объединение [NAND + NOT эквивалентно AND](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKDAQj0IBZwNCQpFHwFVhtFgFlwYNCJkJhYflBApoCFgElBxJSuZzloqBoosAMiDzZhTARjy97qiADMAhgBsAznWqQlta24A5Ooa4gnr7+SIHSZCbMiqpiGmyU1jyqialq1JoAHtbEEAyE2ILcZYRUvCi8AIIAcgAiLMV4GMTISmCQlf1I9bzNLa0AOj4TAA5TzQDyACpTEwCOU+MsAO5ZvGB6wUqHgbs2SgLn4Cc7RxFc+6K3DyAuTnivYE9nIW-cHy5TtZ-p9LiCvlQgS8IcCPjDAkA).
 
@@ -70,7 +84,7 @@
 | 0 | 0 | 0 |
 | 1 | 0 | 1 |
 
-### OR `A || B`
+### OR — `A || B`
 
 **OR** Это логическая операция, которая выдает истину (True), если хотя бы один из операндов истинен.
 
@@ -79,7 +93,7 @@
 | 0 | 0 | 1 |
 | 1 | 1 | 1 |
 
-### XOR `A ⊕ B`
+### XOR — `A ⊕ B`
 
 **XOR** (от англ. Exclusive OR/Исключающее ИЛИ). Это логическая операция, которая выдает истину (True), если только один из операндов истинен, и ложь (False), если оба операнда одинаковы (оба истинны или оба ложны).
 
@@ -88,7 +102,7 @@
 | 0 | 0 | 1 |
 | 1 | 1 | 0 |
 
-### NOT `!A`
+### NOT — `!A`
 
 **NOT** (Инвертор) Инвертирует входное значение. Истина становится Ложью, и наоборот.
 
@@ -96,7 +110,7 @@
 
 1 -> NOT -> 0
 
-### NAND `!(A && B)`
+### NAND — `!(A && B)`
 
 **NAND** (Not-AND/И-НЕ) Противоположность AND. Выдает Ложь, только если оба входа Истинны. Т.е. сперва применяется операция AND и к результату ее применяется операция NOT: 1 AND 1 = 1 NOT = 0
 
@@ -109,7 +123,7 @@
 * `A && B ≡ !(A NAND B)`
 
 
-### NOR `!(A || B)`
+### NOR — `!(A || B)`
 
 **NOR** (Not-OR/ИЛИ-НЕ) Противоположность OR. Выдает Истину, только если оба входа Ложны. Т.е. сперва применяется операция OR и к результату ее применяется операция NOT: 0 OR 0 = 0 NOT = 1
 [Так же можно получить NOR](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKDAQmJT3A0OQT8wfKCBSiELALLgwkACy8h7ccP5UU0SQEkBQkcwVLRMJJIAyIPNnFN+GPIrsmQAMwCGAGwDOdapBZLa1V7R3B1UQ8fPyQAmVJxKmYERNFNSXYqLh4bJMhBEFy06kkADytiCAZCbBBieSdCKkUURQA5AHkAJRZyvAxiZFVuIXyQFvaOgBUAChnOqYAdbwBBAEpltpW2gBFl+enlgCE1je9FgEdN7pYAdytCRTAuKxtwF4D74PDX1Q+734-PCPH6fB5OMD8Rw8Zxg77OaEgWEAxEI+Q8SFUOEgzFWdHhLFsBC1YGKLIfYpmFi6UnvcTZOkmLQUanggl1bjsrHMsoVCCYWrMQjkTD8CYgA5LVZrQDkRJLjmdLtcejSQbhFAz1UyqarFNhsPxNQbtSyvvjcYitdi9UZLUY4W9nuJvvr1Ci1caXca4npCmhZCk-VixFoWEA)
@@ -132,7 +146,7 @@
   * `!(A || B) ≡ !(!A NAND !B)`     
  
 
-### XNOR `!(A ⊕ B)`
+### XNOR — `!(A ⊕ B)`
 
 **XNOR** (Exclusive-NOR/Исключающее ИЛИ-НЕ). Противоположность XOR. Выдает Истину, если оба входа одинаковы (оба Ложны или оба Истинны).
 
@@ -151,6 +165,18 @@
 ![полусумматор на реле](img/полусумматор_реле.png)
 
 [схема полусумматора и полного сумматора (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcAOZ0AsBOAbJyAmAZm3UPUkxAUipFKoFMBaMMAKDGpCfWXE3x0+YAVBCCaCDgnTde4MIPmsJ4sVIDucvvkh8myGrr6Q2Wg0b3dD4fCbPWai-Tlv3zJEK6aewAdmwoBx5hAO5fMNMPWW9XV1MAGW44wJZ0GMCnEAAzAEMAGwBnBlpE5MDnbjB0tzEaPKKSpFMAWSEFQRsVMXxoKTblUS7RIz62AA9ufDBAzEoWbD9wAjpwQMAmEEBREEA+EEAWEAAdQoBBCanOcEJBBYrCJFkZkC29w4AhU7A4BVldJFYl+8CgAEQQAMIIB2EEBgHkQA6FQCCIIBhEEAPCAIwDSIKc5vxAvh8L90QCQCDwVDDoB+EEArCCA0mAXhBtjDgRxMEgmK5LjQQiAWUFJkxdEtLrIWAg+Jd-mtHjtoScucZ2QhUpxKLdKHintC3pMsOyseAZJq7qKCZDofCkajJghBLd7n4hQgRQ8DUTCmSKdTaWwkkzAhy0rIOVkGsVSu7yjKrtVfeaxBAA00gm0aBzLpqaKN+mJbhaLZHU2wAEZTfCyTxEL3o0z57mF8TkcTEdll05MpSBPw0DXfWSAfBBtoBuEDhxoRwMAQiDbQH0u5dOxUKeVUwiJC22aBbBV+LB3hOKekQSz8A5AqB5rrrrYNtJmYpvcxoNJRdeQLb+9R-eNINtRaCVzWjI9MacQQfuANR+JG4Y9OoDh3heICAdBpiTIYECYHweAVJAEB4g6RqIiipyGDu6BIAIwjyJhYKGiS5JUjSdKTMQvyEIQdDVBcD6iiqhySuyvjYBhYBMTMsjKuKrynPgeBeEqDwfEo+rkY6zrUW6bQgQRsjfkBsg5iIgSykYfiCHe+AGWo7DvrK4gmdgqCWaovRSLep7snWCCKM5mRXgesbwXQ6CYiBdAMpZfDCc8xynOkQoUIFvJuaFqqnIQfhMYxIXomQGFyYS0KKa6tEgK2EBkDQhhevQZHZYcA6mgVkDfH4sjIIQ+l2kC8k5VReVsOZXp1tZQp1jmjn6YZbnGao9ReTeVBOc1siuRadXPteR75oWRg1gySDYEx5bVkYhCUAypb2Oq1l0MuuCBasVbdj2lLIoAnCBVThw6jo2lxMSBqTGV9CBKtWIBHAAcgAIh9WoblMrZCExHYgAAGgA8gASsE8jeJ4a7mMoU4WLUc7WpqME2d0-VAXuMAYdA+C8YQyC4PThHYP9zAsTAkC-PA8BQLAhkpnzvOIEE-guMuNkLCTJGU9AEAc3MCuK4rBm7bAXPcwLKxcBzEiwJz4DBA8gFJuTpgAOZVMuFk0CzHnmx0MEWZUtt1GwFs+PNYQe1QIxBO7rh3p6PsTcEAdOd75ruCGkfhPNTmE0Khk1BHNQVLz1O0-xDOYEzsqs2kQvq9zQv8yXQv6wnVSiDI-IB6nMty7ASvN3MKuF8sGtl9rgsc-r7BaCbVaVkWVZRMTd6D1pDhgbBYSAWPZMmTPJn22BBlOE56+uwATppMFL8BuhRnAYn0IsXpXYsAP2u1lEujR3XgHPJlYkWK-iGMA8AVWJvW6HVtylEC7MeLBq5exEABP+XI+RUCJtyAKgpMoPA4uFD0EDYE-Qsnef0U0jwelfjBIe2JlyjzECtTk3BPqEJ+g1Qh18NgiUKGqfaVB0C8kIlQLgFUKKwhwqiNo3Qa7iCrEInMFtBGiDAv9EOu9BE1AkaoD4Y8kxCLkVPFGVck78gIaIsQNZmh1DGBooO5MWBTlNnoyQdReZSArIxB88hDoAUgEsPaTB7EwSsIdGgfhaE+SbHQZqtVAlw0Bndfsr0Rxjg0YBAIfASA+POpefR1iYBSA0XeFc81U6kLbFYy8aSHCGBtlWVAJSp67zKYQxqNh54dzdiAKpgFMBuTqWUIRrZ5puU6ctXBQRbxzywa062ZC+lj0yVgsIyVMgOFiS5KZg0imfB6cUgqizd4tMEKpLwblVlOBPhbTZjTPjEWOQUopNhtlHO2WPa5kZMDAWzEsm2FlVk9LHm8paHSlqV0yVWQCWSYIN0aXzBk1oWYuOQFgMAyBmAmDVh3YuOsqCa11sLSuqzAU9MBWnKmQsW7IBhTMBAspVZ9w1qilFZde6-FmVZKw2KaxjwBTWbFVh7YAosgC9+9tsUWWxTyhpVTpmNK-INP2BVIwiriWsu2DhtnbLeUkjgRNYnnQVedFijcIBoAIGChm1BvwtNhQYduSikWC27isGlIsiZKr4MKzV9x074uboSwlLNSVmopV3SlNr2AaJUDbUmeh4k2WSfkwx6TlgiJqHMLR1iUkFM-rYeQqjLh8FEWwWRGbWH3FzdI4+q8C2SOIJIX2rQLhTlUekSQNQhoxs9rpNy2DPKviPFoGSTbG2OxmZ2xQLy0L-L-p2ws8SqyKHkMA7NrEbZLzLQVI++zi2byPvxKZS6gidtzbBBd89p57vnUAle08x0YNTeOqeo6p2riAaPFVwgCDZPuAOvNQLtWupbsrIg3rO7IqtWivuD6L1vtYJGIRuLZauqwNaEQvidJkHheSv9lq-V61pf2o+McwOGXjtPV9ekFDganKvAjYQg3B1duI-856cOUZTA0-i5inZkCLCM1euhB22CNux09nxYJntNsBij5MB3Bulh++WX7v1kqLjzf9aHhbsFFiB0TO7SbOrxVJmDhLMDwZwIh39FqtaKaA1oJpt7v5Xu1EtKFwhqCNSTAvU8PioVrE+HZrd7mfGgRcwVNzphA3mh8zuYLi6Cl0EjQLKQ4jeAOvPGwzoTmJWcDc9szg6rsxBEDbxZcS9cswSZZY0oUbhNhfS2FpqAFgW93gIxRiWIfgCHg4QRuyHjOl2RTayuMwjb5YeNsyDbW5grj8DgQUkBcs4C0gi818nUPUvQwbSYMKVyNN8SgZCjSbDw1Rg4B56lQJxclRIA9x7Qtuf3Z2vzGkZieA0pWu76k3P+CmQFj+UgVtja2QzfgML-P0PxLfJ0nUH6doc405QfnPM+WqAgJiMh7OCk4UgtqlVeEmlOAtVhy56asMB1hO+Sl8rpCtkqIK2A1vxU4hFNhtUhJfhcasZBjC3j5ggSVVw1RbgwXOHtaoVgGZCVpii3apxrQOr8h3QIUKAZVl2OsYEJJewRKRG9EEaI9O+RfVt9IIpbq9ges9DHg4ol5n4HWI56B+IXSPEAA)
+
+
+<div class="sim-wrapper" data-circuit-id="2">
+  <button class="sim-fullscreen-btn" data-circuit-id="2">⛶</button>
+  <iframe 
+      data-circuit-id="2"
+      id="2"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/2_half_adder.txt"
+      loading="lazy">
+  </iframe>
+</div>
 
 Существует причина, по которой эта схема называется полусумматором. Разумеется, она складывает две двоичные цифры и выдает бит суммы и бит переноса. Однако длина подавляющего большинства двоичных чисел превышает один бит. То, что полусумматор не может сделать, так это прибавить возможный бит переноса, получившийся в результате предыдущей операции сложения. Представьте, что складываем два двоичных числа.
 
@@ -773,3 +799,6 @@ $(-1)^{sign} \times (1 + \text{fraction}) \times 2^{(exponent - bias)}=(-1)^{0} 
 На домашних компьютерах язык БЕЙСИК начал использоваться в 1975 году, когда два приятеля, Билл Гейтс (род. 1955) и Пол Аллен (род. 1953), написали интерпретатор языка БЕЙСИК для микрокомпьютера Altair 8800 и основали корпорацию Microsoft.
 
 Ранее я упоминал, что бóльшая часть языков высокого уровня не предполагает операций побитового сдвига или булевых операций над битами, которые являются частью функционала многих процессоров. Язык C — ​исключение из правила. Кроме того, важная особенность этого языка — ​поддержка указателей, которые, по сути, являются числовыми представлениями адресов памяти. Поскольку язык C поддерживает операции, реализующие многие инструкции процессора, он иногда классифицируется как язык ассемблера высокого уровня. По сравнению с любым другим языком типа АЛГОЛ язык C точнее всего имитирует общие наборы команд процессора.
+
+
+ 
