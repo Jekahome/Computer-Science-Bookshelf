@@ -74,24 +74,59 @@
 * Если теперь отрицать обе части, получим: 
     * `A || B` ≡ `!(!A && !B)`
 
+---
 
 ### AND — `A && B`
 
 **AND** в логике и программировании означает И (логическое умножение или конъюнкция). Это логическая операция, которая выдает истину (True), только если оба операнда истинны. Если хотя бы один из операндов ложен, то результат — ложь. Так же объединение [NAND + NOT эквивалентно AND](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKDAQj0IBZwNCQpFHwFVhtFgFlwYNCJkJhYflBApoCFgElBxJSuZzloqBoosAMiDzZhTARjy97qiADMAhgBsAznWqQlta24A5Ooa4gnr7+SIHSZCbMiqpiGmyU1jyqialq1JoAHtbEEAyE2ILcZYRUvCi8AIIAcgAiLMV4GMTISmCQlf1I9bzNLa0AOj4TAA5TzQDyACpTEwCOU+MsAO5ZvGB6wUqHgbs2SgLn4Cc7RxFc+6K3DyAuTnivYE9nIW-cHy5TtZ-p9LiCvlQgS8IcCPjDAkA).
+
+* AND можно получить через NAND `A && B ≡ !(A NAND B)`
+* AND можно получить через NOR `A && B ≡ !(!A || !B) ≡ (A NOR A) NOR (B NOR B)`
 
 |AND| 0 | 1 |
 |:--|:--|:--|
 | 0 | 0 | 0 |
 | 1 | 0 | 1 |
 
+
+<div class="sim-wrapper" data-circuit-id="6">
+  <button class="sim-fullscreen-btn" data-circuit-id="6">⛶</button>
+  <iframe 
+      id="6"
+      data-circuit-id="6"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/6_and.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
+
 ### OR — `A || B`
 
-**OR** Это логическая операция, которая выдает истину (True), если хотя бы один из операндов истинен.
+**OR** Это логическая операция, которая выдает истину (True), если хотя бы один из операндов истинен. Мат. синтаксис **`A + B`**
+
+* OR можно получить через AND `(A || B) ≡ !(!A && !B)`
+* OR можно получить через NAND `(A || B) ≡ (A NAND A) NAND (B NAND B)`
+* OR можно получить через NOR `(A || B) ≡ !(!(A || B))` 
 
 |OR | 0 | 1 |
 |:--|:--|:--|
 | 0 | 0 | 1 |
 | 1 | 1 | 1 |
+
+<div class="sim-wrapper" data-circuit-id="7">
+  <button class="sim-fullscreen-btn" data-circuit-id="7">⛶</button>
+  <iframe 
+      id="7"
+      data-circuit-id="7"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/7_or.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
 
 ### XOR — `A ⊕ B`
 
@@ -102,6 +137,8 @@
 | 0 | 0 | 1 |
 | 1 | 1 | 0 |
 
+---
+
 ### NOT — `!A`
 
 **NOT** (Инвертор) Инвертирует входное значение. Истина становится Ложью, и наоборот.
@@ -109,6 +146,8 @@
 0 -> NOT -> 1
 
 1 -> NOT -> 0
+
+---
 
 ### NAND — `!(A && B)`
 
@@ -120,15 +159,31 @@
 | 1  | 1 | 0 |
 
 [Из AND можно получить NAND и наоборот](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgwEIUUaQUEhENkJ5+gqP0kIOlfr3AoxIsWCWSU1GQA9+hPoSTYwBsXwUBBAHIARNrsya0SGmDFoz-Ples2AOgDOfgAOgVYA8gAqbACywqKKZjSq6lQo0DJxrkICQjTJ4kJpGWwAMuCEVKya1eBqkhAAZgCGADYBDNSQZRVV+XU1-VUgLe2dSN0A7r0D4MQ19VPyfLVg87NLaws167xUSzzmNFW7x1Bs02CV4P1gGEImfJv3NysvjufTh-wYNe+-n2Wr3AL0e5wAkvF3BJsoVJDAkDIgA):
-* `A && B ≡ !(A NAND B)`
+* NAND можно получить через AND, так как `A && B ≡ !(A NAND B)`
+* NAND можно получить через OR `!(A && B) ≡ (!A) || (!B)`
+* NAND можно получить через NOR `!(A && B) ≡ (A NOR A) OR (B NOR B)`
 
+<div class="sim-wrapper" data-circuit-id="8">
+  <button class="sim-fullscreen-btn" data-circuit-id="8">⛶</button>
+  <iframe 
+      id="8"
+      data-circuit-id="8"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/8_nand.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
 
 ### NOR — `!(A || B)`
 
 **NOR** (Not-OR/ИЛИ-НЕ) Противоположность OR. Выдает Истину, только если оба входа Ложны. Т.е. сперва применяется операция OR и к результату ее применяется операция NOT: 0 OR 0 = 0 NOT = 1
 [Так же можно получить NOR](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKDAQmJT3A0OQT8wfKCBSiELALLgwkACy8h7ccP5UU0SQEkBQkcwVLRMJJIAyIPNnFN+GPIrsmQAMwCGAGwDOdapBZLa1V7R3B1UQ8fPyQAmVJxKmYERNFNSXYqLh4bJMhBEFy06kkADytiCAZCbBBieSdCKkUURQA5AHkAJRZyvAxiZFVuIXyQFvaOgBUAChnOqYAdbwBBAEpltpW2gBFl+enlgCE1je9FgEdN7pYAdytCRTAuKxtwF4D74PDX1Q+734-PCPH6fB5OMD8Rw8Zxg77OaEgWEAxEI+Q8SFUOEgzFWdHhLFsBC1YGKLIfYpmFi6UnvcTZOkmLQUanggl1bjsrHMsoVCCYWrMQjkTD8CYgA5LVZrQDkRJLjmdLtcejSQbhFAz1UyqarFNhsPxNQbtSyvvjcYitdi9UZLUY4W9nuJvvr1Ci1caXca4npCmhZCk-VixFoWEA)
-* `!(A || B) ≡ (! A) && (! B)`
-* `!(A || B) ≡ (! A) && (! B) = !(!A NAND !B)`
+* NOR можно получить через AND `!(A || B) ≡ (! A) && (! B)`
+* NOR можно получить через NAND `!(A || B) ≡ (! A) && (! B) = !(!A NAND !B)`
+
+Так же можно получить NOR если инвертировать выход OR, сравните таблицу истинности, если выход NOR `!(A || B)` инвертировать то получим OR `A || B`
 
 |NOR| 0 | 1 |
 |:--|:--|:--|
@@ -145,6 +200,18 @@
 * преобразуем AND в NAND
   * `!(A || B) ≡ !(!A NAND !B)`     
  
+<div class="sim-wrapper" data-circuit-id="5">
+  <button class="sim-fullscreen-btn" data-circuit-id="5">⛶</button>
+  <iframe 
+      id="5"
+      data-circuit-id="5"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_nor.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
 
 ### XNOR — `!(A ⊕ B)`
 
@@ -155,6 +222,7 @@
 | 0  | 1 | 0 |
 | 1  | 0 | 1 |
 
+---
 
 ## Глава 12. Двоичный сумматор
 
