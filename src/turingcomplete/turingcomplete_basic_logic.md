@@ -1,10 +1,11 @@
 
-# Turing Complete
+# Turing Complete. Basic logic
 
 * [Turing Complete](https://turingcomplete.game/) — это игра о компьютерных науках.
 * [Turing Complete youtube channel](https://www.youtube.com/@TuringCompleteGame)
 * [Nari youtube channel](https://www.youtube.com/@nari1774/videos)
-
+* [Процессор RV32i](https://github.com/BenjaminSchaaf/turning-complete-riscv) Это полноценная реализация RISC-V CPU внутри игры, на который можно запускать реальный компилируемый код (например, Rust). Игра превращается в мини-симулятор архитектуры компьютера.
+* [MegaIng/turing-complete-interface](https://github.com/MegaIng/turing-complete-interface) Это библиотека для взаимодействия со схемами, созданными в игре Turing Complete
 
 > [!IMPORTANT]
 > **Существа, которые смогут завершить создание компьютера, по закону считаются разумными.**
@@ -15,6 +16,15 @@
 ![you learn this](/img/turingcomplete_1.avif)
 
 Игра построена на мощном симуляторе, который предоставляет вам полную свободу в прохождении уровней или создании собственных компьютеров. Подключайте экраны, таймеры, звук, ввод с клавиатуры и сетевые компоненты, чтобы создать все, что захотите. Вы даже можете разработать уникальный язык ассемблера для своего компьютера.
+
+Режим кампании шаг за шагом проведет игрока к созданию самого простейшего 8битного АЛУ с возможностью программировать.
+
+А при желании в режиме песочница можно от одного транзистора развиться до создания полноценного марио, тетриса, сапера,змеек и прочих радостей эпохи денди. Что собственно уникумы тут и делают.
+
+>
+> Path save files for linux mint `/home/$USER/.wine/drive_c/users/$USER/AppData/Roaming/Godot/app_userdata/Turing Complete`
+> [tcsaveeditor](https://github.com/narikiro/tcsaveeditor.py) инструмент для работы с сохранениями Turing Complete
+>
 
 ---
 
@@ -199,12 +209,28 @@
 
 ### XNOR — `!(A ⊕ B)`
 
-**XNOR** (Exclusive-NOR/Исключающее ИЛИ-НЕ). Противоположность XOR. Выдает Истину, если оба входа одинаковы (оба Ложны или оба Истинны).
+**XNOR** (Exclusive-NOR/Исключающее ИЛИ-НЕ/NOT XOR). Противоположность XOR. Выдает Истину, если оба входа одинаковы (оба Ложны или оба Истинны).
+
+* XNOR можно получить через AND + OR + NOT: `!(A ⊕ B) = (A && B) || (!A && !B)`
+* XNOR можно получить через XOR + NAND: `!(A ⊕ B) = XOR NAND XOR`
+* XNOR можно получить через NOR: `!(A ⊕ B) = ((A NOR B) NOR ((A NOR A) NOR (B NOR B))) NOR ((A NOR B) NOR ((A NOR A) NOR (B NOR B)))`
 
 |XNOR| 0 | 1 |
 |:-- |:--|:--|
 | 0  | 1 | 0 |
 | 1  | 0 | 1 |
+
+ 
+<div class="sim-wrapper" data-circuit-id="10">
+  <button class="sim-fullscreen-btn" data-circuit-id="10">⛶</button>
+  <iframe 
+      id="10"
+      data-circuit-id="10"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/10_xnor.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 ---
 
@@ -235,6 +261,8 @@
   </iframe>
 </div> 
 
+---
+
 ### Второй тик
 
 Ожидаемый выход 1 только при входе A=1, B=0
@@ -264,6 +292,8 @@
   </iframe>
 </div> 
 
+---
+
 ### XOR элемент
 
 Получить XOR
@@ -275,6 +305,7 @@
 | 0 | 0 | 1 |
 | 1 | 1 | 0 |
 
+---
 
 ### OR gate with 3 inputs
 
@@ -302,6 +333,7 @@
   </iframe>
 </div> 
 
+---
 
 ### AND gate with 3 inputs
 
@@ -317,7 +349,6 @@
 | 1 | 0 | 1 | 0                    |
 | 1 | 1 | 0 | 0                    |
 | 1 | 1 | 1 | 1                    |
-
 
 
 <div class="sim-wrapper" data-circuit-id="4">

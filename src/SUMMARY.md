@@ -4,7 +4,9 @@
  
 - [Обо всем]()
     - [Чарльз Петцольд. КОД тайный язык информатики](conclusion_3.md)
-        - [Turing Complete](turingcomplete/turingcomplete.md)
+        - [Turing Complete. Basic logic](turingcomplete/turingcomplete_basic_logic.md)
+        - [Turing Complete. Arithmetic](turingcomplete/turingcomplete_arithmetic.md)  
+        - [Turing Complete. Memory](turingcomplete/turingcomplete_memory.md)             
     - [Стив Макконнелл - Совершенный код](conclusion_16.md)
     - [Мартин Фаулер. Рефакторинг. Улучшение проекта существующего кода 2019](conclusion_17.md)
     - [Брайан Керниган, Роб Пайк. Практика программирования 2004](conclusion_5.md)

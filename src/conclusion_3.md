@@ -231,12 +231,28 @@
 
 ### XNOR — `!(A ⊕ B)`
 
-**XNOR** (Exclusive-NOR/Исключающее ИЛИ-НЕ). Противоположность XOR. Выдает Истину, если оба входа одинаковы (оба Ложны или оба Истинны).
+**XNOR** (Exclusive-NOR/Исключающее ИЛИ-НЕ/NOT XOR). Противоположность XOR. Выдает Истину, если оба входа одинаковы (оба Ложны или оба Истинны).
+
+* XNOR можно получить через AND + OR + NOT: `!(A ⊕ B) = (A && B) || (!A && !B)`
+* XNOR можно получить через XOR + NAND: `!(A ⊕ B) = XOR NAND XOR`
+* XNOR можно получить через NOR: `!(A ⊕ B) = ((A NOR B) NOR ((A NOR A) NOR (B NOR B))) NOR ((A NOR B) NOR ((A NOR A) NOR (B NOR B)))`
 
 |XNOR| 0 | 1 |
 |:-- |:--|:--|
 | 0  | 1 | 0 |
 | 1  | 0 | 1 |
+
+ 
+<div class="sim-wrapper" data-circuit-id="10">
+  <button class="sim-fullscreen-btn" data-circuit-id="10">⛶</button>
+  <iframe 
+      id="10"
+      data-circuit-id="10"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/10_xnor.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 ---
 
