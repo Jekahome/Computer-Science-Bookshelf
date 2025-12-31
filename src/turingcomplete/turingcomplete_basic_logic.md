@@ -13,7 +13,7 @@
 
 Всё в компьютере может быть построено из базового компонента, называемого логическим элементом NAND. Вам предстоит решить ряд головоломок, чтобы проложить путь от элементов NAND к арифметике, памяти и вплоть до полноценных архитектур центрального процессора. Пройдя эту игру, вы получите глубокое понимание взаимосвязи между ассемблером, наборами инструкций ЦП и базовыми компонентами. А также поймете, как работают такие концепции программирования, как условные операторы, циклы и функции, на уровне ассемблера и аппаратного обеспечения.
 
-![you learn this](/img/turingcomplete_1.avif)
+![you learn this](/img/turingcomplete_1.png)
 
 Игра построена на мощном симуляторе, который предоставляет вам полную свободу в прохождении уровней или создании собственных компьютеров. Подключайте экраны, таймеры, звук, ввод с клавиатуры и сетевые компоненты, чтобы создать все, что захотите. Вы даже можете разработать уникальный язык ассемблера для своего компьютера.
 
@@ -22,7 +22,9 @@
 А при желании в режиме песочница можно от одного транзистора развиться до создания полноценного марио, тетриса, сапера, змеек и прочих радостей эпохи денди. Что собственно уникумы тут и делают.
 
 >
-> Path save files for linux mint `/home/$USER/.wine/drive_c/users/$USER/AppData/Roaming/Godot/app_userdata/Turing Complete`
+> Path save files for linux mint:
+>
+> `/home/$USER/.wine/drive_c/users/$USER/AppData/Roaming/Godot/app_userdata/Turing Complete`
 >
 > [tcsaveeditor](https://github.com/narikiro/tcsaveeditor.py) инструмент для работы с сохранениями Turing Complete
 >
@@ -66,6 +68,42 @@
 | 0 | 0 | 0 |
 | 1 | 0 | 1 |
 
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+# 
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+#
+# fn or(a: u8, b: u8) -> u8 { a | b }
+#
+
+fn and(a: u8, b: u8) -> u8 {
+    a & b
+}
+
+fn and_by_using_or(a: u8, b: u8) ->u8{
+    !or(!a,!b)
+}
+
+fn main() {
+    print_truth_table("AND", and);
+
+    print_truth_table("AND", and_by_using_or);
+}
+```
+
 
 <div class="sim-wrapper" data-circuit-id="6">
   <button class="sim-fullscreen-btn" data-circuit-id="6">⛶</button>
@@ -93,6 +131,50 @@
 | 0 | 0 | 1 |
 | 1 | 1 | 1 |
 
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+# fn and(a: u8, b: u8) -> u8 { a & b }
+# fn nand(a: u8, b: u8) -> u8 { 
+#  !(a & b) & 1 
+# }
+
+fn or(a: u8, b: u8) -> u8 {
+    a | b
+}
+
+// Операция &1 означает нормализовать 8 бит к 0 или 1 
+// т.е. оставить только младший бит, всё остальное выбросить
+// Для типа bool нормализация не нужна
+fn or_by_using_and(a: u8, b: u8) -> u8 { 
+    !and(!a,!b) & 1 
+}
+
+fn or_by_using_nand(a: u8, b: u8) -> u8 { 
+    nand(nand(a, a),nand(b, b))
+}
+
+fn main() {
+    print_truth_table("OR", or);
+    print_truth_table("OR", or_by_using_and);    
+    print_truth_table("OR", or_by_using_nand);
+}
+```
+
 <div class="sim-wrapper" data-circuit-id="7">
   <button class="sim-fullscreen-btn" data-circuit-id="7">⛶</button>
   <iframe 
@@ -119,6 +201,45 @@
 |:--|:--|:--|
 | 0 | 0 | 1 |
 | 1 | 1 | 0 |
+
+ 
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+#
+# fn and(a: u8, b: u8) -> u8 { a & b }
+# fn or(a: u8, b: u8) -> u8 { a | b }
+# fn nand(a: u8, b: u8) -> u8 { 
+#  !(a & b) & 1 
+# }
+
+fn xor(a: u8, b: u8) -> u8 {
+    a ^ b
+}
+ 
+fn xor_by_using_nand_and_or(a: u8, b: u8) -> u8 {
+    and(nand(a, b), or(a, b))
+}
+
+fn main() {
+    print_truth_table("XOR", xor);
+    print_truth_table("XOR", xor_by_using_nand_and_or);    
+}
+```
 
 <div class="sim-wrapper" data-circuit-id="9">
   <button class="sim-fullscreen-btn" data-circuit-id="9">⛶</button>
@@ -157,6 +278,49 @@
 * NAND можно получить через OR `!(A && B) ≡ (!A) || (!B)`
 * NAND можно получить через NOR `!(A && B) ≡ (A NOR A) OR (B NOR B)`
 
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+#
+# fn and(a: u8, b: u8) -> u8 { a & b }
+# fn or(a: u8, b: u8) -> u8 { a | b }
+# fn nor(a: u8, b: u8) -> u8 { !(a | b) & 1 }
+
+fn nand(a: u8, b: u8) -> u8 { 
+  !(a & b) & 1 
+}
+fn nand_by_using_and(a: u8, b: u8) -> u8 { 
+  !and(a, b) & 1 
+}
+fn nand_by_using_or(a: u8, b: u8) -> u8 { 
+  or(!a, !b) & 1 
+}
+fn nand_by_using_nor(a: u8, b: u8) -> u8 { 
+  or(nor(a, a), nor(b, b)) 
+}
+
+fn main() {
+    print_truth_table("NAND", nand);
+    print_truth_table("NAND", nand_by_using_and);
+    print_truth_table("NAND", nand_by_using_or);
+    print_truth_table("NAND", nand_by_using_nor);
+}
+```
+
 <div class="sim-wrapper" data-circuit-id="8">
   <button class="sim-fullscreen-btn" data-circuit-id="8">⛶</button>
   <iframe 
@@ -194,6 +358,41 @@
 * преобразуем AND в NAND
   * `!(A || B) ≡ !(!A NAND !B)`     
  
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+#
+# fn and(a: u8, b: u8) -> u8 { a & b }
+
+fn nor(a: u8, b: u8) -> u8 {
+    !(a | b) & 1
+}
+
+fn nor_by_using_and(a: u8, b: u8) -> u8 { 
+    and(!a, !b) & 1
+}
+
+fn main() {
+    print_truth_table("NOR", nor);
+    print_truth_table("NOR", nor_by_using_and);    
+ 
+}
+```
+
 <div class="sim-wrapper" data-circuit-id="5">
   <button class="sim-fullscreen-btn" data-circuit-id="5">⛶</button>
   <iframe 
@@ -220,7 +419,34 @@
 | 0  | 1 | 0 |
 | 1  | 0 | 1 |
 
- 
+
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for a in 0..=1 {
+#         println!(
+#             "|{:^width$}| {} | {} |",
+#             a,
+#             gate(a, 0),
+#             gate(a, 1),
+#             width = NAME_WIDTH
+#         );
+#     }
+#     println!("");
+# }
+#
+fn xnor(a: u8, b: u8) -> u8 {
+    !(a ^ b) & 1
+}
+
+fn main() {
+    print_truth_table("XNOR", xnor);
+}
+```
+
 <div class="sim-wrapper" data-circuit-id="10">
   <button class="sim-fullscreen-btn" data-circuit-id="10">⛶</button>
   <iframe 
