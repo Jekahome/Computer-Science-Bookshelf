@@ -73,28 +73,28 @@
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
-# 
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
 #
 # fn or(a: u8, b: u8) -> u8 { a | b }
-#
+# fn not(x: u8) -> u8 {!x & 1}
 
 fn and(a: u8, b: u8) -> u8 {
     a & b
 }
 
 fn and_by_using_or(a: u8, b: u8) ->u8{
-    !or(!a,!b)
+    not(or(not(a),not(b)))
 }
 
 fn main() {
@@ -137,35 +137,31 @@ fn main() {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
 #
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
 # fn and(a: u8, b: u8) -> u8 { a & b }
-# fn nand(a: u8, b: u8) -> u8 { 
-#  !(a & b) & 1 
-# }
+# fn nand(a: u8, b: u8) -> u8 { not(a & b)}
+# fn not(x: u8) -> u8 { !x & 1 }
 
 fn or(a: u8, b: u8) -> u8 {
     a | b
 }
-
-// Операция &1 означает нормализовать 8 бит к 0 или 1 
-// т.е. оставить только младший бит, всё остальное выбросить
-// Для типа bool нормализация не нужна
+ 
 fn or_by_using_and(a: u8, b: u8) -> u8 { 
-    !and(!a,!b) & 1 
+    not(and(not(a),not(b)))
 }
 
 fn or_by_using_nand(a: u8, b: u8) -> u8 { 
-    nand(nand(a, a),nand(b, b))
+    nand(nand(a, a), nand(b, b))
 }
 
 fn main() {
@@ -209,14 +205,14 @@ fn main() {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
 #
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
@@ -224,8 +220,9 @@ fn main() {
 # fn and(a: u8, b: u8) -> u8 { a & b }
 # fn or(a: u8, b: u8) -> u8 { a | b }
 # fn nand(a: u8, b: u8) -> u8 { 
-#  !(a & b) & 1 
+#   not(a & b)  
 # }
+# fn not(x: u8) -> u8 {!x & 1}
 
 fn xor(a: u8, b: u8) -> u8 {
     a ^ b
@@ -262,6 +259,20 @@ fn main() {
 
 1 -> NOT -> 0
 
+```rust
+// Операция &1 означает нормализовать 8 бит к 0 или 1 
+// т.е. оставить только младший бит, всё остальное выбросить
+// Для типа bool нормализация не нужна
+fn not(x: u8) -> u8 {
+  !x & 1
+}
+ 
+fn main() {
+    assert_eq!(not(1),0);
+    assert_eq!(not(0),1);    
+}
+```
+
 ---
 
 ### NAND — `!(A && B)`
@@ -284,31 +295,35 @@ fn main() {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
 #
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
 #
 # fn and(a: u8, b: u8) -> u8 { a & b }
 # fn or(a: u8, b: u8) -> u8 { a | b }
-# fn nor(a: u8, b: u8) -> u8 { !(a | b) & 1 }
+# fn nor(a: u8, b: u8) -> u8 { not(a | b) }
+# fn not(x: u8) -> u8 {!x & 1}
 
 fn nand(a: u8, b: u8) -> u8 { 
-  !(a & b) & 1 
+  not((a & b)) 
 }
+
 fn nand_by_using_and(a: u8, b: u8) -> u8 { 
-  !and(a, b) & 1 
+  not(and(a, b))
 }
+
 fn nand_by_using_or(a: u8, b: u8) -> u8 { 
-  or(!a, !b) & 1 
+  or(not(a), not(b))  
 }
+
 fn nand_by_using_nor(a: u8, b: u8) -> u8 { 
   or(nor(a, a), nor(b, b)) 
 }
@@ -364,26 +379,27 @@ fn main() {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
 #
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
 #
 # fn and(a: u8, b: u8) -> u8 { a & b }
+# fn not(x: u8) -> u8 {!x & 1}
 
 fn nor(a: u8, b: u8) -> u8 {
-    !(a | b) & 1
+    not(a | b)
 }
 
 fn nor_by_using_and(a: u8, b: u8) -> u8 { 
-    and(!a, !b) & 1
+    and(not(a), not(b))  
 }
 
 fn main() {
@@ -426,20 +442,22 @@ fn main() {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
 #     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
 #
-#     for a in 0..=1 {
-#         println!(
-#             "|{:^width$}| {} | {} |",
-#             a,
-#             gate(a, 0),
-#             gate(a, 1),
-#             width = NAME_WIDTH
-#         );
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
 #     }
 #     println!("");
 # }
 #
+# fn not(x: u8) -> u8 {!x & 1}
+
 fn xnor(a: u8, b: u8) -> u8 {
-    !(a ^ b) & 1
+    not(a ^ b)  
 }
 
 fn main() {
@@ -518,6 +536,34 @@ out 0 1 0 0
 
 ```
 
+```rust
+# const NAME_WIDTH: usize = 4;
+# fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
+#     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
+#     println!("|{:-^width$}|---|---|", "", width = NAME_WIDTH);
+#
+#     for b in 0..=1 {
+#        println!(
+#            "|{:^width$}| {} | {} |",
+#            b,
+#            gate(0, b),
+#            gate(1, b),
+#            width = NAME_WIDTH
+#        );
+#     }
+#     println!("");
+# }
+# fn and(a: u8, b: u8) -> u8 { a & b }
+# fn not(x: u8) -> u8 {!x & 1}
+
+fn tick(a: u8, b: u8) -> u8 { 
+    and(a, not(b))
+}
+
+fn main() {
+    print_truth_table("tick", tick);
+}
+```
 
 <div class="sim-wrapper" data-circuit-id="2">
   <button class="sim-fullscreen-btn" data-circuit-id="2">⛶</button>
