@@ -687,7 +687,7 @@ fn main() {
 
 Задача: Применить операцию OR к целому байту т.е. побайтово применить gate OR
 
-![Byte OR](/img/Byte_OR.png)
+![Byte OR](/Computer-Science-Bookshelf/img/Byte_OR.png)
 
 
 ### Byte NOT
@@ -747,7 +747,7 @@ fn main() {
 </div> 
 
 
-![Adding Bytes](/img/Adding_Bytes.png)
+![Adding Bytes](/Computer-Science-Bookshelf/img/Adding_Bytes.png)
 
 ### Negative Numbers
 
@@ -816,7 +816,7 @@ fn main() {
 
 
 
-![Adding Bytes](/img/Signed_Negator.png)
+![Adding Bytes](/Computer-Science-Bookshelf/img/Signed_Negator.png)
 
 
 

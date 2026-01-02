@@ -53,7 +53,7 @@ Input → [Delay 1] → [Delay 2] → Output
 
 * Есть компонент Delay на 1 такт → он помнит прошлое состояние
 
-![Odd ticks](/img/Odd_ticks.png)
+![Odd ticks](/Computer-Science-Bookshelf/img/Odd_ticks.png)
 
 [Odd ticks (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCCsIAwHQwCyQMwwBwE4ZgOwCZ0cA2TEfGKKSyAUwFowwAoAGRBQvMmO9-x6whAMwCGAGwDOtKjGYBZKJnzlElYgVWVK+OJGYAPcmH5rypVShCJVIAJIA7AA4BXAC7MwqDl3ybEJuSaOkL6XiqImKY0ylpCKtD6AO4+OoKcOvg2cikZ5FnWUfnZzCmIxDZ+EUUCvDnWFUERjWglZS1IqRyd9XmE6F2tsIYgFRD4YGS4YFb4c9a2APLurh5GiBOq0MjjiAM2YCoARi7CwrQATswbEYFVDZXB8XpQzEA)
 
@@ -117,7 +117,7 @@ Switch: Когда верхний контакт компонента актив
 
 ```
 
-![Bit Switch](/img/Bit_Switch.png)
+![Bit Switch](/Computer-Science-Bookshelf/img/Bit_Switch.png)
  
 
 У буфера с 3-мя состояниями выход бывает трёх типов:
@@ -199,11 +199,11 @@ Multuplexers (Мкльтиплексер)
 </div> 
 
  
-![Input Selector](/img/Input_Selector.png)
+![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector.png)
 
 Но есть уже готовый компонет 8-ит битный переключатель
 
-![Input Selector](/img/Input_Selector2.png)
+![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector2.png)
 
 
 ### The Bus (Шина)
@@ -226,7 +226,7 @@ Multuplexers (Мкльтиплексер)
 </div> 
 
 
-![The Bus (Шина)](/img/The_Bus.png)
+![The Bus (Шина)](/Computer-Science-Bookshelf/img/The_Bus.png)
  
 ### Saving Gracefully
 
