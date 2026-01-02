@@ -5,7 +5,7 @@
 
 Каждая позиция (бит) в двоичном числе имеет свой "вес" — степень двойки. Сумма "весов" всех единичных битов и дает десятичное число.
 
-Для 8-ми битного числа без знака, все биты кодируют число, количество комбинаций в 8-ми ячейках 256 (вместе с нулем)
+**Для 8-ми битного числа без знака**, все биты кодируют число, количество комбинаций в 8-ми ячейках 256 (вместе с нулем)
 
 Число 0 относится к беззнаковому типу.
 
@@ -31,7 +31,7 @@
 
 ```
 
-Для 8-ми битного числа со знаком, старший бит кодирует знак, 0 кодирует положительно число, а 1 отрицательное и имеет вес -128 так как 2^7=128
+**Для 8-ми битного числа со знаком**, старший бит по мимо значения еще кодирует и знак, так если старший бит 0 это кодирует положительно число с весом 0, а 1 отрицательное и имеет вес -128 так как 2^7=128
 
 Количество комбинаций 256:
 * Отрицательные (-128 … -1) → 128 комбинаций
@@ -58,16 +58,17 @@
 -1 11111111
 0 00000000  
 ```    
+ 
 
-```
-бит:   7   6   5   4   3   2   1   0
-вес: -128 64  32  16   8   4   2   1
-```
+| Бит/степень двойки | 7   | 6  | 5  | 4  | 3 | 2 | 1 | 0 |
+| --- | --- | -- | -- | -- | - | - | - | - |
+| Вес | -128 | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
 
 ```
 01111111 = 2^6 + 2^5 + 2^4 + 2^3 + 2^2 + 2^1 + 2^0 = 64 + 32 + 16 + 8 + 4 + 2 + 1 = 127 # максимальное
+11111111 = 2^7 + 2^6 + 2^5 + 2^4 + 2^3 + 2^2 + 2^1 + 2^0 = -128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = -1  
 10000000 = 2^7 = -128 # минимальное
-10000001 2^7 + 2^6 = -128 - 1 = -127
+10000001 2^7 + 2^6 = -128 + 1 = -127
 ```
 
 
@@ -682,10 +683,140 @@ fn main() {
 }
 ```
 
+### Byte OR
+
+Задача: Применить операцию OR к целому байту т.е. побайтово применить gate OR
+
+![Byte OR](/img/Byte_OR.png)
+
+
+### Byte NOT
+
+Задача: Применить операцию NOT к целому байту т.е. побайтово применить gate NOT
+
+... так же как и для byte OR, разбиваем байт на биты (Byte Splitter) и инвертируем бит, собираем обратно через Byte Combiner
+
+
+### Adding Bytes
+
+Суммируем байты.
+
+Задача:
+
+Сложите два входных байта. Каждый выходной бит должен быть результатом сложения соответствующих битов входных данных, а также, возможно, переноса.
+
+Если результат не помещается в 8 бит, поверните перенос на выходе (можно считать его 9-м битом).
+
+Наконец, есть еще и входной перенос. Он полезен для последовательного соединения сумматоров байтов для сложения больших чисел. Можно представить этот перенос как сложение 0 или 1.
+
+Нам нужно 8 полных сумматоров.
+
+
+Что дано в задаче
+
+Входы
+* Byte A — 8 бит: A0 … A7
+* Byte B — 8 бит: B0 … B7
+* Carry In — 1 бит (Cin)
+
+Выходы
+* Sum Byte — 8 бит: S0 … S7
+* Carry Out — 1 бит (Cout)
+  * (это «9-й бит», если сумма > 255)
+
+
+```
+    00000011 #3
++
+    00000011 #3
+    ---------
+    00000110 #6
+```
+
+[Сумматор на 8 разрядов (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKABkRMUQmNDxi3XvypUAZgEMANgGc61SO04YhYQlTCCea0VBCTZ8pIo5dtAFnMDVlveOlyFSs0xR5r2t3f0OjUZyraYNyaqsHeBo7GAULE-KE8cRG+TqaBDHgaWhm6EJF+JiDYhO4MhFYJZVYaPoapytxJCUk1+fVmmR6drSnRadzlHoO6bX0NIObuCZPJdWNm2CFai7NR-v3g8VpqqwUxegm69nPr40xbqiJ6o-4AHpvkvBV4ELwQFdwAghgs92AYVCYSDAeCsrgm4G4ACEfhtzINpsNrr07uBzFR4eQQe8ARDwgBhT4AJSJAE0WJp+MV3OiMStaZxwL8HjxCCEXjwEMQ8V9FH9CI8MFMOQwMEgPiBPqx+Y9iM9XsR3pDJShmWpHswNCKwJByBLPtg1QLPPFtShsDzJeYjRrzOzXmBsNz9QgbdoEMKHQhxcrPoQ1bidVqKpALRKoXzwLjQeAY3g9cqodKo1QSrGrBgleEoaq-riEOyrN7LVDDXmqMV00VnYnreXOMHOGHE67688MyX-QB3cbwqzUibDClJPtFSsF9zYSshFg9lydbAxnL+SkUdTjNlWMwz1eEBD8NDuFRUQ+M1irsUhWwveK2HdJUHuTqK7ide-8OUVeJwKYHpmrnV0R4GZNTBGYZx7ZhKx2ZgYx2RRIMgIDOlgqxulnEBPzRCoQQqWxFAAWXAXDNkhFZ4M4aBXSI1CQBQ81X10FAqJYGiSLAWxgnI-DKNdHtHwbKYSNPBCQEvcZaLMUS9ypaCSKnEQMP3DE4GImMGVE0dR1o0dCLUrd8DI7gRN41j9IkhjxhPFi2JjBSjLHK5mOo8yGS47gNNM2yrG0yzdNMxCgPOM54Iwlx-m-IKIv8QLAWiwDARmUSpMwrxRAwwR3CoTKJiyjKvBmLCkrC9IdEw2xznSnssMq8qvxiuiZk6ASmHwjCWo4rdSra-jyP4PByPCUSBOYV9Bu4Ya+okxSe3EzqxILTw8tmxbXHccK0ownAqW4baoxmhaQj4MToOO0S9pWBYJowmTBJAW6mCGm79yCYzSqentygxdwvs4IDpKAlAgNuoGqvuoDwMCYqe2U8ZYYYFolPXBGD3SRGYdsQYEFsXBqiUnGkLXCtCdE7GrEGMwhx7Ud7NHZdNMGZdFzBdDqaajEZgHTTObTGm025p8T0CVmil51SByqBqzCSbBFvRoo5apRbzBWUTZY8lYBxV662MrBgQMs-WstMv4gaQBhKEhPB+H1hMCWJMlh34cwdluyZUxe19mWwDjysnLxiAQLNoX9e4fasYgFwDgaS1bIpfZ1cJFimSAwB9bM63jkMca8QC7ehMss+QY7k+Lmts1zIvNX9oTmBLZNw+IoDS+YFWS0jH2IBICsUCQEhm3CP1vbrlRuEWJAVHTr4487hb+17hb86tYeICFHaJ7wcuvkL2eXn9pACGDlUV7oy3x9Pgevgbuu8AIIoF9vqfJQ733FQtUvFWdxMfjDuu933+6hAj7fCUC7D8SdKwvl2PUMBdVHJwJGCiQosCyCyQ-GdZEJxkEwR-PAoMxtjhrGwZFCs0EkJHFqEQ0BODAj2R1IERBWDqHxEAng1hPQmEcFgVBNBxFKwcKoVwnYt9SH9W6OAShewhH9U5pWASAipETGETseyN5oFjFgUKfslYtHqNOJoxa9lxKMMEUo-gx54EWJMYo2BJRJyVjsXo4h90Xr2VutYpw9w3A4UzPfYE-wfLKkJCSck0jiJpjoWoAhkjPEUF8f-e64RCBAMtMEx2REg4DBerDdxXkKDhAsbDKxeTMmHSJmU6yLlSm6KKTGSpZlSlqNhmo+pGTwgCWaUlEp7TOjNPEc5Bp4QoGwyga0-JjRbAjJ4gM3+fc65clTL7LcVhACEIIAYRBAA8IBswADCCACEQQAfCCAAEQAAOjIQAvCDbNOXgU5hztmAHYQQ5gB5EEACwg+zABMICwIAA)
+
+<div class="sim-wrapper" data-circuit-id="13">
+  <button class="sim-fullscreen-btn" data-circuit-id="13">⛶</button>
+  <iframe 
+      id="13"
+      data-circuit-id="13"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/13_adding_bytes.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
+![Adding Bytes](/img/Adding_Bytes.png)
+
+### Negative Numbers
+
+Отрицательные числа, для операций вычитания нужны отрицательные числа.
+
+На этом уровне вводится "дополнительный код", наиболее распространенное представление отрицательных чисел.
+
+Здесь старшая цифра инвертируется. Для байтов это означает, что 8-я цифра меняет свое значение со 128 на -128.
+
+Этот уровень завершается, когда вы достигаете 3-го уровня или выше.
+
+### Signed Negator
+
+Отрицание.
+
+Принимая входные данные как знаковые (где 8-й бит равен -128), создайте компонент, который принимает число и инвертирует его.
+
+Например, если перевести 4 в отрицательное число, получится -4. Если перевести -9 в отрицательное число, получится 9.
+
+Алгоритм получения отрицательного числа (наз. дополнительный код или дополнение до двух)
+* Возьмите положительное число
+* Инвертируйте все биты
+* Прибавьте 1
+
+```ini
+0000_0100 # 4
+
+1111_1011 # инвертируем
+
+1111_1011
++         # прибавим 1
+0000_0001
+---------
+1111_1100 #-4
+
+```
+
+
+```rust
+fn main() {
+    let x: u8 = 4;    
+    println!("{:08b} # {x}", x); 
+    
+    let inverted = !x; 
+    println!("{:08b} # инвертируем", inverted);
+    
+    let twos_complement = inverted.wrapping_add(1); 
+    println!("{:08b} # прибавим 1", twos_complement);
+    
+    let result = twos_complement as i8;
+    assert_eq!(result, -4i8);
+}
+```
+
+
+<div class="sim-wrapper" data-circuit-id="14">
+  <button class="sim-fullscreen-btn" data-circuit-id="14">⛶</button>
+  <iframe 
+      id="14"
+      data-circuit-id="14"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/14_signed_negator.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 
 
-
+![Adding Bytes](/img/Signed_Negator.png)
 
 
 
