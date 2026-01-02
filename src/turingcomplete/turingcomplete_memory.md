@@ -186,7 +186,6 @@ Multuplexers (Мкльтиплексер)
 
 Для байта — то же самое, но 8 раз, по одному биту.
 
-
 <div class="sim-wrapper" data-circuit-id="16">
   <button class="sim-fullscreen-btn" data-circuit-id="16">⛶</button>
   <iframe 
@@ -201,7 +200,7 @@ Multuplexers (Мкльтиплексер)
  
 ![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector.png)
 
-Но есть уже готовый компонет 8-ит битный переключатель
+Но есть уже готовый компонет, 8-ми битный переключатель
 
 ![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector2.png)
 

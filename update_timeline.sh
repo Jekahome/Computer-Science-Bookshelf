@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # --- КОНСТАНТЫ И НАСТРОЙКИ ---
-TOTAL_BOOKS=36
+TOTAL_BOOKS=37
 TOTAL_WEEKS=72
 README_FILE="src/README.md"
 PERC_DIR="img/perc"
@@ -33,9 +33,9 @@ copy_svg() {
 
     if [ -f "$source_file" ]; then
         cp "$source_file" "$target_file"
-        echo "✅ Обновлен $target_file: скопирован $source_file"
+        echo "Обновлен $target_file: скопирован $source_file"
     else
-        echo "❌ Ошибка: Файл $source_file не найден. Прогресс не обновлен."
+        echo "Ошибка: Файл $source_file не найден. Прогресс не обновлен."
     fi
 }
 
@@ -75,8 +75,8 @@ ELAPSED_WEEKS=$((ELAPSED_SECONDS / 86400 / 7))
 # Вычисляем процент
 SCHEDULE_PERCENT=$(calculate_percent "$ELAPSED_WEEKS" "$TOTAL_WEEKS")
 
-echo "📅 Прошло недель: $ELAPSED_WEEKS (Начало: $START_DATE)"
-echo "🎯 Запланированный прогресс: ${SCHEDULE_PERCENT}%"
+echo "Прошло недель: $ELAPSED_WEEKS (Начало: $START_DATE)"
+echo "Запланированный прогресс: ${SCHEDULE_PERCENT}%"
 
 copy_svg "$SCHEDULE_PERCENT" "$PERC_DIR/schedule.svg"
 copy_svg "$SCHEDULE_PERCENT" "$PERC_SRC_DIR/schedule.svg"
@@ -101,4 +101,4 @@ copy_svg "$REALITY_PERCENT" "$PERC_DIR/reality.svg"
 copy_svg "$REALITY_PERCENT" "$PERC_SRC_DIR/reality.svg"
 
 echo ""
-echo "🎉 Обновление завершено!"
+echo "Обновление завершено!"

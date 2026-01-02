@@ -4,8 +4,8 @@
 * [Turing Complete](https://turingcomplete.game/) — это игра о компьютерных науках.
 * [Turing Complete youtube channel](https://www.youtube.com/@TuringCompleteGame)
 * [Nari youtube channel](https://www.youtube.com/@nari1774/videos)
-* [Процессор RV32i](https://github.com/BenjaminSchaaf/turning-complete-riscv) Это полноценная реализация RISC-V CPU внутри игры, на который можно запускать реальный компилируемый код (например, Rust). Игра превращается в мини-симулятор архитектуры компьютера.
-* [MegaIng/turing-complete-interface](https://github.com/MegaIng/turing-complete-interface) Это библиотека для взаимодействия со схемами, созданными в игре Turing Complete
+* [Процессор RV32i](https://github.com/BenjaminSchaaf/turning-complete-riscv) полноценная реализация RISC-V CPU внутри игры, на который можно запускать реальный компилируемый код (например, Rust). Игра превращается в мини-симулятор архитектуры компьютера.
+* [MegaIng/turing-complete-interface](https://github.com/MegaIng/turing-complete-interface) библиотека для взаимодействия со схемами, созданными в игре Turing Complete
 
 > [!IMPORTANT]
 > **Существа, которые смогут завершить создание компьютера, по закону считаются разумными.**
