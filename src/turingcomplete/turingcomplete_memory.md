@@ -1,4 +1,4 @@
-# Turing Complete. Memory
+# Memory
 
 * [Circular Dependency]()
 * [Delayed lines]()
@@ -11,7 +11,6 @@
 * [Saving Bytes]()
 * [Counter]()
 * [Little Box]()
-
 
 ## Circular Dependency
 
