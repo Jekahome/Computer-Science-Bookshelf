@@ -1,6 +1,19 @@
 # Turing Complete. Memory
 
-### Circular Dependency
+* [Circular Dependency]()
+* [Delayed lines]()
+* [Odd ticks]()
+* [Bit Inverter]()
+* [Bit Switch]()
+* [Input Selector]()
+* [The Bus]()
+* [Saving Gracefully]()
+* [Saving Bytes]()
+* [Counter]()
+* [Little Box]()
+
+
+## Circular Dependency
 
 > Задача: Создайте "круговую зависимость". Это схема, в которой вход компонента зависит от его собственного выхода. 
 
@@ -12,7 +25,9 @@ A → B → C
 └───────┘
 ```
 
-### Delayed lines
+---
+
+## Delayed lines
 
 Линия задержки. В задаче предоставлен компонент с задержкой в один tick.
 
@@ -38,7 +53,7 @@ Input → [Delay 1] → [Delay 2] → Output
 
 ---
 
-### Odd ticks
+## Odd ticks
 
 Нечетные такты. 
 
@@ -54,7 +69,7 @@ Input → [Delay 1] → [Delay 2] → Output
 
 * Есть компонент Delay на 1 такт → он помнит прошлое состояние
 
-![Odd ticks](/Computer-Science-Bookshelf/img/Odd_ticks.png)
+![Odd ticks](/Computer-Science-Bookshelf/img/tc/Odd_ticks.png)
 
 [Odd ticks (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCCsIAwHQwCyQMwwBwE4ZgOwCZ0cA2TEfGKKSyAUwFowwAoAGRBQvMmO9-x6whAMwCGAGwDOtKjGYBZKJnzlElYgVWVK+OJGYAPcmH5rypVShCJVIAJIA7AA4BXAC7MwqDl3ybEJuSaOkL6XiqImKY0ylpCKtD6AO4+OoKcOvg2cikZ5FnWUfnZzCmIxDZ+EUUCvDnWFUERjWglZS1IqRyd9XmE6F2tsIYgFRD4YGS4YFb4c9a2APLurh5GiBOq0MjjiAM2YCoARi7CwrQATswbEYFVDZXB8XpQzEA)
 
@@ -71,7 +86,7 @@ Input → [Delay 1] → [Delay 2] → Output
 
 ---
 
-### Bit Inverter
+## Bit Inverter
 
 Битовый инвертор
 
@@ -84,8 +99,9 @@ Input → [Delay 1] → [Delay 2] → Output
 | 0 | 0 | 1 |
 | 1 | 1 | 0 |
 
+---
 
-### Bit Switch
+## Bit Switch
 
 Битовый переключатель
 
@@ -118,7 +134,7 @@ Switch: Когда верхний контакт компонента актив
 
 ```
 
-![Bit Switch](/Computer-Science-Bookshelf/img/Bit_Switch.png)
+![Bit Switch](/Computer-Science-Bookshelf/img/tc/Bit_Switch.png)
  
 
 У буфера с 3-мя состояниями выход бывает трёх типов:
@@ -143,8 +159,9 @@ Switch: Когда верхний контакт компонента актив
   </iframe>
 </div> 
  
+---
 
-### Input Selector
+## Input Selector
 
 Multuplexers (Мкльтиплексер)
 
@@ -199,14 +216,17 @@ Multuplexers (Мкльтиплексер)
 </div> 
 
  
-![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector.png)
+![Input Selector](/Computer-Science-Bookshelf/img/tc/Input_Selector.png)
 
 Но есть уже готовый компонет, 8-ми битный переключатель
 
-![Input Selector](/Computer-Science-Bookshelf/img/Input_Selector2.png)
+![Input Selector](/Computer-Science-Bookshelf/img/tc/Input_Selector2.png)
 
+---
 
-### The Bus (Шина)
+## The Bus 
+
+Шина.
 
 На этом уровне имеется 2 байтовых входа и 2 байтовых выхода. Ваша задача — скопировать верные данные с одного из входов на один из выходов.
 
@@ -226,9 +246,11 @@ Multuplexers (Мкльтиплексер)
 </div> 
 
 
-![The Bus (Шина)](/Computer-Science-Bookshelf/img/The_Bus.png)
+![The Bus (Шина)](/Computer-Science-Bookshelf/img/tc/The_Bus.png)
  
-### Saving Gracefully
+---
+
+## Saving Gracefully
 
 Линия задержки позволяет нам использовать значение на 1 такт позже. 
 
@@ -317,13 +339,13 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 
  
 
-![Saving Gracefully](/Computer-Science-Bookshelf/img/Saving_Gracefully.png)
+![Saving Gracefully](/Computer-Science-Bookshelf/img/tc/Saving_Gracefully.png)
 
-![Saving Gracefully 2](/Computer-Science-Bookshelf/img/Saving_Gracefully2.png)
+![Saving Gracefully 2](/Computer-Science-Bookshelf/img/tc/Saving_Gracefully2.png)
 
 ---
 
-### Saving Bytes
+## Saving Bytes
 
 
 > Задача:
@@ -346,10 +368,22 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 * DATA OUT (байт) — сохранённое значение
 * ENABLE (бит) — выход активен только при LOAD
 
+<div class="sim-wrapper" data-circuit-id="20">
+  <button class="sim-fullscreen-btn" data-circuit-id="20">⛶</button>
+  <iframe 
+      id="20"
+      data-circuit-id="20"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/20_saving_bytes.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
-![Saving Bytes](/Computer-Science-Bookshelf/img/Saving_Bytes.png)
+![Saving Bytes](/Computer-Science-Bookshelf/img/tc/Saving_Bytes.png)
 
-### Counter
+---
+
+## Counter
 
 > Задача:
 > Создайте счётчик, который будет увеличиваться на 1 при каждом такте.
@@ -393,7 +427,89 @@ MUX
 </div> 
 
 
-![Counter](/Computer-Science-Bookshelf/img/Counter.png)
+![Counter](/Computer-Science-Bookshelf/img/tc/Counter.png)
+
+---
+
+## Little Box
+
+> [!TIP]
+> Разблокирует компонент памяти: 256 байтная ОЗУ
+
+Можно ли уместить 4 байта в этом ограниченном пространстве?
+
+> Задача:
+> 
+> На этом уровне вы должны построить схему которая может [SAVE] или [LOAD] (показать (выдать) значение выбранного регистра на выход) из 4-х разных байтов памяти.
+> 
+> Вам даётся один быт который определяет нужно ли вам [LOAD]. 
+> Другой бит определяет нужно ли вам загружать [SAVE] и к нему прилагается значение.
+> 
+> Кроме того у вас есть 2 бита для адресас, что дает 4 комбинации, одна на каждый байт на этом уровне.
+
+Для этого уровня вам, по сути, нужно создать четырехбайтовую оперативную память (RAM) в ограниченном пространстве.
+
+**RAM 4×8 бит:**
+* 4 ячейки памяти
+* каждая по 8 бит
+* выбор ячейки по 2-битному адресу ADDR[1:0] — (00, 01, 10, 11)
+* операции, декодер выбирает ровно один регистр:
+  * SAVE — при 1 записать байт в выбранную ячейку, при 0 не записывать
+  * LOAD — при 1 вывести байт из выбранной ячейки, при 0 не выводить
+
+
+Для начала вам понадобятся четыре 8-битных регистра для независимого хранения и извлечения байтов.
+* Соедините все выводы сохранения значений с входом, а все выводы вывода — с выходом.
+* Подключите вывод загрузки к выводу разрешения выхода.
+
+Далее соберите 2-битный декодер для активации одного из регистров за раз.
+
+Наконец, используя восемь переключателей, создайте две шины, которые будут управлять выводами загрузки и сохранения регистров, и подключите их к соответствующим входам.
+
+Соедините пары переключателей с соответствующими выходами декодера, и готово!
+
+![Little Box](/Computer-Science-Bookshelf/img/tc/Little_Box.png)
+
+(Так же можно использовать компонент Switch вместо NOT + AND. Узел Switch можно использовать как логическое И, поскольку для его включения необходимо выполнение двух условий.)
+
+**2 bit decoder (2 to 4)** нужен для выбора одного из четырех регистров
+
+```
+A B | addr
+-------------
+0 0 | 0001 D0  
+0 1 | 0010 D1  
+1 0 | 0100 D2  
+1 1 | 1000 D3  
+```
+
+<div class="sim-wrapper" data-circuit-id="22">
+  <button class="sim-fullscreen-btn" data-circuit-id="22">⛶</button>
+  <iframe 
+      id="22"
+      data-circuit-id="22"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/22_2_bit_decoder_2_to_4.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
+**RAM 4×8 бит:**
+
+<div class="sim-wrapper" data-circuit-id="23">
+  <button class="sim-fullscreen-btn" data-circuit-id="23">⛶</button>
+  <iframe 
+      id="23"
+      data-circuit-id="23"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/23_ram_4_byte.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
+
 
 
 
