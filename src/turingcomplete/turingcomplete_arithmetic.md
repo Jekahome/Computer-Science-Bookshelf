@@ -817,12 +817,11 @@ fn main() {
 </div> 
 
 
-
 ![Adding Bytes](/Computer-Science-Bookshelf/img/Signed_Negator.png)
 
+### 
 
-
-
+Создайте компонент, который сможет переключать "поток" между двумя контактами.
 
 
 

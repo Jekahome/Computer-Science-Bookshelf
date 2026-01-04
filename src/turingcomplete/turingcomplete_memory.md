@@ -321,14 +321,79 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 
 ![Saving Gracefully 2](/Computer-Science-Bookshelf/img/Saving_Gracefully2.png)
 
+---
+
+### Saving Bytes
 
 
+> Задача:
+> Создать схему, которая может SAVE или LOAD байт.
+> 
+> Когда первый входной бит 1, LOAD память и пошлите её на выход.
+> 
+> Когда второй входной бит 1, SAVE входной байт.
+> 
+> У выхода есть активирующий контакт, активируйте его только если LOAD.
+
+Это байтовая память на 1 ячейку с управлением:
+
+Входы
+* LOAD (бит) — читать сохранённое значение
+* SAVE (бит) — записать новое значение
+* DATA IN (байт) — что сохраняем
+
+Выходы
+* DATA OUT (байт) — сохранённое значение
+* ENABLE (бит) — выход активен только при LOAD
 
 
+![Saving Bytes](/Computer-Science-Bookshelf/img/Saving_Bytes.png)
+
+### Counter
+
+> Задача:
+> Создайте счётчик, который будет увеличиваться на 1 при каждом такте.
+> 
+> Кроме того, должна быть предусмотрена возможность перезаписи счетчика заданным значением.
+> 
+> Вам даны два входных параметра: бит (MODE) и байт (INPUT_BYTE).
+> 
+> Входной бит (MODE) должен переключаться между подсчетом и перезаписью значением байта.
 
 
+Каждый такт:
+* если MODE = 0 → counter = counter + 1
+* если MODE = 1 → counter = INPUT_BYTE
+
+Где:
+* MODE (бит) — выбирает режим
+* INPUT_BYTE — значение для перезаписи
+* counter хранится в регистре (delay byte + обратная связь)
+
+Есть 3 сущности:
+* Регистр → хранит counter
+* Инкрементер → считает counter + 1
+* MUX → выбирает, что писать в регистр
+
+MUX
+* Если select = 0 → на выход идёт первый вход (counter)
+* Если select = 1 → на выход идёт второй вход (INPUT_BYTE)
+
+[Counter (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKDDwBZwxIvtC83fiH6CqrAB4gOCLg1kVCKEPIhcUXAJIA7AA4BXAC4AdAM4AhAJ6G6LKR0JcOGCAmHOnIDSACyAeQARAFEWABkQRyomMGUEYmVo5SoqADMAQwAbUzpqSDCIjioHLjjlYqgK9KycpDzwyJViQgp4xubkkCrs3PyGhjxaVv6O1Mzu2t7ClUcWhJmOrpqoSaiOQVKVNYrR6p76qYZsWKGj7c6xpbqCqLBmjaZ2you964qNjohFnqkEARVmWicf6QchcHjgFB4OyKQQMYglDDERpqZAFaG-WFYCiIlQYTzgo7ov4MQiuHHyQRg8SEImwjjYbEMhhTKkgKE-YlERkqFAM1kcWn-MlMymolCChkIHARaSo1gAd2QeEpMwa5TyYCa4GVdNu4GIvE2euUUPC7GV-1a7AOmqS4HOuwmZp1PO81qiKG8C2eTu1FoYKF+2oOgceO3Gy2d-shgndPIt3sdkb9sKO4k4UTTZy+vvNqYQyjjhwL2Z9ybzKmwQKLVa4iYjVwrzL1RY4evrl2hYAwkMrYAZ3eIqfB6i4AEEAgEzKwo4ItXGtR2emAEEh+4QqKJwBxvFvkmxqzxR+J114puIWIqeBbytfBNhhHkr-gVWDbq-ltbuIbmIXT7+KlYL8ATkFtTweQCDzfQ0mA4N9hFgutwCg785EwP8EPQyDgKPTY4CEZpmXwi8cJggtY3A8jIOfC0H2aZg-jo5YaPvYQ7y8fBmKVQQ0Aov5eK4hjBAGbi2X3FixNEgSn24YktnY5kxEvUTFNEkSZKE-4MHol8tPaZSFO7HT-S2DT30rH9dMOQ0NKs3AqX9IzBPM5lTgU+kkgMqyPJU+yuIaKg1WIgzcMKQKWWCq9cKwwggywmS+j1WLCPbZTkv+Zp0vikKfzgiIe23Os0oOU5CAKw5PMVMqElKgqwDysyf0yi1Uqqg4tgEOklKqkzBE68B9Lam4YleZlFxyuQOC1PopsG1DKz+dLDj+BKg2Wvq1vGqrNsyg4tvmgMpmqnlzzS8qNEC8r1OKqIROO4ZnJggD+sSfzHJGl75hu6YuE+oqVzXfgqAu7dvBB-cAfAIGMtB0CwzYVcoY3bhCx3N87Q1RH1w9Oq0Z5AqIax6HENh-4Gs-InkfkXt6u8amxApwGqbC0miJGAy0E3P5sZEFaOfwkGefB-mT0LaGAI0zmYZ5iDJfwkmZfqoqrylgM6uJ7KVfllmZZZuWoiomWqKuBoqI2Y37RzQToZ16HNaR4H1eRpXredvKedah2Bq916NOJgCZeFq9idmn29wM4mt0D06rxkQjDcIGZ6cExO5ATpPbnElMMupDPkY0uO8OpLY2ZTkudccWEYm67OmBpyv-l7DSXThejCFOVvBMLtXC3bhJ7duDusMHhJ9vqtaXduPUSeb-0ZinwivqvUkUvdlefq7ie2+nz2F8rXud7mveKtr04C6DAP14lgyXWpdsU-vvfr9juKphHs8s4rNy+5ESqBtOb+pwg7Z3ng3Je24gxRwbuHZeHUwTQL5leIcchsAlk5pmEsMl0GVjQfAFQvxP64WTgpY2Xl-SGysgQwSlDkbYPkPnAyyD97A0gNPLMWDWGESzGgaeUo5o8PjtpZA5U+HUJEUIng5U9ZeSkfhECRdBJMIDBaNAQ8EzKVUf3FRkAO7vA0TohIGweBrT0c+ExVpIBrQHpYwiw8iEDyUaGDiJcnEcJcXFXgsINw1zQCXbxyADj+NsoEziR4bgNS8jad2RCXYaUcWDSASdPTKw4kkhJSclApLQBkt0kA6aZOofk3JdNd55LhgdXeSjbQcREkwVoHDanVN4lEAK+jakNB4JxEkMdkBdI6XACif9OmDPms-fUQIHgsK1JMriaBpmZw4tM9KHCllBlIHMIMMl1nTDWa0YB2zBbRR6ZqCZ1cvAATrj4i5ZyUAXOOlgu5BUyCLwJspZ50wnlCJgSAd5UdcLfN5MSApgK6TgN5BM4FW4SRehYJoLwTiSScV5GgaYnFkjQCQAgDRtZ8F7JxdCrJ+KqHgrTk3DRcFYRURJfgslioNAlypWsA2tKvBZhJHFNlQTsUosRTxNlVCsFEtofyhhdL8VZU5ZshG5BqXsuaBoaeyyQDkCziCzYMw1XWUJRM8omr1SwvhWtClrKeXGvRZi7FOqgH4v1WKnVAt8UAuNetVlEynUly3BoWpAK2Wh2RasUy3KA18tNZFV1k0HWhtVTarU-rNjjRXDKmN8q2yEVDlQFVFMk2nKEQqlKQiM3bEtaBXNbKnKComSJOND1BU8puWy66Yq62lrrSy+lXUzy1MDXS51WxZXdvDSoKtNqfH4oArK2JBrPQT17NWs55qKDFrJuoKFk6xXEhdmq1KibB2HGEHmysj5lVFrtSg-dbKmIVrQlMatwDb0qLZXei956eUxlmc6gSXqPRovJS4pF+LpJLsOsDADP7T342ULKvyeQ4XTtsQ+19CYoAYsXeBrVrLiTQexZhw0mrJ07upZu1NhUKiZqvSRuNa7B0gzjU+lFTTuE9Mo3lSj9Tf08QKl+rwrye19s4zi+21KaMCZ49R-91YC1TqcQx+j9TkMWvA05Ldkn12xlLYxR80rd3GmI7LY90bTnyrLfwnFw6UWNpNZuSDWYLNzqMyis+7GUadtFu++SI1CMjXI8Ow8f9qV9pxalWDTjrUOYxihrFimjPcxMzFjDan9IEZxbq4j6p9OzOSxqrMtrB3EqzAKoNFAPP5dFZZ6QWWUUIC805jYXHTFni2LVnF9XqV5aBC15rs7kvjWC0GKr1nKtefk6hwdfqtzpq09SvyB7oPpfI9NrMWHwMszjdIptm40HZbDXGhbDnMFOZ8lxnyWDjWHeS455bDqgTHaXZ6nFl6pOQM23t8LCnB1MTVQ91TIhz1-Am3SvBxZIMgyB7MhF-jkktLA-CkqaCQdcrpQi41cHmGzM4ajlHFVVUGPjDxBFb63GwicZj1xGiEU3Px1KxHkDgdTAuzDqzDPXRZMSWhMGIPklg4vnszn1SsG855yUtjAPGmC9AsLw1zRUHA84tLsHsu4ddIWSslKtCBIzP531jz1T+uzJ19roY86NHXNndUy5yZZWQoheeS2ZY8g+HGZNFsSi0soAxV2fgoI8D0TWGUPASJRwgACAwAAKgAJU0AAcSCGHrsMRYisO4BgTFhpA8+AAKoAA1oTYDbBQXPFB6T59BGeEAABhUIfgy8AGkzAAAptB0AkCYUwpgbC6AAJTfUNtDUhwdka22RqQqQ5okS3HomQAcJBZTeAnMEWPUhsmESxLc6eeIZ9cD8OnkPLAgA)
+
+<div class="sim-wrapper" data-circuit-id="19">
+  <button class="sim-fullscreen-btn" data-circuit-id="19">⛶</button>
+  <iframe 
+      id="19"
+      data-circuit-id="19"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/19_counter.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 
+![Counter](/Computer-Science-Bookshelf/img/Counter.png)
 
 
 
