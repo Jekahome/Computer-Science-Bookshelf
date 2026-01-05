@@ -1,19 +1,19 @@
 # Базовая логика
 
-* [Логические вентили]()
-  * [Законы де Моргана: Позволяют упрощать и инвертировать сложные условия]()
-  * [AND]()
-  * [OR]()
-  * [XOR]()
-  * [NOT]()
-  * [NAND]()
-  * [NOR]()
-  * [XNOR]()
-* [Always ON]()
-* [Second tick]()
-* [XOR элемент]()
-* [OR gate with 3 inputs]()
-* [AND gate with 3 inputs]()
+* [Логические вентили](#Логические-вентили)
+  * [Законы де Моргана: Позволяют упрощать и инвертировать сложные условия](#Законы-де-Моргана-Позволяют-упрощать-и-инвертировать-сложные-условия)
+  * [AND](#and--a--b)
+  * [OR](#or--a--b)
+  * [XOR](#xor--a-xor-b)
+  * [NOT](#not--a)
+  * [NAND](#nand--a--b)
+  * [NOR](#nor--a--b)
+  * [XNOR](#xnor--a--b)
+* [Always ON](#always-on)
+* [Second tick](#second-tick)
+* [XOR элемент](#xor-элемент)
+* [OR gate with 3 inputs](#or-gate-with-3-inputs)
+* [AND gate with 3 inputs](#and-gate-with-3-inputs)
 
 ## Логические вентили
 

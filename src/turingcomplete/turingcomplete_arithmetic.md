@@ -1,21 +1,21 @@
 # Arithmetic
 
-* [Конвертация десятичных чисел в двоичные]()
-* [Double trouble]()
-* [Odd number of signals]()
-* [Counting signals]()
-    * [Карта Карно]()
-* [Half Adder]()
-* [Full Adder]()
-* [Double the number]()
-* [Byte OR]()
-* [Byte NOT]()
-* [Adding Bytes]()
-* [Negative Numbers]()
-* [Signed Negator]()
-* [1 Bit Decoder]()
-* [3 Bit Decoder]()
-* [Logic Engine]()
+* [Конвертация десятичных чисел в двоичные](#Конвертация-десятичных-чисел-в-двоичные)
+* [Double trouble](#double-trouble)
+* [Odd number of signals](#odd-number-of-signals)
+* [Counting signals](#counting-signals)
+    * [Карта Карно](#Карта-Карно)
+* [Half Adder](#half-adder)
+* [Full Adder](#full-adder)
+* [Double the number](#double-the-number)
+* [Byte OR](#byte-or)
+* [Byte NOT](#byte-not)
+* [Adding Bytes](#adding-bytes)
+* [Negative Numbers](#negative-numbers)
+* [Signed Negator](#signed-negator)
+* [1 Bit Decoder](#1-bit-decoder)
+* [3 Bit Decoder](#3-bit-decoder)
+* [Logic Engine](#logic-engine)
 
 ## Конвертация десятичных чисел в двоичные
 
@@ -927,6 +927,7 @@ A B C | Активный выход
 > [!TIP]
 > Разблокирует восьмибитные компоненты: AND, NAND, NOR
 
+[strategywiki.org/wiki (Logic Engine)](https://strategywiki.org/wiki/Turing_Complete/Logic_Engine)
 
 > Задача:  
 > Создайте устройство, способное выполнять операции OR, NAND, NOR или AND с двумя восьмибитными входами. 
@@ -954,7 +955,7 @@ A B C | Активный выход
 
 2. Что бы получить NOR  мы можем инвертировать оба входа в AND и получить на его выходе эквивалент AND.
 
-Или инвертирования **выходного** сигнала (<span style="color:blue"> OR ⇄ NOR`,`NAND ⇄ AND </span>).
+Или инвертирования **выходного** сигнала (<span style="color:blue"> OR ⇄ NOR`,`NAND ⇄ AND </span>):
 
 1. Что бы получить NOR мы можем инвертировать выход OR и получить сразу NOR.
 

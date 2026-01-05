@@ -1,16 +1,16 @@
 # Memory
 
-* [Circular Dependency]()
-* [Delayed lines]()
-* [Odd ticks]()
-* [Bit Inverter]()
-* [Bit Switch]()
-* [Input Selector]()
-* [The Bus]()
-* [Saving Gracefully]()
-* [Saving Bytes]()
-* [Counter]()
-* [Little Box]()
+* [Circular Dependency](#circular-dependency)
+* [Delayed lines](#delayed-lines)
+* [Odd ticks](#odd-ticks)
+* [Bit Inverter](#bit-inverter)
+* [Bit Switch](#bit-switch)
+* [Input Selector](#input-selector)
+* [The Bus](#the-bus)
+* [Saving Gracefully](#saving-gracefully)
+* [Saving Bytes](#saving-bytes)
+* [Counter](#counter)
+* [Little Box](#little-box)
 
 ## Circular Dependency
 
