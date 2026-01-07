@@ -2,7 +2,7 @@
 
 [Introduction](README.md)
  
-- [Обо всем]()
+- [Основы]()
     - [Чарльз Петцольд. КОД тайный язык информатики](conclusion_3.md)
     - [Turing Complete](turingcomplete/turing_complete.md)
         - [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
