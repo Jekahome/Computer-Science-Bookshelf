@@ -56,8 +56,14 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
  
 #### Circuit Simulation ALU
 
+Необходимые компоненты схемы ALU:
 * [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
 * [Bit Switch](turingcomplete_memory#bit-switch-tri-state-buffer)
+* [Adding Bytes](turingcomplete_arithmetic.html#adding-bytes)
+* [8 bit NEG](turingcomplete_arithmetic.html#signed-negator)
+* [8 bit NOT](turingcomplete_arithmetic.html#byte-not)
+* [8 bit NAND](turingcomplete_arithmetic.html#logic-engine)
+
 
 <div class="sim-wrapper" data-circuit-id="25">
   <button class="sim-fullscreen-btn" data-circuit-id="25">⛶</button>

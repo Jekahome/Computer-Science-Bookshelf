@@ -720,6 +720,9 @@ fn main() {
 
 ## Byte NOT
 
+> [!TIP]
+> Разблокирует: компонент `8 bit NOT`
+
 > Задача: Применить операцию NOT к целому байту т.е. побайтово применить gate NOT
 
 ... так же как и для byte OR, разбиваем байт на биты (Byte Splitter) и инвертируем бит, собираем обратно через Byte Combiner
@@ -727,6 +730,9 @@ fn main() {
 ---
 
 ## Adding Bytes
+
+> [!TIP]
+> Разблокирует: компонент сложения байт 
 
 Суммируем байты.
 
@@ -793,6 +799,9 @@ fn main() {
 ---
 
 ## Signed Negator
+
+> [!TIP]
+> Разблокирует: компонент `NEG` инверсия знака (меняет положительное на отрицательное) для 8 бит.
 
 Отрицание.
 
@@ -920,7 +929,7 @@ A B C | Активный выход
 ## Logic Engine
  
 > [!TIP]
-> Разблокирует восьмибитные компоненты: AND, NAND, NOR
+> Разблокирует компоненты: `8 bit AND, 8 bit NAND, 8 bit NOR`
 
 [strategywiki.org/wiki (Logic Engine)](https://strategywiki.org/wiki/Turing_Complete/Logic_Engine)
 
