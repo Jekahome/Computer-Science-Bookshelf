@@ -4,7 +4,7 @@
 * [Delayed lines](#delayed-lines)
 * [Odd ticks](#odd-ticks)
 * [Bit Inverter](#bit-inverter)
-* [Bit Switch](#bit-switch)
+* [Bit Switch](#bit-switch-tri-state-buffer)
 * [Input Selector](#input-selector)
 * [The Bus](#the-bus)
 * [Saving Gracefully](#saving-gracefully)
@@ -100,20 +100,47 @@ Input → [Delay 1] → [Delay 2] → Output
 
 ---
 
-## Bit Switch
+## Bit Switch (tri-state buffer)
 
-Битовый переключатель
+> [!TIP]
+> Разблокирует:
+> * переключатель на 1 бит `S` 
+> * 8-ми битный `SWC`
 
-Если компоненты выдают разные значения по одному и тому же проводу, возникает ошибка. Однако у некоторых компонентов выходные контакты серые, и они вообще не выдают сигналы, когда компонент не активен. Это относится и к компоненту Bit Switch
+> [!IMPORTANT]
+> Главная цель битового переключателя (Bit Switch / Tri-state) - дать возможность нескольким источникам делить **одну** линию, не вызывая короткого замыкания **к.з.** (в Falstad → singular matrix)
+> ```
+> A ─┐
+>    ├─── BUS
+> B ─┘
+> ```
 
-Switch: Когда верхний контакт компонента активирован, выходной сигнал отключен. Это означает, что к одному и тому же проводу может быть подключено более одного из этих серых выходных контактов, и это не вызовет ошибки, если одновременно активировать только один из них.
+ 
+Если компоненты выдают разные значения по одному и тому же проводу, возникает ошибка (к.з.). Однако у некоторых компонентов выходные контакты могут иметь **состояние выхода Z (high-impedance)**, и они вообще не выдают сигналы, когда компонент не активен,т.е. Z состояние это не просто низкий сигнал LOW/pull-down, а имеено **электрическое отключение выхода/обрыв линии**. Это относится и к компоненту Bit Switch.
 
-У Bit Switch выход “серый” — это значит:
+> [!IMPORTANT]
+> На практике, состояние Z применяется в шинах (the bus)
+> ```
+> REG0 ──┐
+> REG1 ──┼─── BUS ──► ALU
+> REG2 ──┘
+> ```
+
+У Bit Switch выход “Z” — это значит:
 * когда switch выключен → он НИЧЕГО не выдаёт (провод “в воздухе”)
 * когда switch включен → он пропускает вход на выход
 
-Поэтому несколько серых выходов можно соединять в один провод, если гарантировано, что включён только один из них.
+Поэтому несколько Z выходов можно соединять в один провод, если гарантировано, что включён только один из них.
 
+> [!IMPORTANT]
+> Bit Switch по сути это **управляемый буфер с тремя состояниями**
+> | Enable | In | Out              |
+> | ------ | -- | ---------------- |
+> | 0      | X  | **Z** (отключён) |
+> | 1      | 0  | 0                |
+> | 1      | 1  | 1                |
+
+ 
 > Задача: Собрать gate XOR используя два переключателя switch и два gate NOT
 
 * Один switch отвечает за случай A=1, B=0
@@ -135,15 +162,15 @@ Switch: Когда верхний контакт компонента актив
 
 ![Bit Switch](/Computer-Science-Bookshelf/img/tc/Bit_Switch.png)
  
+Из 8 штук битовых переключателей, можно сконструировать 8-ми битный переключатель самостоятельно.
 
-У буфера с 3-мя состояниями выход бывает трёх типов:
-* 0
-* 1
-* Z (отключён, «ничего не выдаёт», это не 0, это отсутствие сигнала)
+![Byte Switch](/Computer-Science-Bookshelf/img/tc/Byte_Switch.png)
+
+#### Circuit Simulation (gate XOR)
+(Собрать gate XOR используя два переключателя switch и два gate NOT)
 
 Если учитывать состояние Z, то при A=1, B=1 оба tri-state буфера отключены, и линия оказывается в состоянии Z — никто не тянет её ни в 0, ни в 1.
-Чтобы в этом случае получить 0, добавляют pull-down — подтяжку к нулю по умолчанию. Тогда при отсутствии активных драйверов (Z) выход принимает значение 0.
-
+Чтобы в этом случае получить 0, добавляют pull-down — подтяжку к нулю по умолчанию. Тогда при отсутствии активных драйверов (Z) выход принимает значение 0 по умолчанию.
 
 [Bit Switch (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWKsEA4wHYvoCwCZIBOVSVHcAZhCQUmoFMBaMMAKAA8Q88A2LwvF3z8k5POQBCrADIgKCQXlSouCPkpV0IAMwCGAGwDO9alFYB3OWS7iQOMOtuQLdnCoqRyON3IJmAklbkFH7e7n50MDSsgRQ8KnhqrglJkdDRlm50GnYkqnzOmXncXsWpLvbqynIKXNXOYHmVdSpZLXbIEGDwPfDgvX0IHNQUhFwUKjwsQhBi5ADyAK4ALgAOK8PcCXhj4mIhHbYAgqwAsrnZSWqXBVzpMr7ZtomO5FogekYmSM6co9kULzTPAUDAdbogABy8wAKsNRupCGN7GCPIJyBDoXDODgEEg8NMcBhsmAvP0QBJFtphrjFMS7DwwXgMFQMXRKdTGnRmiULjYyTAugMev1hdQXPJFNVJfkzJkfOJuQrypYJsE-CE6Jq5Y9ddreYVdby1fydTKXnJ4rLnEA)
 
@@ -158,9 +185,43 @@ Switch: Когда верхний контакт компонента актив
   </iframe>
 </div> 
  
+#### Circuit Simulation (Bit Switch)
+(также часто называют "pass transistor logic", "передающий транзистор" или "ключ") 
+
+В CircuitJS нет прямого “tri-state buffer” как в игре Turing Complete.
+
+Но есть аналог из реальной электроники для правильного моделирования состояния Z:
+* Управляемый ключ на N-MOSFET (или NMOS):
+  * Сток (Drain) и Исток (Source) подключаются в разрыв вашей сигнальной линии
+  * Затвор (Gate) — это управляющий вход
+  * Принцип: Режим ключа предполагает заземлить подложку Body/Bulk, что бы диод не открылся когда на стоке напряжение выше, чем на истоке,что лишит нас возможности управлять затровором Gate. Когда на затвор Gate подается высокий уровень (логическая 1, напряжение, близкое к Vdd), транзистор открывается и проводит сигнал между стоком Drain и истоком Source. Когда на затворе низкий уровень (0), транзистор закрывается и разрывает цепь.
+  * Недостаток: пороговые потери (Threshold Voltage, Vth) на преодоление барьра открытия транзистора, что снижает выходное напряжение, например если HIGH был 5 Вольт, то на выходе 3.5 Вольт, что в каскаде т.е. дальнейшее использование сигнала HIGH с выхода уже невозможно!
+* Transmission Gate (Analog Switch)
+  * Он состоит из параллельно соединенных N-MOSFET и P-MOSFET, управляемых инверсными сигналами.
+  * Когда ключ открыт, он отлично передает как 0, так и 1 без потерь напряжения.
+* Трёхстабильный буфер (Tri-state buffer)
+  * По сути, трёхстабильный буфер — это "цифровая" версия Transmission Gate с гарантированными уровнями 0V/5V на выходе.
+
+ 
+<div class="sim-wrapper" data-circuit-id="26">
+  <button class="sim-fullscreen-btn" data-circuit-id="26">⛶</button>
+  <iframe 
+      id="26"
+      data-circuit-id="26"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/26_bit_switch.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+[Bit Switch NMOS,Transmission Gate,Tri-state buffer (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWKsEA4wHYvoCwCZIBOVSVHcAZhCQUmoFMBaMMAKABlKdyEMA2cHhypq-KOBAAzAIYAbAM71qUVgHdKYhGDzgcpatpXqw3OgkI6TekH32RWASUq3q3XdYRu6MGmt0YdXgETANdye2McUK1LKMCvPxN9IK4eMXswEl1ksRDAsXDoCDB4UvhwMvKEVgAPcAQKCAQ8YPMmvEIQcgIQAHkAVwAXAAch2vAwNANO7UnqPB1yTJAHADtRwYAdeQBBVgBZf3ilhGaw8TxoarqwClRAheyqZqQlugA5XoAVcasMLsIMxwfECkEWFRAACF+pJftweFMTOZqHwIG8oTDWJk6EkRDEjgZwTBipVShVSdREqZ5iIrGYEpFrLZaY0dMyjJRDPjbppDBFOcdnPTwqxJCA7mkBHozGJCMErsgweM9HicJ1qadwSUQAARABO0gAlqttmw6jhDKjyDgzqj-uiAMoAe36eoAxvRTeMKGCbNqKBQ2bcuhCAOLSQae+RsTh4VB4wxCMx8iQyBRKJD2Q7NER8Jn6PPeECXa7gDBNTDFuPzOhLERrDbbPY3DBIPhiPCBmwYdXgevrIbbSEcYsIATtnRJ7s6ItpxTKex1H3kDA+8UUFcBkPa8OR7Z4ZWGLDWs5Ye0Q52uj375X6DBELrWctauj6o0m+QHsUSkCrqVwX8KAEOVwAVGAlXUaUUVrAD8X5KD8TjBMZz8KCAhgugJw5KCsLwMdpxUJwkNEAQAwEFJvAVap1DIkjxTIOj+TwaIO3jRi-GY-IBE4wCBCY0I-3ozc+NQ2CLBpahxP5HNJIeXNrHggDWzk38zmk6tCwk5SVAAcy6JSgK6LtBO8LFkVQLtiNQEDiMnHFSXKEssRcdBSIY6y3O6Yt7IcugnLqe4RCEGZIBBYs+F7EwQAdAAFB0vm2AAKB1jR02Qoxip10u2FLVjSqMvgACz1J1VAASm2TZNlWQA8EEAFhBAF4QQA+EEAfhAmsAbhBADkQQBBEAawBpEEAThAABptiaxqmoawAGEBawABEEmwAmEHawBWEAa-qBvGCzyADJASmRChTm3chYp1BL5GS1LsvkTLLp1F0ACNLqKkryqq2rxrarresGkb5Dq+bAGEQKbZoW5bVsG34ey6XgbCELoXG6Oh9n6WRBn6YZ0pqeg9XkJL9gAVQADW2AB6bZABwQf72sAGRBACEQQAOEBa5bAC4Qbqlpmir5HeRh9l6B0ADEAFEfju8B4a7PhT1QTM-Fo2iLVIwymLYwM6BV8Uen5WXIC2wziPsb8ejV2WehAsAwNgA8l3wcVIAgICkGXbdXwNY1vSi-aRA3B3USd6KXXdehxgIf5AyQIRSOrOsQF3QPDmBHXyLcWi-KuEdaNs-C9fEOcMxUG4JeLQgICEMPCGtPsVgHLZ5AAEwjaQR2ItW8IjosIBzhdWD043Vb4T2Nd0-SZSlLsKJUEWwHhyebDVUWRLqPDLEIZ4XDAEDulpaAh0NauHVUHe3UK7YuZ5-mhdYYY4YTq+hPFcQfLKLuumnn8oJ-UzIJfwz4-XETOAsycbF+BBTYjiKQch5zS0OB5YsbFCCsRECnao-88w2xXH3NB4h24QNzvYf+L8GLANvmAjuUCQAwKAiIeBpEMFIIOOQ9eAFqFDwuKnf+whxQYKIZQrB4D0ydzqPeHaRcJgAQWK8WBxYt7yEhDvHK+9BiH22F8A0qx5AAFtDTyHkIaJ0H4Y6vUSjsVYcgnQ6XkQfQqZVWAi3bDiPgwRtBSjXnnch1tVxUGXkgQSUcT680Fj8AKG5qD7RABYcidxtwiBitzfx59BG+htDtIgrx0Ahh6LI3eCilHyFivFJKuV8rbGulGQpj1iqlQ5q9eqzUPo9TWj9MazUgZzUWitNa4xVw6HvJ0LAEBnxROjhGQOdQLBtjSWXXMDF0RvldgFC0Ng0moFCH3cu2pLwB3GMvToEsqE+wcWiCEkInQ1wAJ4X3JLmfQJQCzWCoG3Uk9CblXNpJAfC7I6H-yyOyDADEPmphwZ3MUMD7zkBgRLYC8pMwW1FAw8iLkQLsngaBaFEEwmWmuXAF5HJwX6HBbDfk+LyBl3ICCEU6hwX4XBQpPw1K6AkpnqZPSDLNJykwgpDkLLYYMooqwAASmEtwKQeVeHEB4e+yBqLkO+Xi75+F+RFzZPoRVNh5UjgAb+bWv5CFapIYC6WTgNVjjoDA4198qK0uMlqo1Lh7B6WeYs15d5dUqD1Jcxl7q+6IPJISkCoLyFWpFG6n+r8CHhB9Vsg6Y4dDwP+GOCR2pjlnK2VFWwMabQ2Deb7DZHoNqz1sFQZZSqpQQlmasGxBEcBdhYJ2bV896IOx6HoEOtb0RJvOeaWeKRhAykinQdtXpO29O-lkVcfaoQnNOTeAKBcLCFrgS0X2ZatlrgsDGn2Yzs3+1zaM350q3gAXjOeRNk6-AqpKLDMgryCW0o4ResFHD4ymUNY+rIKqn3mt8OoCwVDqw-rCekWlIF-0wOYfYAVzDQMuVQUWcVRYfBntlG4SDIE7WCuJS4BlYHOWGDZehsJtqz24dlLhwj37cPIaQ+S9FMa-0Ueo-+-996wnVn1jR6V9LcN-v+GbVFX52PMZVcw025slT-yYdWbS-69X8LIcxko1gSihAU0Wfygr-hyiQHKTocoRBttPQFaGNyIDxidWsugOaRlhMMiUFgYTkS2fM7qF25a6h92AluDAVbrMluWA2QcuwNpefIRu4EIW1nkBiafAJQXknW0mRUDNSxyB+LPoE8h95BAOMFVQJxkUUuxLS0F3LpAIBl2SdM3QIAotxPS+5iY+EvO5cmJFfsjYZFbIWdoPCBGlgLD06WlzG0jPiOlbSfrW6rxWYS9oJhmXZtUH08m-+1bJjdLOCwNSALZMqDFOeoQVDDCzfpVCxU-Hz0KYE2tgDKKztnurJtywYIljXYVUd67F3aFEcsJPKhuRfs4csAQTjP2GJvdBxhnEmQRTMtXtDgDjiwc4tNtdmBx3OUPY+w94HhE3G0kuxdl1PhKQUrvQdvHoiGNHfJ1ewQHDFzWah2FuUxQTDjssxtAuLAohjYa7WQb75EjPZY9et4NLjDC8exUWGKnkeOLOBqqXhKALaC7CQHE5Plca8fWT+ntKVedh0Or6X1HjcgeA6xja1ypwWXG959EBjPwbTswpzoZASRnAd8Mr036qMI4qKEBV-2MHMKUyhBJRueglEIEge4i3vIgCRijNGGMsY4zOvjIm8hSbyAptTemjMloszZhzPJPxxP2VhtpZjMnIG4+N8x2nNfJWUjc2ki9w6QpdijgAYT0YMEqsgzJu9QTyYCD2KAdgTzchyUjqgtfC+4elD3qR2R9RSJyKCliT4EA3nfvDSEqC30v8hKvqS19weq6tKpT84hvxfgRv4ZcWm6fcXQcxe-98H50xdPJekWUoDfyjn82rmbCf2CG4H6QAKsDWTawC2HEOCYxv1D3vzn3uxZFlBXzsHQJPyQOwJfVpDiDhQJEoi-WILyHIJtBEgpWvzxVNnvyA2CAoHEjRwYNJ0INCEVyIMJVoJEC4MD0bhYm4g8HSG2zrwZ0wECDSU7DMEq2WD71WAHyygrSwgb1V0ECwHHgIm0BRzwGKC0HuU6RVzVmj1y0DHjx6CT1RnRnoExmxlxkJhJnJkplpgZmZlZnZhyjinS1mx42XnqFnjXhLWrAoGkUyQsUUSPnkBUUNEYHkEGG93kDuhhEkCxipH0GIlxEwQyCyDH2LGU1X1CEKBJF8nXzJFLBMDmDwiBDXBaBfAxFhE4DyJ4m0A4R4gfzk0KMsGaD8kDzQJuAaEnE0Ja0AX5x6AGBGDGBuEmH+GYh407FmKyGAKrm2DrgSJHCyMdlaM9hdWwR2wkLXi2gfFVyoFZEGRjl+BMEWAc1REWDCgRkT2RmsNT3sIz0cOz2cPzzcKLw8I5hiLiISL3CSJSLSKaLOM8D6w4QhIP31VcU23IloEECilOHj3kK-2UOmOhjQCB2RKlkGRAKHESHBLcFuAxUQQrRYG-mrRBCgJFAnh5FFlpBBFeD0NcUBGS2DF2g5OCLoAmI2F+EgEn2l3smRQvQsN5KGH5JuG1lkPxzEkOXGMlKmJRCoFRHHFrVRF7EVMmMGHGBeHFDmDQAdmWAeL5OVPbFLjoFbFLlRLgOrjWIbkEUMB9H+FbDtm1CjguKdNONQAEG0juFayGUjHGHbBoV6Xwkny1DtNWPrg2PBOpyhJTDoEPwZwilVLsywHTNgMrnawdNYCAA)
+
 ---
 
 ## Input Selector
+
+> [!TIP]
+> Разблокирует 8-ми битный MUX / Мультиплексер
 
 Multuplexers (MUX / Мультиплексер)
 
@@ -228,7 +289,9 @@ Multuplexers (MUX / Мультиплексер)
 Шина.
 
 > Задача: 
-> На этом уровне имеется 2 байтовых входа и 2 байтовых выхода. Ваша задача — скопировать верные данные с одного из входов на один из выходов.
+> На этом уровне имеется 2 байтовых входа и 2 байтовых выхода. 
+>
+> Ваша задача — скопировать верные данные с одного из входов на один из выходов.
 > 
 > Первый входной бит определяет, с какого входа следует копировать данные. Второй входной бит определяет, на какой выход следует копировать данные.
 

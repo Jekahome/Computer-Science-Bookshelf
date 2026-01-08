@@ -201,7 +201,9 @@ fn main() {
 
 Нечетное число сигналов. 
 
-> Задача: Имеем 4 входных сигнала. Используя не более трех компонентов (xnor,xor,nor,nand,or,and,not,on,off), установить вывод в значение 1, когда количество вводов со значением 1 нечетное.
+> Задача: Имеем 4 входных сигнала. 
+>
+> Используя не более трех компонентов (`xnor,xor,nor,nand,or,and,not,on,off`), установить вывод в значение 1, когда количество вводов со значением 1 нечетное.
 
 Т.е. при четном числе входов со значением 1 нужно получить 0. Такая ситуация при которой имея два входа по 1 (т.е. четное) дают на выходе 0,а другая комбинация c 1 (не четная) дает выход 1, напоминает таблицу истинности для XOR
 
@@ -864,28 +866,22 @@ Decoder "1 to 1"
 
 Decoder "3 to 8"
 
-С 3-мя входными битами возможны 8 комбинаций. 
+С 3-мя входными битами: `A, B, C`, возможны 8 комбинаций выхода: `2³ = 8`. 
 
 > Задача: 
+>
 > Создайте схему которая выбирает один выходной бит для каждой из 8-и комбинаций. 
+>
 > Строго один бит должен быть положительным для каждой из комбинаций.
 
-Это 3→8 decoder.
-
-Есть 3 входа: `A, B, C  (по 1 биту)`
-
-Всего комбинаций: `2³ = 8`
-
-Нужно сделать так, чтобы:
-* для каждой комбинации ABC
-* ровно один выход был 1
-* остальные 0
+Нужно сделать так, чтобы, для каждой комбинации ABC, был ровно один выход был 1, остальные 0
 
 Когда у нас есть `k` состояний и `n` входов, это **декартово произведение** состояний, считается: `N = k состояний ^ n входов`
 
 У нас есть два состояния 0 либо 1 т.е. `k=2`. И 3 входа `n=3`, получаем `N=2^3=8`
 
-Все 8 уникальных комбинаций мы можем придумать в произвольном порядке, но в задаче есть таблица истинности которой мы будем следовать. 
+Все 8 уникальных комбинаций мы можем придумать в произвольном порядке, но в задаче есть таблица истинности, которой мы будем следовать. 
+И к тому же в таком же порядке следования opcode кодируются числа 1,2,3... 
 
 ```
 A B C | Активный выход
@@ -900,9 +896,7 @@ A B C | Активный выход
 1 1 1 | 10000000 D7
 ```
 
-
 Нам нужно переключаться между выходными битами в зависимости от числа, соответсующего входному биту
-
  
 <div class="sim-wrapper" data-circuit-id="21">
   <button class="sim-fullscreen-btn" data-circuit-id="21">⛶</button>
@@ -915,12 +909,13 @@ A B C | Активный выход
   </iframe>
 </div> 
 
-
 ![3 Bit Decoder](/Computer-Science-Bookshelf/img/tc/3_Bit_Decoder.png)
 
 Или с помощью открытого компонета `1 Bit Decoder`
 
 ![3 Bit Decoder](/Computer-Science-Bookshelf/img/tc/3_Bit_Decoder2.png)
+
+---
 
 ## Logic Engine
  
@@ -983,6 +978,73 @@ A B C | Активный выход
 
 
 ---
+
+<!-- Feedback -->
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<!-- <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script> -->
+<script>
+  window.formbutton = window.formbutton || function() {
+    (formbutton.q = formbutton.q || []).push(arguments)
+  };
+  formbutton("create", {
+    action: "https://formspree.io/f/xkogdkjd",
+    title: "Feedback",
+    fields: [
+      { 
+        type: "text", 
+        label: "Name:", 
+        name: "name",
+        required: true,
+        placeholder: "Your name"
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        required: true,
+        placeholder: "Please share your thoughts...",
+        rows: 5
+      },
+      {
+        type: "file",
+        label: "Attach file (optional, max 10MB):",
+        name: "file",
+        required: false,
+        multiple: false,
+        accept: "image/*,.pdf,.doc,.docx,.txt"
+      },
+     { 
+        type: "email", 
+        label: "Email (optional, for reply):", 
+        name: "email",
+        required: false,
+        placeholder: "your@email.com"
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#333",
+        color: "#fff"
+      },
+      input: {
+        borderBottom: "1px solid #CCC",
+        borderRight: "1px solid #CCC",
+        padding: "5px 0"
+      },
+      button: {
+        backgroundColor: "#4a5568",
+        color: "#fff"
+      },
+      form: {
+        backgroundColor: "#f7fafc",
+        maxWidth: "400px"
+      },
+      submitInput: {padding: "0.75em 1em"}
+    },
+  });
+</script>
+ 
 
 <style>
 table {

@@ -54,6 +54,23 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 
 ![New_Component_ALU](/Computer-Science-Bookshelf/img/tc/New_Component_ALU.png)
  
+#### Circuit Simulation ALU
+
+* [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
+* [Bit Switch](turingcomplete_memory#bit-switch-tri-state-buffer)
+
+<div class="sim-wrapper" data-circuit-id="25">
+  <button class="sim-fullscreen-btn" data-circuit-id="25">⛶</button>
+  <iframe 
+      id="25"
+      data-circuit-id="25"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/25_arithmetic_engine_alu.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
 ---
 
 ## Registers
@@ -471,6 +488,7 @@ printf '\x00\x00\x00\x00\x00\x00\x00\x0F' > data.bin
  
 ---
 
+<!-- Feedback -->
 <!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
 <!-- <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script> -->
 <script>
