@@ -215,7 +215,7 @@ OPCODE MODE:
 Компонент ввода инструкций был удален. Он заменен компонентом программирования Program Memory. 
 
 Раньше мы использовали ручной ввод инструкции (Instruction Input) прямой передачей 8 бит. 
-Теперь нам выдают Program Memory (ПЗУ) который содержит в своей постоянной памяти 8-ми битные инструкции.
+Теперь нам выдают Program Memory (ПЗУ **ROM** (Read-Only Memory)) который содержит в своей постоянной памяти 8-ми битные инструкции.
 Что бы их достать нам нужно их поочередно брать по индексу, для этого нам нужно использовать счетчик который будет с каждым такстом увеличиваться и мы будем получать следующую инструкцию из блока Program Memory.
 
 В блоке Program Memory инструкции хранятся в определенной последовательности.
@@ -387,3 +387,152 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 
 ![Turing Complete](/Computer-Science-Bookshelf/img/tc/Turing_Complete.png)
 
+
+<details>
+
+<summary>компонент RAM в circuitjs</summary>
+
+[RAM](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKABYxsQM82QG22FCDxhC-QcKp4R4EHzBUm-FCwCyIvEpRsqxMMIY6qVFNATrN2-CH2G0M0+ct4t-MBnF33nqCDMWADJWEkK2BqFScgBmAIYANgDOdNSQLm5GGMLemVEB6Uq4fDlFfvkaroXYXhEM2NVlzhUZ1TIlhI7+TSECcOGGuiZdQdy8KrrcDUYTQ3FJKUhpwTx8RjY44mudEHPJqSzLY0y+Gz7iVDsJe4sHo6uSk5sPFyC7C1C3KypZj99RVG99odVqVTnVIHxZld3ks7vx6uIwQi-ADoUC4XUOr9MZ1UfN0V9elQwYMUa80TcOMRwJwnmFmFiBGFpLdmFMHDSISobC9ATdgmzNsZOathbyKR8BbS-iKZeL8ZSUBAwGwdPwEBEVRMGBqop1Fn4DUh+eBVaKEOJOMR7BayXyPlTwAg0BI3GAEM7XUM8CwAEqmtU6zXYa3qzX+ZBOJABFHOAXO7Rq92eoxq+XXSUB0VJkP2NMxCWwlWBlCucC5lRlqEKzPFkEuq2GIRDPEZotm+Gexud-7kmvtwPYMbdupjatt1kdgRicuh6fnPz2gf3NgyEdsVd2wuTwOri4VgRuccwnerMChkfnqKXfushPuC8ewxXvw3icADxpGCQAgwypQCBcAIWJ8GqAAiACWiQAA7xLEACeLCflo1K-nweCEAMf7yP4fC+gAgmoSGmhw6qAU6uBkVQoF8AAwgA9gArgAdgALnQABOLBAA)
+
+RAM:
+A0, A1, A2 — это адресные входы (куда подаётся адрес ячейки)
+D0, D1, D2... D7 — это выходы данных (откуда читается содержимое ячейки)
+
+ 
+
+**Правильная логика управления RAM:**
+
+| Сигнал | Значение | Режим работы |
+|--------|----------|--------------|
+| **WE = 1** | HIGH | **ЗАПИСЬ** — данные с входов D0-D7 записываются в память |
+| **WE = 0** | LOW | **ЧТЕНИЕ** — данные из памяти выводятся на выходы D0-D7 |
+| **OE = 1** | HIGH | **Разрешение выхода** — данные появляются на выходах |
+| **OE = 0** | LOW | **Высокий импеданс** — выходы отключены (Z-состояние) |
+
+
+
+RAM:
+```
+0: 0 0 0 0
+7: 15
+```
+
+Вход это адрес ячейки:
+```
+A2=1 # 2²=4
+A1=1 # 2¹=2
+A0=1 # 2⁰=1 
+ 
+Это означает адрес: 111 в двоичном = 7 в десятичном.
+
+2² + 2¹ + 2⁰ = 4 + 2 + 1 = 7
+```
+
+
+Выход значения формируется из 8-ми бит:
+```
+D7=0
+D6=0
+D5=0
+D4=0
+D3=1 # 2³=8
+D2=1 # 2²=4
+D1=1 # 2¹=2
+D0=1 # 2⁰=1
+```
+
+2³ + 2² + 2¹ + 2⁰ = 8 + 4 + 2 + 1 = 15
+
+Для загрузки файла, RAM ожидает бинарный формат:
+```
+printf '\x00\x00\x00\x00\x00\x00\x00\x0F' > data.bin
+
+Что создаст файл с:
+0: 0 0 0 0 0 0 0 15
+
+Что тоже самое:
+7: 15
+
+адрес: значение
+```
+
+Формат данных:
+```
+1: 4
+2: 10
+
+трансформируется в:
+1: 4 10
+```
+
+
+</details>
+
+ 
+---
+
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<!-- <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script> -->
+<script>
+  window.formbutton = window.formbutton || function() {
+    (formbutton.q = formbutton.q || []).push(arguments)
+  };
+  formbutton("create", {
+    action: "https://formspree.io/f/xkogdkjd",
+    title: "Feedback",
+    fields: [
+      { 
+        type: "text", 
+        label: "Name:", 
+        name: "name",
+        required: true,
+        placeholder: "Your name"
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        required: true,
+        placeholder: "Please share your thoughts...",
+        rows: 5
+      },
+      {
+        type: "file",
+        label: "Attach file (optional, max 10MB):",
+        name: "file",
+        required: false,
+        multiple: false,
+        accept: "image/*,.pdf,.doc,.docx,.txt"
+      },
+     { 
+        type: "email", 
+        label: "Email (optional, for reply):", 
+        name: "email",
+        required: false,
+        placeholder: "your@email.com"
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#333",
+        color: "#fff"
+      },
+      input: {
+        borderBottom: "1px solid #CCC",
+        borderRight: "1px solid #CCC",
+        padding: "5px 0"
+      },
+      button: {
+        backgroundColor: "#4a5568",
+        color: "#fff"
+      },
+      form: {
+        backgroundColor: "#f7fafc",
+        maxWidth: "400px"
+      },
+      submitInput: {padding: "0.75em 1em"}
+    },
+  });
+</script>
+ 
