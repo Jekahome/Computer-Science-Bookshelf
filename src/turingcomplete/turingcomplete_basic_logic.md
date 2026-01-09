@@ -1,6 +1,6 @@
 # Базовая логика
 
-* [Логические вентили](#Логические-вентили)
+* [Logic gates](#logic-gates)
   * [Законы де Моргана: Позволяют упрощать и инвертировать сложные условия](#Законы-де-Моргана-Позволяют-упрощать-и-инвертировать-сложные-условия)
   * [AND](#and--a--b)
   * [OR](#or--a--b)
@@ -15,14 +15,67 @@
 * [OR gate with 3 inputs](#or-gate-with-3-inputs)
 * [AND gate with 3 inputs](#and-gate-with-3-inputs)
 
-## Логические вентили
+## Logic gates
 
 Логические вентили можно комбинировать для решения более сложных задач, например для выполнения простых арифметических операций.
 
-![Логические вентили](/Computer-Science-Bookshelf/img/Логические_вентили.png)
+![Логические вентили с помощью реле](/Computer-Science-Bookshelf/img/Логические_вентили.png)
 
-[Логические вентили OR, AND, XOR (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgAPEJwjYimkh4p+CGnlogUNEADkA8gBU2YDBKY1ihChm1NsCFDu3aIqKFFhIw8eJchG09ozERQ2Ac24GjhfN8MQQhoqULYAJW5NbQRdKK0KMBcLEOpQywQ2ACdvSBkEP1yZQmkLG0hPIqDS-Tyg1LCuHjx6bGx1QmwIbBoIGVKADXlwzm5eIxYSMew9MEJtfplh0eaZMB7ptexyRZAAQVkAERUS7jAaGSY8KhYLqIkjABMGADMAQwBXABsAFyYvhiPcAWUKwdhzCZgYhGc6XKEw6FSEDPd7fP4AoFmEFgk4TaRUGbqfG0OZIlGfX7-QHA9KucFqMY1WHcMRwu6mSxY1zWWxwZwUUEOeyQJAVVTqOiQu76QK3Yo06BcqzIXn8yj81wi9zi7goApnaWqWbshVKrXlWxqwUuWBaiqRYRsy6EfVykG0Kii7GZLxMVlnJIs6XXEGVGWQwPh7ghsK+o0ByFxK60tgAd0ZcMjLtmgYq6Y02AjExowQT7nzepzeLw6lYLjYABkxq66829IX3e8vgBnBhpRtRUssSMly4d9Jd3v9ptMFA1suz+f6ZJUSd90VsACyBrhc+4CRYe6oKGgmRybsPteD6XKYeZGivY5XESiHYvo537tSXtBmQdlc-RdHy-T13RgTJ839S8WUjJIJDzGDIT3P1YMRBCUMhRFlxueFy28JwWCwwscKPNN8JI9QfDOUj82Is4sPvXD0MYhjDRos4kzgwCuPQlBSgPXCEgqONEVwwjHH8MJz0E2ZRLuKhb23cSQAEu4hKkU8B30GZwEjNpTDQiw12ne4FJHEMmKMt4e3XdwZxKNYs1KSzV2sqcN1oupW200xczIjRxF04sLL8yDRKcxz619PjIt1Zz5PcX1CSC7xCAkZlY0QlKMPABL0NwGQQ1qGQhP85KDwKlTtHQi4JCK2qqrwnKDwa0qHQQREiuCKgYxSUDaU0nVipAIqYpGqgORgM0eVVVwjHVObhQ3IaGqK5KQ0mxVsXNXlrQFDVbWWhk-U6m4EEDDbTW2mbLUWhbYBtNwKiU4k6OUujj006LUl6PRiUlUNz1egjXrSso4DKpw3uBsIZznCQqKA2hx2BYyNxnWJtERzHkeSCA0aaujEfhkAqPQ-1sbiMmw1+0nZVp5LMoChH6cCxn3Hau43pxj6+rSb1-Ia-SolJSqarZuoNFFnSxWOomCIZpxNrMWBSDV9X1YwFB6G5FVboe-bFs1awVGOimFbZpWrtcDXbdILWdeVC07DuvbjfALToiCfwTt8SSrJs-sIQCebCmGgpj2RV4KXRakuXsdglMqiPdX1FPPsyHViVbOjW2V+w7dth37Bul2DfuoV3fpBG8Fij88+t1XC817WS71suhQrx7zRfbPA1w1t0m-MDNPTXO93aNZ2MnlKZ54sj673Qx0tIrxc65px40y+u7nruIwnTbO7jQdL5LIueucCDKBxP3L+n8MaFJAAmKibKjmSox-Ubc2znpALWepUF0HVdIJ5M6nHGONf+TgQxPGjmiKkmIR6QHYF4ABd9oEKUKFJTBUD0EZRVC+ZejViEoyoMPAaPogha3AHuSBcwUw6mIQkSBLCFQ2mkHgDABQUBgDwMQEUFxKCOx2rNA2TgjaHQ9lwKEEAxBSA6joSQpRZAHGOOmYhw4jBey0XhYWLA4iaK3ufHSuj9HGLHpLHOpjB4vlptBGe0Eh79QFm-Wu+4sbuMmGUZ+P8TJiQSGJUkT8X4L1JEwBIjjSqHxqIErCpUvA6ISDo0smVKoRKxpLVJHMpBMj3EEo8fMfwZFNhIexXEdFcXzjbZuati662dnyV2B03DV1ybuBGVi6GN0gLUuprcGm7StC0nuMi8CyWPNgfgLAuHKJkAoEYTCw7MgwFYk0KsOHRC4fwlB2xcCQFSU7IZi0JEGyrpUVZmYjCXOjCmSIKc3QPNvs4-mv5sj-1lAwj5Ex1K3jQbKBI3CJi9TFKcG5kwgGfMKHA1ElIMQ0m2onb5ZxCjXBwtgjSEEKDIVbA82xGicWGJxX5LOqQqLCyovnbAioxAHK1qoPZcxiDMCSI9UuTTy5uykbLMppZyVg0pT0vp9sBlHLEZ3LlrSTFYx0slRm0rSYCoFTLXuZLAi3zJkUkeVCKXuOFiEFMa8BV6rBga0Mh8yXuI1e4hCH4Z5exnq-KQ-gZ63w-BOPx6NaCRPcV7d139A4eVoHywIFNAgVByGG+au8mmEK8P6BqCaQW4gEDIM1CbAowpjoghFgp2AyJwFIcZUgaCOH4XMkAAwFmlOMKTJw6C6KbU2eMyAuBeDEA6lgJI5BBniokiMk2aCoaBAbTanJPMnA40wCuD0rySk5GAaTOoi72Z-P-kqiQK6x2guuVDZdAq6hZoQfC+OdItzrs6YVUWdQM5kSjbW6mYB1TeK4oEwpyRMjbjfafKe8FMVaVJPeUsBD8aersii7KwHcwBvctqKF1EJACXfRYT9jVoKMXfZpGc4SgNOh8aE7DVYxhXPw2BioAAjMY85APQuwWwSjXzwlpWmbwjcX7wowjyGZZIYCBzjN-SNQDhTQOBvA-xxqeBSS-N8aJsU50RpQaMKQGE0GP3nuUwh5AqQnH-qbDWHCdwWhShkCEsjfGiqtiM2WUzsn1OeLWFzMdvGZwdjNTwNNsbXK2Zc0YZK7nFV-pE7Bij4BCgpNmXqfgIXGOmHwPQWcT73AMehfqGw7jEvRbC4E-A-R9SZfIQeNK2h6VwafKTdxPqTNIg+AAOxRAASxq9STOCB6D6c0xpnTRhasNaa0CTIABJfC3tEMmH9uBCgdmRu0IkH4P9znhtzeI9Nj1tmgA)
+[Логические вентили с помощью реле (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgAPEJwjYimkh4p+CGnlogUNEADkA8gBU2YDBKY1ihChm1NsCFDu3aIqKFFhIw8eJchG09ozERQ2Ac24GjhfN8MQQhoqULYAJW5NbQRdKK0KMBcLEOpQywQ2ACdvSBkEP1yZQmkLG0hPIqDS-Tyg1LCuHjx6bGx1QmwIbBoIGVKADXlwzm5eIxYSMew9MEJtfplh0eaZMB7ptexyRZAAQVkAERUS7jAaGSY8KhYLqIkjABMGADMAQwBXABsAFyYvhiPcAWUKwdhzCZgYhGc6XKEw6FSEDPd7fP4AoFmEFgk4TaRUGbqfG0OZIlGfX7-QHA9KucFqMY1WHcMRwu6mSxY1zWWxwZwUUEOeyQJAVVTqOiQu76QK3Yo06BcqzIXn8yj81wi9zi7goApnaWqWbshVKrXlWxqwUuWBaiqRYRsy6EfVykG0Kii7GZLxMVlnJIs6XXEGVGWQwPh7ghsK+o0ByFxK60tgAd0ZcMjLtmgYq6Y02AjExowQT7nzepzeLw6lYLjYABkxq66829IX3e8vgBnBhpRtRUssSMly4d9Jd3v9ptMFA1suz+f6ZJUSd90VsACyBrhc+4CRYe6oKGgmRybsPteD6XKYeZGivY5XESiHYvo537tSXtBmQdlc-RdHy-T13RgTJ839S8WUjJIJDzGDIT3P1YMRBCUMhRFlxueFy28JwWCwwscKPNN8JI9QfDOUj82Is4sPvXD0MYhjDRos4kzgwCuPQlBSgPXCEgqONEVwwjHH8MJz0E2ZRLuKhb23cSQAEu4hKkU8B30GZwEjNpTDQiw12ne4FJHEMmKMt4e3XdwZxKNYs1KSzV2sqcN1oupW200xczIjRxF04sLL8yDRKcxz619PjIt1Zz5PcX1CSC7xCAkZlY0QlKMPABL0NwGQQ1qGQhP85KDwKlTtHQi4JCK2qqrwnKDwa0qHQQREiuCKgYxSUDaU0nVipAIqYpGqgORgM0eVVVwjHVObhQ3IaGqK5KQ0mxVsXNXlrQFDVbWWhk-U6m4EEDDbTW2mbLUWhbYBtNwKiU4k6OUujj006LUl6PRiUlUNz1egjXrSso4DKpw3uBsIZznCQqKA2hx2BYyNxnWJtERzHkeSCA0aaujEfhkAqPQ-1sbiMmw1+0nZVp5LMoChH6cCxn3Hau43pxj6+rSb1-Ia-SolJSqarZuoNFFnSxWOomCIZpxNrMWBSDV9X1YwFB6G5FVboe-bFs1awVGOimFbZpWrtcDXbdILWdeVC07DuvbjfALToiCfwTt8SSrJs-sIQCebCmGgpj2RV4KXRakuXsdglMqiPdX1FPPsyHViVbOjW2V+w7dth37Bul2DfuoV3fpBG8Fij88+t1XC817WS71suhQrx7zRfbPA1w1t0m-MDNPTXO93aNZ2MnlKZ54sj673Qx0tIrxc65px40y+u7nruIwnTbO7jQdL5LIueucCDKBxP3L+n8MaFJAAmKibKjmSox-Ubc2znpALWepUF0HVdIJ5M6nHGONf+TgQxPGjmiKkmIR6QHYF4ABd9oEKUKFJTBUD0EZRVC+ZejViEoyoMPAaPogha3AHuSBcwUw6mIQkSBLCFQ2mkHgDABQUBgDwMQEUFxKCOx2rNA2TgjaHQ9lwKEEAxBSA6joSQpRZAHGOOmYhw4jBey0XhYWLA4iaK3ufHSuj9HGLHpLHOpjB4vlptBGe0Eh79QFm-Wu+4sbuMmGUZ+P8TJiQSGJUkT8X4L1JEwBIjjSqHxqIErCpUvA6ISDo0smVKoRKxpLVJHMpBMj3EEo8fMfwZFNhIexXEdFcXzjbZuati662dnyV2B03DV1ybuBGVi6GN0gLUuprcGm7StC0nuMi8CyWPNgfgLAuHKJkAoEYTCw7MgwFYk0KsOHRC4fwlB2xcCQFSU7IZi0JEGyrpUVZmYjCXOjCmSIKc3QPNvs4-mv5sj-1lAwj5Ex1K3jQbKBI3CJi9TFKcG5kwgGfMKHA1ElIMQ0m2onb5ZxCjXBwtgjSEEKDIVbA82xGicWGJxX5LOqQqLCyovnbAioxAHK1qoPZcxiDMCSI9UuTTy5uykbLMppZyVg0pT0vp9sBlHLEZ3LlrSTFYx0slRm0rSYCoFTLXuZLAi3zJkUkeVCKXuOFiEFMa8BV6rBga0Mh8yXuI1e4hCH4Z5exnq-KQ-gZ63w-BOPx6NaCRPcV7d139A4eVoHywIFNAgVByGG+au8mmEK8P6BqCaQW4gEDIM1CbAowpjoghFgp2AyJwFIcZUgaCOH4XMkAAwFmlOMKTJw6C6KbU2eMyAuBeDEA6lgJI5BBniokiMk2aCoaBAbTanJPMnA40wCuD0rySk5GAaTOoi72Z-P-kqiQK6x2guuVDZdAq6hZoQfC+OdItzrs6YVUWdQM5kSjbW6mYB1TeK4oEwpyRMjbjfafKe8FMVaVJPeUsBD8aersii7KwHcwBvctqKF1EJACXfRYT9jVoKMXfZpGc4SgNOh8aE7DVYxhXPw2BioAAjMY85APQuwWwSjXzwlpWmbwjcX7wowjyGZZIYCBzjN-SNQDhTQOBvA-xxqeBSS-N8aJsU50RpQaMKQGE0GP3nuUwh5AqQnH-qbDWHCdwWhShkCEsjfGiqtiM2WUzsn1OeLWFzMdvGZwdjNTwNNsbXK2Zc0YZK7nFV-pE7Bij4BCgpNmXqfgIXGOmHwPQWcT73AMehfqGw7jEvRbC4E-A-R9SZfIQeNK2h6VwafKTdxPqTNIg+AAOxRAASxq9STOCB6D6c0xpnTRhasNaa0CTIABJfC3tEMmH9uBCgdmRu0IkH4P9znhtzeI9Nj1tmgA)
 
+**Логические вентили на современной логике CMOS: MOSFET (P-MOSFET/P-MOS и N-MOSFET/N-MOS)**
+
+P-MOS транзисторы используются в качестве подтягивающих резисторов, а N-MOS транзисторы — в качестве понижающих. 
+Благодаря этому статическое энергопотребление логических элементов и схем на основе КМОП-технологии очень низкое по сравнению с логическими элементами, разработанными с использованием только N-MOS или только P-MOS транзисторов
+
+P-MOS и N-MOS получают одинаковые управляющие сигналы, но работают инверсно
+
+Именно эта комплементарность (Complementary) дала название CMOS — Complementary MOS.
+
+N-MOSFET:
+* Открывается при HIGH (1) на Gate (GND проходит на Drain) 
+* Закрывается при LOW (0) на Gate
+* Хорошо проводит 0V (GND)
+* Плохо проводит Vdd (потери Vth)
+* Body (подложка) подключается к GND
+
+P-MOSFET:
+* Открывается при LOW (0) на Gate (Source проходит на Drain)
+* Закрывается при HIGH (1) на Gate
+* Хорошо проводит Vdd (+5V)
+* Плохо проводит GND (потери Vth)
+* Body подключается к Vdd
+
+Body всегда к своему питанию (P-MOS к Vdd, N-MOS к GND)
+
+В общем случае, любой логический элемент на основе КМОП-технологии состоит из повышающей и понижающей цепей. 
+Повышающая цепь состоит из PMOS-транзисторов, а понижающая — из NMOS-транзисторов. Входы обеих цепей одинаковы.
+
+> Принцип работы КМОП-инвертора:
+> 
+> Когда входной сигнал логический «0», PMOS-транзистор будет включен, а NMOS-транзистор — выключен.
+> Поэтому выход будет подключен к 5 В.
+> Более того, поскольку PMOS-транзистор пропускает сильную логическую «1», выходное напряжение будет очень близко к напряжению питания.
+> 
+> С другой стороны, когда Vin равен логической «1», PMOS-транзистор будет выключен, а NMOS-транзистор — включен.
+> В этом случае NMOS-транзистор понизит выходное напряжение до логического «0». А поскольку NMOS-транзистор пропускает сильный «0», выходное напряжение будет очень близко к 0 В.
+> 
+> Таким образом, в любой момент времени либо PMOS-транзистор включен, либо NMOS-транзистор включен. И нет прямого пути от источника питания к земле.
+> И поэтому статическое энергопотребление логического элемента CMOS практически пренебрежимо мало.
+
+
+<div class="sim-wrapper" data-circuit-id="28">
+  <button class="sim-fullscreen-btn" data-circuit-id="28">⛶</button>
+  <iframe 
+      id="28"
+      data-circuit-id="28"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/28_logic_gates_cmos.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
 
 ### Законы де Моргана: Позволяют упрощать и инвертировать сложные условия.
 
@@ -102,7 +155,7 @@ fn main() {
 
 ### OR — `A || B`
 
-**OR** Это логическая операция, которая выдает истину (True), если хотя бы один из операндов истинен. Мат. синтаксис **`A + B`**
+**OR** это логическая операция, которая выдает истину (True), если хотя бы один из операндов истинен. Мат. синтаксис **`A + B`**
 
 * OR можно получить через AND `(A || B) ≡ !(!A && !B)`
 * OR можно получить через NAND `(A || B) ≡ (A NAND A) NAND (B NAND B)`
