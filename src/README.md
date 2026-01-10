@@ -74,3 +74,8 @@
 - Разное
   - [x] Бугаенко Егор. Элегантные объекты. Java Edition 2018
   - [x] Бугаенко Егор. Наш код. Ремесло, профессия, искусство
+
+## License
+
+This project includes CircuitJS1 under the GNU GPL license.
+All source code is available in this repository.
