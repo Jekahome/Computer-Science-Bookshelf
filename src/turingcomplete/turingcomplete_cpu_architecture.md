@@ -48,9 +48,13 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 > [D0 D1 D2 x x x x x]
 >
 
+Реализация ALU через NAND.
+
 ![Arithmetic Engine](/Computer-Science-Bookshelf/img/tc/Arithmetic_Engine.png)
 
-Схема созданного вами компонента определяет его функционал, а планировка определяет форму. Имеено по этой причине, нельзя было двигать красные компоненты на схеме, так как они участвуют в форме нового компонента.
+Схема созданного вами компонента определяет его функционал, а планировка определяет форму. Имеено по этой причине, нельзя было двигать красные компоненты на схеме, так как они участвуют в форме нового компонента. 
+
+Реализация ALU через OR.
 
 ![New_Component_ALU](/Computer-Science-Bookshelf/img/tc/New_Component_ALU.png)
  
@@ -62,7 +66,7 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 * [Adding Bytes](turingcomplete_arithmetic.html#adding-bytes)
 * [8 bit NEG](turingcomplete_arithmetic.html#signed-negator)
 * [8 bit NOT](turingcomplete_arithmetic.html#byte-not)
-* [8 bit NAND](turingcomplete_arithmetic.html#logic-engine)
+* [8 bit NAND](turingcomplete_arithmetic.html#logic-engine) или OR
 
 
 <div class="sim-wrapper" data-circuit-id="25">

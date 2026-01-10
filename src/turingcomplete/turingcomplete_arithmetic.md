@@ -987,6 +987,20 @@ A B C | Активный выход
 </div> 
 
 
+**8 bit NAND**
+
+<div class="sim-wrapper" data-circuit-id="29">
+  <button class="sim-fullscreen-btn" data-circuit-id="29">⛶</button>
+  <iframe 
+      id="29"
+      data-circuit-id="29"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/29_8_bit_nand.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
 ---
 
 <!-- Feedback -->
