@@ -78,7 +78,7 @@ Input → [Delay 1] → [Delay 2] → Output
       id="11"
       data-circuit-id="11"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/11_odd_ticks.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/11_odd_ticks.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -180,7 +180,7 @@ Input → [Delay 1] → [Delay 2] → Output
       id="12"
       data-circuit-id="12"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/12_bit_switch.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/12_bit_switch.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -209,7 +209,7 @@ Input → [Delay 1] → [Delay 2] → Output
       id="26"
       data-circuit-id="26"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/26_bit_switch.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/26_bit_switch.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -225,7 +225,7 @@ Input → [Delay 1] → [Delay 2] → Output
       id="27"
       data-circuit-id="27"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/27_8_bit_switch_and_mux_tri_state_buffer.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/27_8_bit_switch_and_mux_tri_state_buffer.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -270,7 +270,7 @@ Multuplexers (MUX / Мультиплексер)
       id="15"
       data-circuit-id="15"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/15_input_selector_1bit.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/15_input_selector_1bit.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -284,7 +284,7 @@ Multuplexers (MUX / Мультиплексер)
       id="16"
       data-circuit-id="16"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/16_input_selector_8bit.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/16_input_selector_8bit.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -317,7 +317,7 @@ Multuplexers (MUX / Мультиплексер)
       id="17"
       data-circuit-id="17"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/17_the_bus.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/17_the_bus.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -409,7 +409,7 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
       id="18"
       data-circuit-id="18"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/18_saving_gracefully.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/18_saving_gracefully.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -451,7 +451,7 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
       id="20"
       data-circuit-id="20"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/20_saving_bytes.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/20_saving_bytes.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -502,7 +502,7 @@ MUX
       id="19"
       data-circuit-id="19"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/19_counter.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/19_counter.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -586,7 +586,7 @@ A B | addr
       id="22"
       data-circuit-id="22"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/22_2_bit_decoder_2_to_4.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/22_2_bit_decoder_2_to_4.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -600,7 +600,7 @@ A B | addr
       id="23"
       data-circuit-id="23"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/23_ram_4_byte.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/23_ram_4_byte.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -613,6 +613,72 @@ A B | addr
 
 ---
 
+<!-- Feedback -->
+<!-- Read the Formbutton docs at formspree.io/formbutton/docs. See more examples at codepen.io/formspree -->
+<!-- <script src="https://formspree.io/js/formbutton-v1.min.js" defer></script> -->
+<script>
+  window.formbutton = window.formbutton || function() {
+    (formbutton.q = formbutton.q || []).push(arguments)
+  };
+  formbutton("create", {
+    action: "https://formspree.io/f/xkogdkjd",
+    title: "Feedback",
+    fields: [
+      { 
+        type: "text", 
+        label: "Name:", 
+        name: "name",
+        required: true,
+        placeholder: "Your name"
+      },
+      {
+        type: "textarea",
+        label: "Message:",
+        name: "message",
+        required: true,
+        placeholder: "Please share your thoughts...",
+        rows: 5
+      },
+      {
+        type: "file",
+        label: "Attach file (optional, max 10MB):",
+        name: "file",
+        required: false,
+        multiple: false,
+        accept: "image/*,.pdf,.doc,.docx,.txt"
+      },
+     { 
+        type: "email", 
+        label: "Email (optional, for reply):", 
+        name: "email",
+        required: false,
+        placeholder: "your@email.com"
+      },
+      { type: "submit" }      
+    ],
+    styles: {
+      title: {
+        backgroundColor: "#333",
+        color: "#fff"
+      },
+      input: {
+        borderBottom: "1px solid #CCC",
+        borderRight: "1px solid #CCC",
+        padding: "5px 0"
+      },
+      button: {
+        backgroundColor: "#4a5568",
+        color: "#fff"
+      },
+      form: {
+        backgroundColor: "#f7fafc",
+        maxWidth: "400px"
+      },
+      submitInput: {padding: "0.75em 1em"}
+    },
+  });
+</script>
+ 
 <style>
 table {
   margin: 0px !important;  

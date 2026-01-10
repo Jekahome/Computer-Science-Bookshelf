@@ -190,7 +190,7 @@ fn main() {
       id="6"
       data-circuit-id="6"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/6_double_trouble.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/6_double_trouble.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -251,7 +251,7 @@ fn main() {
       id="7"
       data-circuit-id="7"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/7_odd_number.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/7_odd_number.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -414,7 +414,7 @@ fn main() {
       id="8"
       data-circuit-id="8"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/8_counting_signals.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/8_counting_signals.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -612,7 +612,7 @@ fn main() {
       id="9"
       data-circuit-id="9"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/9_half_adder.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/9_half_adder.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -665,7 +665,7 @@ fn main() {
       id="10"
       data-circuit-id="10"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/10_full_adder.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/10_full_adder.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -776,7 +776,7 @@ fn main() {
       id="13"
       data-circuit-id="13"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/13_adding_bytes.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/13_adding_bytes.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -852,7 +852,7 @@ fn main() {
       id="14"
       data-circuit-id="14"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/14_signed_negator.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/14_signed_negator.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -914,7 +914,7 @@ A B C | Активный выход
       id="21"
       data-circuit-id="21"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/21_decoder_3_to_8.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/21_decoder_3_to_8.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -981,7 +981,7 @@ A B C | Активный выход
       id="24"
       data-circuit-id="24"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/24_logic_engine.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/24_logic_engine.txt"
       loading="lazy">
   </iframe>
 </div> 

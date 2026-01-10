@@ -70,7 +70,7 @@ Body всегда к своему питанию (P-MOS к Vdd, N-MOS к GND)
       id="28"
       data-circuit-id="28"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/28_logic_gates_cmos.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&hideMenu=false&hideSidebar=false&hideInfoBox=false&startCircuit=/turingcomplete/28_logic_gates_cmos.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -146,7 +146,7 @@ fn main() {
       id="6"
       data-circuit-id="6"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/6_and.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/6_and.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -212,7 +212,7 @@ fn main() {
       id="7"
       data-circuit-id="7"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/7_or.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/7_or.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -279,7 +279,7 @@ fn main() {
       id="9"
       data-circuit-id="9"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/9_xor.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/9_xor.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -377,7 +377,7 @@ fn main() {
       id="8"
       data-circuit-id="8"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/8_nand.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/8_nand.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -450,7 +450,7 @@ fn main() {
       id="5"
       data-circuit-id="5"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_nor.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/5_nor.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -508,7 +508,7 @@ fn main() {
       id="10"
       data-circuit-id="10"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/10_xnor.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/10_xnor.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -538,7 +538,7 @@ fn main() {
       id="1"
       data-circuit-id="1"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/1_true.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/1_true.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -610,7 +610,7 @@ fn main() {
       id="2"
       data-circuit-id="2"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/2_second_tick.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/2_second_tick.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -635,7 +635,7 @@ fn main() {
       id="5"
       data-circuit-id="5"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/5_xor.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/5_xor.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -663,7 +663,7 @@ fn main() {
       id="3"
       data-circuit-id="3"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/3_big_or.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/3_big_or.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -692,7 +692,7 @@ fn main() {
       id="4"
       data-circuit-id="4"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/4_big_and.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/4_big_and.txt"
       loading="lazy">
   </iframe>
 </div> 

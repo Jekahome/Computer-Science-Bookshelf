@@ -71,7 +71,7 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
       id="25"
       data-circuit-id="25"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/25_arithmetic_engine_alu.txt"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/25_arithmetic_engine_alu.txt"
       loading="lazy">
   </iframe>
 </div> 
