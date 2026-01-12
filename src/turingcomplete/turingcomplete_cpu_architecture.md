@@ -56,7 +56,7 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 
 Необходимые компоненты схемы ALU:
 * [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
-* [Bit Switch](turingcomplete_memory#bit-switch-tri-state-buffer)
+* [8 Bit Switch (SWC)](turingcomplete_memory#bit-switch-tri-state-buffer)
 * [Adding Bytes](turingcomplete_arithmetic.html#adding-bytes)
 * [8 bit NEG](turingcomplete_arithmetic.html#signed-negator)
 * [8 bit NOT](turingcomplete_arithmetic.html#byte-not)
@@ -135,7 +135,7 @@ Output       00000001 # 1
 >
 > Кроме того, этот уровень имеет отдельный входной компонент, который может быть источником, и выходной компонент, который может быть пунктом назначения.
 
-Назначение адреса для источника Source:
+Адреса для источника Source:
 ```
 OPCODE Source:
 
@@ -151,7 +151,7 @@ S2 S1 S0
 1  1  1  UNUSED
 ```
 
-Назначение адреса для назначения Destination:
+Адреса для назначения Destination:
 ```
 OPCODE Destination:
 
@@ -179,8 +179,36 @@ D2 D1 D0
 
 Необходимые компоненты:
 * [Register 8 bit](turingcomplete_memory.html#saving-bytes)
+* [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
+* [8 Bit Switch (SWC)](turingcomplete_memory#bit-switch-tri-state-buffer)
 
  
+
+Проверка:
+```
+#1
+Input: 00000111 # 7
+Instruction: 00110000
+    Source 110 (INPUT)
+    Destination 000 (REG 0)
+
+#1
+Instruction: 00000110
+    Source 000 (REG 0)
+    Destination 110 (OUTPUT)
+
+```
+
+<div class="sim-wrapper" data-circuit-id="30">
+  <button class="sim-fullscreen-btn" data-circuit-id="30">⛶</button>
+  <iframe 
+      id="30"
+      data-circuit-id="30"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/30_registers.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 
 ---
@@ -213,9 +241,22 @@ OPCODE MODE:
 
 ![Instruction Decoder](/Computer-Science-Bookshelf/img/tc/Decoder_2_to_4.png)
 
-Или используйте Byte Splitter для получения доступа к исходным битам, а затем 3-битный декодер для декодирования высоких бит на четыре выхода.
+Или используйте Byte Splitter для получения доступа к исходным битам, а затем 3-битный декодер для декодирования старших бит на четыре выхода.
 
 ![Instruction Decoder](/Computer-Science-Bookshelf/img/tc/Turing_Complete_Instruction_Decoder_2_to_4.png)
+
+
+<div class="sim-wrapper" data-circuit-id="31">
+  <button class="sim-fullscreen-btn" data-circuit-id="31">⛶</button>
+  <iframe 
+      id="31"
+      data-circuit-id="31"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/31_decoder_2_to_4.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 
 ---
 
