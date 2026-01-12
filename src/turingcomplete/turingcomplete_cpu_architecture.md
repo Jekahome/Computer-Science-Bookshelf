@@ -312,6 +312,23 @@ OPCODE MODE:
 
 ![2bit_input_decoder_2_to_4](/Computer-Science-Bookshelf/img/tc/2bit_input_decoder_2_to_4.png)
 
+#### Circuit Simulation Calculations
+ 
+Необходимые компоненты:
+* [ALU](turingcomplete_cpu_architecture.html#arithmetic-engine)
+* [8 bit Multuplexers (MUX) Tri-state buffer](turingcomplete_memory.html#bit-switch-tri-state-buffer)
+
+<div class="sim-wrapper" data-circuit-id="32">
+  <button class="sim-fullscreen-btn" data-circuit-id="32">⛶</button>
+  <iframe 
+      id="32"
+      data-circuit-id="32"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/32_calculations.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 ---
 
 ## Program
