@@ -8,6 +8,10 @@
 * [Процессор RV32i](https://github.com/BenjaminSchaaf/turning-complete-riscv) полноценная реализация RISC-V CPU внутри игры, на который можно запускать реальный компилируемый код (например, Rust). Игра превращается в мини-симулятор архитектуры компьютера.
 * [MegaIng/turing-complete-interface](https://github.com/MegaIng/turing-complete-interface) библиотека для взаимодействия со схемами, созданными в игре Turing Complete
 
+---
+
+* [github.com/tomwhite/8-bit-computer](https://github.com/tomwhite/8-bit-computer)
+
 > [!IMPORTANT]
 > **Существа, которые смогут завершить создание компьютера, по закону считаются разумными.**
 >
