@@ -1089,6 +1089,9 @@ fn main() {
 </details>
 
 Что-то тормозит...
+* 0.01 - Время шага моделирования [с]
+* Speed 10%
+* Clock 10 Hz
 
 <div class="sim-wrapper" data-circuit-id="33">
   <button class="sim-fullscreen-btn" data-circuit-id="33">⛶</button>
