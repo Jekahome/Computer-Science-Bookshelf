@@ -11,6 +11,7 @@
 ---
 
 * [github.com/tomwhite/8-bit-computer](https://github.com/tomwhite/8-bit-computer)
+* [Building an 8-bit breadboard computer!](https://www.youtube.com/playlist?list=PLowKtXNTBypGqImE405J2565dvjafglHU)
 
 > [!IMPORTANT]
 > **Существа, которые смогут завершить создание компьютера, по закону считаются разумными.**
