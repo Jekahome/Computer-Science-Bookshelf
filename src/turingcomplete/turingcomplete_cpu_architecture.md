@@ -1088,7 +1088,7 @@ fn main() {
 ```
 </details>
 
-Что-то притармаживает...
+Что-то тормозит...
 
 <div class="sim-wrapper" data-circuit-id="33">
   <button class="sim-fullscreen-btn" data-circuit-id="33">⛶</button>
