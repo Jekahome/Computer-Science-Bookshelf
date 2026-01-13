@@ -186,13 +186,14 @@ D2 D1 D0
 
 Проверка:
 ```
-#1
-Input: 00000111 # 7
+INPUT: 00000111 # 7
+
+# tick 1
 Instruction: 00110000
     Source 110 (INPUT)
     Destination 000 (REG 0)
 
-#1
+# tick 2
 Instruction: 00000110
     Source 000 (REG 0)
     Destination 110 (OUTPUT)
@@ -653,7 +654,7 @@ RAM:
 10:16
 
 # симулятор перекодирует данные RAM в свой формат. 
-# Так как вход 8-ми битный, поэтому симулятор делит все данные на куски кратные 8-ми. И позиция числа соответвует его номеру адреса.
+# Данные распределены по строкам из 8-ми значений. И позиция числа соответвует его номеру адреса.
 0: 0 1 2 3 4 5 6 7
 8: 8 9 16
 ```
@@ -1015,6 +1016,91 @@ number:address
 [8-ми битный десятичный дисплей](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l5AWAnC1b0DZwGYCssNslsAmZSEkyAdhBNxAd0kYFMBaMMAKAHcR21DAA4BYEsJbskCBGIktIfAZKlhs4gTLmcNJKMumyx2Y+2GkTxpf3NIsuoVrPqnNlfbHCEU4Z8dY7tKanD6iRjpgYQa2SBJislJx4WBIiDHOkYla8aE+GREJ1PqFnMSBhly4JeouYNXyCKJB4pa6dQ3tci1gIiYhXH2cJJYtIzV6Yr0pkz3e8pJT88O9Ba01CkuRm2NwjSlUaodr4-vye8NNJ6srDuI3XPNjbfd3JA-vFbbrW-Iv0wVqNg7uUBCIUqCgsU1GkdOCxLDAelOMJimDhClUfoep16ssuMi8d1KvUahgHuI1OSvlNgWIMFdOKT6VcgrgMGpJOF2Wpmc8asz2Dypg02XEvJBueKmX1+VMhrhpYNmoYMGRfrdfkE1ZEuWD1UynqqMecjhdKYpDNRCZ8Na81gDhm1oX9sSTcWRwkC3qzDBYanrzC9TMTbKp+iVwyjJYChmBA0IDosgkgBlitANoincqlkX4QekWsC1NgnJwaBM3JViwkY+W0aEY0WOQl8vWatlm2oEA2wBWim7voLUnSmbiRJah6Pc5F1HcGSqh1R6RTlyi0S1EGpcLjhzvB2I4ClqrzcSe1keJSlL5xzziOybpGWoiaizmJwsqcnq+-zaQUh+RYDAun4souEZiOyMzAb63w1recaTAh4HDP49TTvB6E0qh84fGhuB0mMiycNS8hoaRRHbvimy3oW1YtrR2zEfUdFwQxvR-r+loIOoCTsvSLwIAavSjCAoiaIo4B0CA2AgHIDBYLQohIOAWBgLQ8bgCpy7vHQ+gjHQcj0DJ+jYLJpgyQwdKljJohEHJLA8XJojIIwLC4BADQEYw8lMFguC0AyIAYApWAYIFogYCp1ogNQEBokCYksMIEDCPoFhiXIwgMMIWComJoh+CAnhILQSDKSpfYsH2EB9vofayX2ch9gwXD1bxXDNfU4CrFwGmaVwlXLvc4DxOIlXYNVGg4PVZk4M1eA4GpNlRM1CCtQgak9uAVxRJVzDgB5h31d59BYPQtD0KI9DaS2JDknQaqPbJ91GSFdBoiQiVfUZ1AMF953UJd1DXdQ2mLBIEASNdRUkGkdCpgj+nEAjRlIP9nhw7Qk1yJNVmQFgk3YzGk0qRoLAaBAkwaOZy6kFTlAmbTuPGaQhNfSZdlwzJ1k2WZdn2aYFNOaYpkIOZximFZDR4OZuC4zulmEwFll2YqMktsCVN9MCZMxaWVNoqW5nULjf0yU4pbY-M2DZbZhP5bbdlFUQFOI0Qpkoz4jmQBAPj6D4sk+HIPgMD4WA+LQ0Q+CpHn6B5skefJ3Uef56mMJpHmx8u1SefE1Sx5NjDTQR8dzQR8mLQR-k2fL8nrT5-nbfLojy7HB07p5XnecK7KeU97KJ0F7J+f54WMH07Kx04AW0AFrdg4wiy4ClS-xxlK-yXbirxyjiryejjCeIqtCcAIJDcKkp9ziWLj-lYxJX6BJHMacL+Wk-7YDoebZRBul8q3YPCMoo4GQwkIrFKABRgEWnRJifIUIbQ3GtLqf+tgXROhKBgmcgJpygkENOT0Bh6in3zAiUc3gIQQNoJOTI5CHBkJAdhRh8YGypgDGgqYhJN5cN1AgyoW5IK4kEdGFCpU7hNHCOIq8BgAAekEnKcGtEcFA9JSpyVUiAAALgAQwAEYABtWAAB0ADOAB7AAZmY8Q7A9EAEstFmIAMbmIACasFMWYyxAAncxABbMxkAzFaPMWY+guASSEnTEyNcrCDxMkJIiJkeDWIihqPggkkRIQAOvk1ehh5+JMKgTQuRCRFokXHroNK9IgpGTkAAJQAIIAFluAABk+LzkEo+ES2IpKWJ0QY0xrBGAGE6bodihAJhTKCtVEAgzhmjIYEoAAhCADxgyACuBitFQIACLUAADT7IwCc3AJyEAnOwCckgJywAnJYE0m5TS7lNIeU0yARyABCNzvl3O+Q875XyADCNyQV3JBQ8kFLBnFbNMaEwJpiDHmIAOb2OcVAeA2LjEAEdsUEvgMYgAdoS32eKyXYrACSwlfYKWUt9sE0lBKuD0spay5l8AqpstpXAGlVLyX4vZeSzlcACQ8pZXS0VvtWVCrJVwaloqqrBLlSyolSqxUSq5ZqjVdLVXavVQK2V8quX8rFdy-VYqrVmplYKk1MqbUKpVSa7lSqFVasZTVM1yrnW8vFZy5V1LLWeo5QavV8rlXevNR6gkIrtUWt5TigNnqtU+sVfG8NarrXJvdZawN6bzVErzVaplXKqpBsTV6gNNVfUCttd6mqFas3uurQmtVkbW12vbTqst4q80+obbm2lgb+U+trWW7NJbNX9ujcywN47C2uqncayVKa50ltTY20tjKU0zpbSWvtw6O0HpXVS2NBaa18v1WO7dl6m0GtNeumtEq023pDS+s9o7bULvnW+gk97l1xpDZmh9-qrUKoAzumVF6B3XqnaOkdcGd0wetXBgdc7y2QcvUB-9V7u2MoQ7u-DobbWHqNTuwjQ7yNVvNZGtD9aMPlo-Y2mDz60PHugw69jPboNtonUm2jXrr1poQ06l987RNUf4w60lN7xMbtkyy+Ta6oMEeE4WmlaasOYfTb++Tx753aeQ5pid4n0NQak7Rx9yGi2SvLaW+zXbe2zpsyBqzS77Onvc3GzDeGz1bpM6Rsz0HAtieE7GhzgmzNMcU7ButBKTOIfi9Zu946x1Ss9dG1V6XdOZbS3WxLRGH0qZrWRqdDHMuWa07liLPLf2RfPXVsNiW2N1vM1urzjmfOcfyzZlrQm2suZY25zzfLYsQaa5VzTY7JsBdkyJ7L4HQ0RZG4Wsb36uNtZi9+vjN71vnqc3t3Tvm2U3oy+e09Z3jtQdO1m6bxm5XpZ86V2tOWHOlfvTl67sbbsPvu-+37B7-tlfq+93jgOR3zbi4BgjUPTWPbDcd+zEOKNw824BmjTrdsZve6VlH+6scgfzYawnn3+NI7o2GhLUOmMI9UxTtTVPJ0QfRzZobLPXsHv2yzsnrnpss9+ydmnUnHMtr24Lm7xKzsS5i09wX6Gcvy8fa+znO2mWvt5xdklWnVe4fV-5pXVb6uG6lb+zXLHtfxt17VqXGb5ey-47duTtvF1O6Uy7zjbvtWW6iwjrTPvod5dR11snhmA+oatxpl3mGvchejxRv38H48DfA0D5PROg-6+A27yHvm-OVezXn0PyHFW+Yzy9rP-7i94+jz9xPc2dOHcqxynT5eNsB4m-Xh3M2-czdtwtnHyuLOc5W-r-NTvx-943b3hTqXQ+ectydmfDG72XZ2y3oPE-JcV-n8ZqfrWlsK+bxP3PIb88scL2f+fMf98g8466j7a+sciq3bZw-K+NvX7j6-8vTqxs-+v270vVO3F37zx0e2lzAPrQgLVUXwtxgM-TAMpzW1nx60+w1zgIPw2w-0JxAINyQN22NwIMOzN0wJBy6zHwg3QOXW1zkwQORyl3SzwJL1oIFWYOAMYM-XoLXVH1e081NzD24LF2J3YI7RW0uyL1YJuyFT23-1F3pVkNL1GwUJNSkMbRUOHTULbTOzkNdxkL9S0MzSu3V1bw0PwL1z8ye10KS1Uz3z1yMOS1YJj30NAycIT3KwYNwxTxVxbw+19Q12sJCxcNTyUPb2CLPycNpw8O-w638LPXVSr3Rx1xfwvziPKxMPvzMJE04IF2CIkxyM7xhxkz-zfzNzkIH2Hx4NHyyKjxKJXTN18McxqLEIOybUMx1T-zI2JwSIuzaOkyUOwyyM8PsKGNnWfwcMXXKPfTyJr0J0sInX9TmL6MXUaM9xmJaOGyGNlxKLSOdw5y7QoJSIOw0NfVoK1xcP90YL1xOINTOPAK53AzuOgIeJX1JxuNozuOQNFx6M6PeO2OfxuIVx52WOwwGL-0BMLyoIONT2KKoImIr0+Ko1GyrW4CoHCA0HHEZD0CpFZA2VYG2V2SgUkmJKJLGWJNyXPijFSGWC+lxHKm6EgVoXYAkEZGpJ0AUBhCNFsA5IRE6AkBeHRgSR5LKDXEhhBGXCUHkXYFIBsiUUZDhkPjlLDk0V0UMRMQsWsVMVsQcScVMVcQ8S8VMV8QCSCRCTCVMQiUMHul7GrnPnCgDH4iCC+mnA5CkGdLuGymwmFL6UpPNAxBQhugyVFI5AhAlKtLAQRBpJ3kjMfkAUDJjPPjrgTJYFKSdPFgyRpPTLIi9J4jeGIjIAeEFIKDIHNFenPm9gRDDO5Ntm2HlJrK8FfApOZPrLKBpLMhBCeEZOIXUWZMTEglFO9H7I-h7KxjuGKHCDhhzHHO7NPjxjuA9gEEmmEgXKCDnLAkXIoEiBAlXMgCKXqD5OkVvFFCtMPJ9OZNPP3GLNPIwCCnPKVBvNDHPhQDJFvIVJqB4SdOfMgmWDXNvC5I3L3NImlJvF6FWB3LrFAocEmggqimwmgoAn8FHLUTgs3PXOAuEmnJ3IwtyCQqUXiCdMoUglHGtPfMIitJQS8CKS+m4VlHIpoonMIuQmLMHJIguBZIAj2AIoeAfMpMLKrMpIFL5P9GQuLMYrZMpNZMwsMF-NJDdL7NvH4uAr3MkXPnkpfBQhkvWgcABhSC0oKE0oNB0oSHVCdJ1F5JKHjLKGPO5JDMrLdNstCEdKtM2l1CopcpMHwucrQngjIDQk9OLOqExCosCpMHFAItZLhm0qzJwlEtvPEHzNzNAjTNLNfIxCODmStJbPEHlJYSISdNIE5CooKtdGLOKswSfIGFOE-JzFtGZOhnkDAqtPqpRCouavtGqoODYrOlNGLO6pau0r6tgQIpeFgokoQq9LEp4uZJSnnAyu5MmraG9OmWLIrJFLdKyriCZILJBD5I2usvLIFLbPxHpKvJqsWuSAaq9IuuGFfPYXkDmoqo2FusqtGBPJqsQtys8AIrQkispJ+tgifJzHvmmuYnvgItBpwrSvusfPPKBoYgkDiprAIsRvhtyiYi2uuvUGlHYtCqFLEoXOmoiq+vDN-nPGZIjNbJhtem7EfHumEhUtMvptprMqsqFIcqiCoopo5q9OjJRFpt5qiBMqtIFqEnZK5tFuLK5oJvoCBrCq8vnPhqlpbDTMRpwqls8qlKFipAemlPjCpBXg0XVB0TcTcR8U8UNKsTMR0TMWJS2X8T0VYB8UvlvLwExPRLJt6FxOaFJPch9oWSGRGQMAaUXMvJIixNdPXKhnAD2BIGgH+jjqJLjukr0rDvROHG3OkvTpuCllwjgpTqJEXL3H-OlPztDoxPfP2pLr3LJvLqHP0vzpUt1txAZuTuUqKVrscrzuUoNA7sFuJAmVdo7B7ojtCBMqgUWUDpWW4E1qiAgCUQoA3LivtMNrkDhQRRNJJWaTaT0UXOWuZMgEWs9qmCFp3pAVkn3tyEboJCnomXjD3KITKBtFxJYAnuWTWCECOFZPzrysqA-ufm5qSt-vYiQgAd0AkiAdviyD3JDHfuAefHztLGwnUnYmiE7trBQlAdWjUD-ryCZOQe7F7Abv-mDv6u-kfqyDRCjqqjoATtjpWSgCTqPtIdCF7DSgof6W9pJPocklfrKXnqyDtlCHxCaADkMhAGNtNvNrMUttMWttMVtvtsdu4CAA)
 
   
+#### Circuit Simulation Program
+
+Программа
+```
+INPUT: 00000111 # 7
+
+# tick 1
+Instruction: 00110000 #48
+    Source 110 (INPUT)
+    Destination 000 (REG 0)
+
+# tick 2
+Instruction: 00000110 #6
+    Source 000 (REG 0)
+    Destination 110 (OUTPUT)
+
+# tick 3
+Instruction: 00110110 #54
+    Source 110 (INPUT)
+    Destination 110 (OUTPUT)
+
+# Что бы сразу проверить работу программы, мы зададим для первой итерации счетчика инструкцию 6 и следующую 48
+# Program RAM:
+0: 6
+1: 48
+2: 54
+
+```
+
+<details>
+<summary>address (decimal form):decimal form</summary> 
+
+```rust
+fn main() {
+    // --- Наглядный массив чисел 0..255 ---
+    let numbers: [u8; 256] = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+        30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+        50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
+        60, 61, 62, 63, 64, 65, 66, 67, 68, 69,
+        70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+        80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
+        90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
+        100, 101, 102, 103, 104, 105, 106, 107, 108, 109,
+        110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
+        120, 121, 122, 123, 124, 125, 126, 127, 128, 129,
+        130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
+        140, 141, 142, 143, 144, 145, 146, 147, 148, 149,
+        150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
+        160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
+        170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
+        180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
+        190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
+        200, 201, 202, 203, 204, 205, 206, 207, 208, 209,
+        210, 211, 212, 213, 214, 215, 216, 217, 218, 219,
+        220, 221, 222, 223, 224, 225, 226, 227, 228, 229,
+        230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
+        240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
+        250, 251, 252, 253, 254, 255
+    ];
+
+    // --- Вывод на экран ---
+    for (addr, &num) in numbers.iter().enumerate() {
+        println!("{}:{}", addr, addr);
+    }
+}
+```
+</details>
+
+Что-то притармаживает...
+
+<div class="sim-wrapper" data-circuit-id="33">
+  <button class="sim-fullscreen-btn" data-circuit-id="33">⛶</button>
+  <iframe 
+      id="33"
+      data-circuit-id="33"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/33_program.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 ---
 
 ## Conditions
