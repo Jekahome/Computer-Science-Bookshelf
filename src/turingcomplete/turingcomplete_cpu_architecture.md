@@ -52,7 +52,7 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 
 ![New_Component_ALU](/Computer-Science-Bookshelf/img/tc/New_Component_ALU.png)
  
-#### Circuit Simulation ALU
+#### Circuit Simulation: ALU
 
 Необходимые компоненты схемы ALU:
 * [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
@@ -175,7 +175,7 @@ D2 D1 D0
 ![Registers](/Computer-Science-Bookshelf/img/tc/Registers.png)
 
 
-#### Circuit Simulation Registers
+#### Circuit Simulation: Registers
 
 Необходимые компоненты:
 * [Register 8 bit](turingcomplete_memory.html#saving-bytes)
@@ -313,7 +313,7 @@ OPCODE MODE:
 
 ![2bit_input_decoder_2_to_4](/Computer-Science-Bookshelf/img/tc/2bit_input_decoder_2_to_4.png)
 
-#### Circuit Simulation Calculations
+#### Circuit Simulation: Calculations
  
 Необходимые компоненты:
 * [ALU](turingcomplete_cpu_architecture.html#arithmetic-engine)
@@ -345,7 +345,7 @@ OPCODE MODE:
 
 ![Program](/Computer-Science-Bookshelf/img/tc/Program.png)
 
-#### Circuit Simulation 8-bin decimal display
+#### Circuit Simulation: 8-bin decimal display
 
 Для отображения 8-ми битного десятичного числа потребуется 8 бит что-бы кодировать 256 значений от 0-255. 
 Воспользуемся методом BCD (Double Dabble), закодируем каждую комбинацию из 8-ми бит в 12 бит, по 4 бита на дисплей.
@@ -617,10 +617,8 @@ OPCODE MODE:
 
 </details>
 
-
 **Особенность реализации RAM (именно в симуляторе circuitjs)**
 
- 
 RAM:
 * A0, A1, A2 — это адресные входы (куда подаётся адрес ячейки)
 * D0, D1, D2... D7 — это выходы данных (откуда читается содержимое ячейки)
@@ -634,13 +632,13 @@ RAM:
 | **OE = 0** | LOW | **Высокий импеданс** — выходы отключены (Z-состояние) |
 
 
-Данные в поле данных RAM не понимают что это формат BCD, RAM просто видит 12 бит `000000010000` как одно целое число и автоматически преобразует в десятичное представление, получается `10000` что соответвует значению `16` в десятичной системе. 
+RAM в симуляторе не понимает, что в поле данных находится формат BCD, RAM просто видит 12 бит `000000010000` как одно целое число и автоматически преобразует в десятичное представление, получается `10000` что соответвует значению `16` в десятичной системе. 
 
 Поэтому если вручную вводить в поле данных RAM, нужно преобразовывать требуемый код BCD в его представление числа в десятичной форме. 
 
 
 ```
-# ввод дынных в RAM 
+# ввод данных в RAM 
 0:0
 1:1
 2:2
@@ -1016,7 +1014,10 @@ number:address
 [8-ми битный десятичный дисплей](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l5AWAnC1b0DZwGYCssNslsAmZSEkyAdhBNxAd0kYFMBaMMAKAHcR21DAA4BYEsJbskCBGIktIfAZKlhs4gTLmcNJKMumyx2Y+2GkTxpf3NIsuoVrPqnNlfbHCEU4Z8dY7tKanD6iRjpgYQa2SBJislJx4WBIiDHOkYla8aE+GREJ1PqFnMSBhly4JeouYNXyCKJB4pa6dQ3tci1gIiYhXH2cJJYtIzV6Yr0pkz3e8pJT88O9Ba01CkuRm2NwjSlUaodr4-vye8NNJ6srDuI3XPNjbfd3JA-vFbbrW-Iv0wVqNg7uUBCIUqCgsU1GkdOCxLDAelOMJimDhClUfoep16ssuMi8d1KvUahgHuI1OSvlNgWIMFdOKT6VcgrgMGpJOF2Wpmc8asz2Dypg02XEvJBueKmX1+VMhrhpYNmoYMGRfrdfkE1ZEuWD1UynqqMecjhdKYpDNRCZ8Na81gDhm1oX9sSTcWRwkC3qzDBYanrzC9TMTbKp+iVwyjJYChmBA0IDosgkgBlitANoincqlkX4QekWsC1NgnJwaBM3JViwkY+W0aEY0WOQl8vWatlm2oEA2wBWim7voLUnSmbiRJah6Pc5F1HcGSqh1R6RTlyi0S1EGpcLjhzvB2I4ClqrzcSe1keJSlL5xzziOybpGWoiaizmJwsqcnq+-zaQUh+RYDAun4souEZiOyMzAb63w1recaTAh4HDP49TTvB6E0qh84fGhuB0mMiycNS8hoaRRHbvimy3oW1YtrR2zEfUdFwQxvR-r+loIOoCTsvSLwIAavSjCAoiaIo4B0CA2AgHIDBYLQohIOAWBgLQ8bgCpy7vHQ+gjHQcj0DJ+jYLJpgyQwdKljJohEHJLA8XJojIIwLC4BADQEYw8lMFguC0AyIAYApWAYIFogYCp1ogNQEBokCYksMIEDCPoFhiXIwgMMIWComJoh+CAnhILQSDKSpfYsH2EB9vofayX2ch9gwXD1bxXDNfU4CrFwGmaVwlXLvc4DxOIlXYNVGg4PVZk4M1eA4GpNlRM1CCtQgak9uAVxRJVzDgB5h31d59BYPQtD0KI9DaS2JDknQaqPbJ91GSFdBoiQiVfUZ1AMF953UJd1DXdQ2mLBIEASNdRUkGkdCpgj+nEAjRlIP9nhw7Qk1yJNVmQFgk3YzGk0qRoLAaBAkwaOZy6kFTlAmbTuPGaQhNfSZdlwzJ1k2WZdn2aYFNOaYpkIOZximFZDR4OZuC4zulmEwFll2YqMktsCVN9MCZMxaWVNoqW5nULjf0yU4pbY-M2DZbZhP5bbdlFUQFOI0Qpkoz4jmQBAPj6D4sk+HIPgMD4WA+LQ0Q+CpHn6B5skefJ3Uef56mMJpHmx8u1SefE1Sx5NjDTQR8dzQR8mLQR-k2fL8nrT5-nbfLojy7HB07p5XnecK7KeU97KJ0F7J+f54WMH07Kx04AW0AFrdg4wiy4ClS-xxlK-yXbirxyjiryejjCeIqtCcAIJDcKkp9ziWLj-lYxJX6BJHMacL+Wk-7YDoebZRBul8q3YPCMoo4GQwkIrFKABRgEWnRJifIUIbQ3GtLqf+tgXROhKBgmcgJpygkENOT0Bh6in3zAiUc3gIQQNoJOTI5CHBkJAdhRh8YGypgDGgqYhJN5cN1AgyoW5IK4kEdGFCpU7hNHCOIq8BgAAekEnKcGtEcFA9JSpyVUiAAALgAQwAEYABtWAAB0ADOAB7AAZmY8Q7A9EAEstFmIAMbmIACasFMWYyxAAncxABbMxkAzFaPMWY+guASSEnTEyNcrCDxMkJIiJkeDWIihqPggkkRIQAOvk1ehh5+JMKgTQuRCRFokXHroNK9IgpGTkAAJQAIIAFluAABk+LzkEo+ES2IpKWJ0QY0xrBGAGE6bodihAJhTKCtVEAgzhmjIYEoAAhCADxgyACuBitFQIACLUAADT7IwCc3AJyEAnOwCckgJywAnJYE0m5TS7lNIeU0yARyABCNzvl3O+Q875XyADCNyQV3JBQ8kFLBnFbNMaEwJpiDHmIAOb2OcVAeA2LjEAEdsUEvgMYgAdoS32eKyXYrACSwlfYKWUt9sE0lBKuD0spay5l8AqpstpXAGlVLyX4vZeSzlcACQ8pZXS0VvtWVCrJVwaloqqrBLlSyolSqxUSq5ZqjVdLVXavVQK2V8quX8rFdy-VYqrVmplYKk1MqbUKpVSa7lSqFVasZTVM1yrnW8vFZy5V1LLWeo5QavV8rlXevNR6gkIrtUWt5TigNnqtU+sVfG8NarrXJvdZawN6bzVErzVaplXKqpBsTV6gNNVfUCttd6mqFas3uurQmtVkbW12vbTqst4q80+obbm2lgb+U+trWW7NJbNX9ujcywN47C2uqncayVKa50ltTY20tjKU0zpbSWvtw6O0HpXVS2NBaa18v1WO7dl6m0GtNeumtEq023pDS+s9o7bULvnW+gk97l1xpDZmh9-qrUKoAzumVF6B3XqnaOkdcGd0wetXBgdc7y2QcvUB-9V7u2MoQ7u-DobbWHqNTuwjQ7yNVvNZGtD9aMPlo-Y2mDz60PHugw69jPboNtonUm2jXrr1poQ06l987RNUf4w60lN7xMbtkyy+Ta6oMEeE4WmlaasOYfTb++Tx753aeQ5pid4n0NQak7Rx9yGi2SvLaW+zXbe2zpsyBqzS77Onvc3GzDeGz1bpM6Rsz0HAtieE7GhzgmzNMcU7ButBKTOIfi9Zu946x1Ss9dG1V6XdOZbS3WxLRGH0qZrWRqdDHMuWa07liLPLf2RfPXVsNiW2N1vM1urzjmfOcfyzZlrQm2suZY25zzfLYsQaa5VzTY7JsBdkyJ7L4HQ0RZG4Wsb36uNtZi9+vjN71vnqc3t3Tvm2U3oy+e09Z3jtQdO1m6bxm5XpZ86V2tOWHOlfvTl67sbbsPvu-+37B7-tlfq+93jgOR3zbi4BgjUPTWPbDcd+zEOKNw824BmjTrdsZve6VlH+6scgfzYawnn3+NI7o2GhLUOmMI9UxTtTVPJ0QfRzZobLPXsHv2yzsnrnpss9+ydmnUnHMtr24Lm7xKzsS5i09wX6Gcvy8fa+znO2mWvt5xdklWnVe4fV-5pXVb6uG6lb+zXLHtfxt17VqXGb5ey-47duTtvF1O6Uy7zjbvtWW6iwjrTPvod5dR11snhmA+oatxpl3mGvchejxRv38H48DfA0D5PROg-6+A27yHvm-OVezXn0PyHFW+Yzy9rP-7i94+jz9xPc2dOHcqxynT5eNsB4m-Xh3M2-czdtwtnHyuLOc5W-r-NTvx-943b3hTqXQ+ectydmfDG72XZ2y3oPE-JcV-n8ZqfrWlsK+bxP3PIb88scL2f+fMf98g8466j7a+sciq3bZw-K+NvX7j6-8vTqxs-+v270vVO3F37zx0e2lzAPrQgLVUXwtxgM-TAMpzW1nx60+w1zgIPw2w-0JxAINyQN22NwIMOzN0wJBy6zHwg3QOXW1zkwQORyl3SzwJL1oIFWYOAMYM-XoLXVH1e081NzD24LF2J3YI7RW0uyL1YJuyFT23-1F3pVkNL1GwUJNSkMbRUOHTULbTOzkNdxkL9S0MzSu3V1bw0PwL1z8ye10KS1Uz3z1yMOS1YJj30NAycIT3KwYNwxTxVxbw+19Q12sJCxcNTyUPb2CLPycNpw8O-w638LPXVSr3Rx1xfwvziPKxMPvzMJE04IF2CIkxyM7xhxkz-zfzNzkIH2Hx4NHyyKjxKJXTN18McxqLEIOybUMx1T-zI2JwSIuzaOkyUOwyyM8PsKGNnWfwcMXXKPfTyJr0J0sInX9TmL6MXUaM9xmJaOGyGNlxKLSOdw5y7QoJSIOw0NfVoK1xcP90YL1xOINTOPAK53AzuOgIeJX1JxuNozuOQNFx6M6PeO2OfxuIVx52WOwwGL-0BMLyoIONT2KKoImIr0+Ko1GyrW4CoHCA0HHEZD0CpFZA2VYG2V2SgUkmJKJLGWJNyXPijFSGWC+lxHKm6EgVoXYAkEZGpJ0AUBhCNFsA5IRE6AkBeHRgSR5LKDXEhhBGXCUHkXYFIBsiUUZDhkPjlLDk0V0UMRMQsWsVMVsQcScVMVcQ8S8VMV8QCSCRCTCVMQiUMHul7GrnPnCgDH4iCC+mnA5CkGdLuGymwmFL6UpPNAxBQhugyVFI5AhAlKtLAQRBpJ3kjMfkAUDJjPPjrgTJYFKSdPFgyRpPTLIi9J4jeGIjIAeEFIKDIHNFenPm9gRDDO5Ntm2HlJrK8FfApOZPrLKBpLMhBCeEZOIXUWZMTEglFO9H7I-h7KxjuGKHCDhhzHHO7NPjxjuA9gEEmmEgXKCDnLAkXIoEiBAlXMgCKXqD5OkVvFFCtMPJ9OZNPP3GLNPIwCCnPKVBvNDHPhQDJFvIVJqB4SdOfMgmWDXNvC5I3L3NImlJvF6FWB3LrFAocEmggqimwmgoAn8FHLUTgs3PXOAuEmnJ3IwtyCQqUXiCdMoUglHGtPfMIitJQS8CKS+m4VlHIpoonMIuQmLMHJIguBZIAj2AIoeAfMpMLKrMpIFL5P9GQuLMYrZMpNZMwsMF-NJDdL7NvH4uAr3MkXPnkpfBQhkvWgcABhSC0oKE0oNB0oSHVCdJ1F5JKHjLKGPO5JDMrLdNstCEdKtM2l1CopcpMHwucrQngjIDQk9OLOqExCosCpMHFAItZLhm0qzJwlEtvPEHzNzNAjTNLNfIxCODmStJbPEHlJYSISdNIE5CooKtdGLOKswSfIGFOE-JzFtGZOhnkDAqtPqpRCouavtGqoODYrOlNGLO6pau0r6tgQIpeFgokoQq9LEp4uZJSnnAyu5MmraG9OmWLIrJFLdKyriCZILJBD5I2usvLIFLbPxHpKvJqsWuSAaq9IuuGFfPYXkDmoqo2FusqtGBPJqsQtys8AIrQkispJ+tgifJzHvmmuYnvgItBpwrSvusfPPKBoYgkDiprAIsRvhtyiYi2uuvUGlHYtCqFLEoXOmoiq+vDN-nPGZIjNbJhtem7EfHumEhUtMvptprMqsqFIcqiCoopo5q9OjJRFpt5qiBMqtIFqEnZK5tFuLK5oJvoCBrCq8vnPhqlpbDTMRpwqls8qlKFipAemlPjCpBXg0XVB0TcTcR8U8UNKsTMR0TMWJS2X8T0VYB8UvlvLwExPRLJt6FxOaFJPch9oWSGRGQMAaUXMvJIixNdPXKhnAD2BIGgH+jjqJLjukr0rDvROHG3OkvTpuCllwjgpTqJEXL3H-OlPztDoxPfP2pLr3LJvLqHP0vzpUt1txAZuTuUqKVrscrzuUoNA7sFuJAmVdo7B7ojtCBMqgUWUDpWW4E1qiAgCUQoA3LivtMNrkDhQRRNJJWaTaT0UXOWuZMgEWs9qmCFp3pAVkn3tyEboJCnomXjD3KITKBtFxJYAnuWTWCECOFZPzrysqA-ufm5qSt-vYiQgAd0AkiAdviyD3JDHfuAefHztLGwnUnYmiE7trBQlAdWjUD-ryCZOQe7F7Abv-mDv6u-kfqyDRCjqqjoATtjpWSgCTqPtIdCF7DSgof6W9pJPocklfrKXnqyDtlCHxCaADkMhAGNtNvNrMUttMWttMVtvtsdu4CAA)
 
   
-#### Circuit Simulation Program
+#### Circuit Simulation: Program
+
+Необходимые компоненты:
+* [8-ми битный счетчик](turingcomplete_memory.html#counter)
 
 Для корретного старта программы, первый адрес в памяти RAM должен быть больше чем 0, т.е. 1 или 2 и т.д. но не 0.
 
@@ -1049,8 +1050,8 @@ Instruction: 00_000_110 # 6
 
 ```rust
 fn main() {
-    // --- Наглядный массив чисел 0..255 ---
-    let numbers: [u8; 256] = [
+    // --- raw data instruction ---
+    let raw_data: [u8; 256] = [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
         10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
         20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
@@ -1076,21 +1077,20 @@ fn main() {
         220, 221, 222, 223, 224, 225, 226, 227, 228, 229,
         230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
         240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
-        250, 251, 252, 253, 254, 255
+        250, 251, 252, 253, 254, 255,
     ];
 
-    // --- Вывод на экран ---
-    for (addr, &num) in numbers.iter().enumerate() {
-        println!("{}:{}", addr, addr);
+    for (addr, &num) in raw_data.iter().enumerate() {
+        println!("{}:{}", addr+1, num);
     }
 }
 ```
 </details>
 
 Оптимизация производительности симулятора:
-* 0.01 c (10m) - Время шага моделирования 
-* Speed 10%
-* Clock 10 Hz
+* 0.01 c (10m) - время шага моделирования 
+* Speed 10% - скорость симуляции
+* Clock 10 Hz - тактовый сигнал CLK
 
 <div class="sim-wrapper" data-circuit-id="33">
   <button class="sim-fullscreen-btn" data-circuit-id="33">⛶</button>
@@ -1131,7 +1131,6 @@ fn main() {
 Убедитесь, что вы находитесь в режиме -1 , а не в режиме +255.
 
 **Связь с условными переходами (JMP / JZ / JN)**
-
 
 Есть:
 * VALUE — обычно результат ALU (последняя операция)
@@ -1176,6 +1175,25 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 
 ![Conditions](/Computer-Science-Bookshelf/img/tc/Conditions.png)
 
+#### Circuit Simulation: Conditions
+
+Необходимые компоненты:
+* [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
+* [Bit Switch (tri-state buffer)](turingcomplete_memory#bit-switch-tri-state-buffer)
+
+
+
+<div class="sim-wrapper" data-circuit-id="35">
+  <button class="sim-fullscreen-btn" data-circuit-id="35">⛶</button>
+  <iframe 
+      id="35"
+      data-circuit-id="35"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/35_conditions.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 ---
 
 ## Immediate values
@@ -1183,7 +1201,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 Нам нужен способ напрямую передавать числа из нашей программы в регистры. 
 
 Ключевая идея уровня - Инструкция сама является данными!
-(Как в уровне Calculations, мы использовали младшие биты предназначенные для адреса Destination `xxxxxD2D1D0` в режиме MODE `01` не для адреса Destination, а для блока ALU)
+(Как в уровне [Calculations](turingcomplete_cpu_architecture.html#calculations), мы использовали младшие биты предназначенные для адреса Destination `xxxxxD2D1D0` в режиме MODE `01` не для адреса Destination, а для блока ALU)
 
 > ```
 > [ M1 M0 | S2 S1 S0 | D2  D1  D0  ]
@@ -1194,16 +1212,15 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 > 0 0 Immediate values непосредственные значения
 > ```
 
-> Задача: При режиме "Immediate values" преобразовать 6 младших бит инструкции в байт и передать его в `REG0`
->
+> Задача: В режиме "Immediate values" преобразовать 6 младших бит инструкции в байт и передать его в `REG0`
 >
 > Если линии остаются активными, когда не должны — будет короткое замыкание. 
-> Это значит: При Immediate Mode: только Immediate должен писать в REG0. 
+> Это значит: В Immediate Mode: только Immediate должен писать в REG0. 
 > В других режимах: Immediate вообще не должен влиять на шину
 >
 > `IMMEDIATE = NOT M1 AND NOT M0`
 
-Если 6 бит инструкции после бит MODE и есть наши данные `S2 S1 S0 | D2  D1  D0` то мы можем иметь значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
+Если 6 бит инструкции после бит MODE и есть наши данные `(S2 S1 S0 D2  D1  D0)` то мы можем закодировать значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
 
 Тогда мы берем 6 младших бит инструкции и превращаем их в байт, и записываем в `REG0`
 
@@ -1213,6 +1230,92 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
  
 ![Immediate values](/Computer-Science-Bookshelf/img/tc/Immediate_values.png)
  
+
+#### Circuit Simulation: Program Counter (PC): Controlled Counter
+
+Необходимые компоненты:
+* [Full Adder](turingcomplete_arithmetic.html#full-adder)
+* [Register 8 bit](turingcomplete_memory.html#saving-bytes)
+* [8-битный MUX (2→1)](turingcomplete_memory.html#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
+
+PC (Program Counter ) — это не просто счётчик команд, это управляемый регистр.
+* В каждом такте процессора, PC указывает, откуда читать инструкцию в памяти
+* После выборки инструкции:
+  * обычно происходит инкремент `PC = PC + 1`
+  * иногда PC ← другое значение (jump, immediate, return), согласно блоку условий [Conditions](turingcomplete_cpu_architecture.html#conditions)
+
+Program Counter обязан:
+* Обновляться ровно один раз за такт (только по фронту clock). 
+* Обновляться без enable. PC обязан обновляться каждый такт.
+  * Остановка PC = остановка процессора.
+* Иметь стабильное значение в течение всего такта.
+* Всегда иметь валидное значение (никогда не должен быть Z). Адрес инструкции всегда должен существовать.
+  * Даже при reset — он определён.
+* Выбирать ровно одно следующее значение 
+  * из набора:
+    * PC + 1
+    * Immediate
+    * Jump target
+    * Return address
+
+```
+┌────────────────────────────────┐
+|       ┌────────────┐           │
+PC ───► │  +1 Adder  │──┐        │
+        └────────────┘  │        │
+                        ├──► MUX ┘ ───► D[7:0]
+Immediate ──────────────┘
+
+```
+
+
+Счетчик с управлением (Controlled Counter)
+
+Имеет 3 управляющих сигнала:
+* Increment (+1) - переход к следующей команде
+* Load - загрузка нового адреса (для JUMP)
+* Reset - сброс в начало программы
+
+Основная задача:
+* Хранить адрес следующей команды в памяти программ.
+
+
+Три режима работы:
+1. Последовательное выполнение (обычный режим)
+  * PC указывает на текущую команду
+  * После выполнения команды PC автоматически +1
+  * Переход к следующей ячейке памяти
+
+2. Прыжок/Переход (Jump)
+  * Текущая команда говорит: "Перейди на адрес X"
+  * PC загружает новый адрес X
+  * Следующая команда будет по адресу X
+
+3. Сброс (Reset)
+  * PC устанавливается в начальный адрес (обычно 0x00)
+  * Начинает выполнение программы сначала
+
+ 
+<div class="sim-wrapper" data-circuit-id="36">
+  <button class="sim-fullscreen-btn" data-circuit-id="36">⛶</button>
+  <iframe 
+      id="36"
+      data-circuit-id="36"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/36_controlled_counter.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+
+#### Circuit Simulation: MODE Immediate values
+
+Необходимые компоненты:
+* [Conditions](turingcomplete_cpu_architecture.html#conditions)
+
+
+
+
 ---
 
 ## Turing Complete
@@ -1267,7 +1370,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 
 ![Turing Complete](/Computer-Science-Bookshelf/img/tc/Turing_Complete.png)
 
- 
+
 ---
 
 <!-- Feedback -->
