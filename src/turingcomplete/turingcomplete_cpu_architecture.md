@@ -1498,6 +1498,20 @@ p.s. счетчик сходит с ума под нагрузкой, не яс�
   </iframe>
 </div> 
 
+ 
+Много ресурсов потребляет полный сумматор, заменил на свою многобитню реализацию. Добавилось странное поведение счетчика - считает нечетные числа
+
+<div class="sim-wrapper" data-circuit-id="39">
+  <button class="sim-fullscreen-btn" data-circuit-id="39">⛶</button>
+  <iframe 
+      id="39"
+      data-circuit-id="39"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/39_tc_custom_full_adder.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 ---
 
 <!-- Feedback -->
