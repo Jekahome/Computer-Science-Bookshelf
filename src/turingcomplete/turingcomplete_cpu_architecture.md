@@ -305,7 +305,6 @@ OPCODE MODE:
 ![Calculations](/Computer-Science-Bookshelf/img/tc/Calculations1.png)
 
 Либо можно вообще не заниматься двойным передокированием младших битов инструкции `D2  D1  D0`, и напрямую пустить в ALU все 8 бит инструкции. 
-Также нужно верно использовать инструкцию COPY, которая должна управлять активацией Source, Destination
 
 ![Calculations](/Computer-Science-Bookshelf/img/tc/Calculations2.png)
 
@@ -318,6 +317,8 @@ OPCODE MODE:
 Необходимые компоненты:
 * [ALU](turingcomplete_cpu_architecture.html#arithmetic-engine)
 * [8 bit Multuplexers (MUX) Tri-state buffer](turingcomplete_memory.html#bit-switch-tri-state-buffer)
+
+У компонента tri-state-buffer в декодере Source/Destination мы наоборот посылаем сигнал выключения для режима MODE COPY/. А для 
 
 <div class="sim-wrapper" data-circuit-id="32">
   <button class="sim-fullscreen-btn" data-circuit-id="32">⛶</button>
@@ -1027,22 +1028,23 @@ number:address
 INPUT: 00000111 # 7
 
 # tick 1
-Instruction: 00_110_000 # 48
+Instruction: 10_110_000 # 176  
     Source 110 (INPUT)
     Destination 000 (REG 0)
 
 # tick 2
-Instruction: 00_000_110 # 6
+Instruction: 10_000_110 # 134
     Source 000 (REG 0)
     Destination 110 (OUTPUT)
 
 # Program RAM:
-# когда счетчик достигнет значения 1 выдать с RAM инструкцию 48, что означает взять данные с INPUT и записать их в REG 0
-# когда счетчик достигнет значения 2 выдать с RAM инструкцию 6, что означает взять данные с REG 0 и отправить их на OUTPUT
+# когда счетчик достигнет значения 1 выдать с RAM инструкцию 176, что означает режим MODE COPY скопировать данные с INPUT и записать их в REG 0
+# когда счетчик достигнет значения 2 выдать с RAM инструкцию 134, что означает режим MODE COPY скопировать данные с REG 0 и отправить их на OUTPUT
 
-1: 48
-2: 6
+1: 176
+2: 134
 
+Ожидаемый OUTPUT: 7
 ```
 
 <details>
@@ -1225,13 +1227,127 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 Тогда мы берем 6 младших бит инструкции и превращаем их в байт, и записываем в `REG0`
 
 Нам нужно:
+* отключить декодеры для Source и Destination, так как в роли Source у нас данные инструкции,а в роли Destination `REG0`
 * используя компонент `Switch 8 bit` (MUX) решить какие данные пустить в `REG0`
 * используя компонент переключателя 1 bit (подойдет и `Switch 8 bit` (MUX)) разрешить регистру `REG0` сохранить данные, так как биты адресации Destination мы теперь используем как часть данных
  
+исправил схему: 
+* в режиме Immediate values необходимо так же отключить декодеры Source и Destination, как это сделано в режиме COPY
+* так же нет необходимости в 8-ми битном MUX для сигналов LOW/HIGH, поставил gate OR для флага `Save` у `REG 0`
+
 ![Immediate values](/Computer-Science-Bookshelf/img/tc/Immediate_values.png)
  
+ 
+#### Circuit Simulation: MODE Immediate values
+
+Необходимые компоненты:
+* [8 bit и 1 bit Multuplexers (MUX)](turingcomplete_memory.html#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
+
+
+
+
+Программа:
+```
+# tick 1
+Instruction: 00_000_100 # 4
+    Для режима MODE Immediate values в роли Source жестко назначены первые 6 младших бит из самой программы
+    А в роли Destination выступает `REG 0`
+
+# tick 2
+Instruction: 10_000_110 # 134
+    Source 000 (REG 0)
+    Destination 110 (OUTPUT)
+
+# Program RAM:
+# когда счетчик достигнет значения 1 выдать с RAM инструкцию 4, что означает в режиме MODE Immediate values, скопировать данные с инструкции программы первые 6 младших бит и записать их в REG 0
+# когда счетчик достигнет значения 2 выдать с RAM инструкцию 134, что означает в режиме MODE COPY скопировать данные с REG 0 и отправить их на OUTPUT
+
+1: 4
+2: 134
+
+Ожидаемый вывод: 4
+```
+
+ 
+<div class="sim-wrapper" data-circuit-id="37">
+  <button class="sim-fullscreen-btn" data-circuit-id="37">⛶</button>
+  <iframe 
+      id="37"
+      data-circuit-id="37"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/37_immediate_values.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
+
+## Turing Complete
+
+> [!TIP]
+> Разблокирует компонент RAM (ПЗУ).
+ 
+> [!INFO] 
+> Полнота по Тьюрингу (Turing completeness) — это свойство вычислительной системы, означающее, что она может выполнить любую вычисляемую функцию, если дать ей достаточно времени и памяти.
+> 
+> Минимальный набор из четырёх вещей:
+> 1. Память (неограниченная или достаточно большая)
+> 2. Условные переходы (if/goto)
+> 3. Изменение памяти (запись)
+> 4. Бесконечный цикл (или возможность продолжать)
+> 
+
+В инструкции два старших бита M1 M0 отвечают за режимы MODE, в котором нам нужно реализовать `11xxxxxx` Conditions. 
+
+До этого момента все программы ограничивались выполнением байт за байтом.
+
+До сих пор только код из Program влиял на память (REG0,...), теперь память должна влиять на код. 
+
+До этого:
+* PC (Program Counter счётчик) всегда делал PC = PC + 1
+* Код → влиял на данные
+ 
+С добавлением условной логики Conditions, наш компьютер теперь может выполнить любой алгоритм и вычислить все что вычислимо.
+
+Теперь:
+* Данные → могут влиять на код
+* Мы можем изменить PC из инструкции
+* Это и есть условные переходы (branch / jump)
+
+
+Последний недостающий кусок CPU которую нам нужно добавить, это механизм для изменения текущего значения счётчика через **инструкции**, при определённых услових.
+
+В режим Conditions мы попадаем при инструкции `11xxxxxx`
+
+В этом режиме, значение `REG3` проверяется на условие заданное тремя младшими битами инструкции `xxxxxD2D1D0`.  
+Если условие выполняется, мы записываем значение `REG0` в счётчик.
+Изменение значения счетка с помощью условия означает, что мы можем пропускать инструкции основываясь на условиях или запускать инструкции в цикле.
+
+Эти условия соответствуют компоненту Conditions который был сохранён в завод компонентов:
+```
+0 0 0 Никогда т.е. не должны ничего делать
+0 0 1 Если REG3 = 0
+0 1 0 Если REG3 < 0
+0 1 1 Если REG3 ≤ 0 
+1 0 0 Всегда
+1 0 1 Если REG3 ≠ 0 
+1 1 0 Если REG3 ≥ 0
+1 1 1 Если REG3 > 0
+```
+
+Реализация:
+* Отключаем блок декодера для Source и Destination, так как мы используем в роли Source `REG3`, а в роли Destination `REG0`
+* Данные для проверки условий в компоненте Conditions. Берём `REG3` — это результат вычислений (для этого нужен 1 битный переключатель (подойдет и `Switch 8 bit` (MUX)) чтобы в компонент вычисления условий Conditions пошли данные из `REG3`)
+* Если условие = 1 → берем данные с `REG0` и записываем в PC
+* Иначе → PC просто увеличится на 1, как обычно
+
+
+![Turing Complete](/Computer-Science-Bookshelf/img/tc/Turing_Complete.png)
+
 
 #### Circuit Simulation: Program Counter (PC): Controlled Counter
+
+[Альтернативная реализация Counter](turingcomplete_memory.html#counter)
 
 Необходимые компоненты:
 * [Full Adder](turingcomplete_arithmetic.html#full-adder)
@@ -1308,68 +1424,24 @@ Immediate ──────────────┘
 </div> 
 
 
-#### Circuit Simulation: MODE Immediate values
+#### Circuit Simulation: Turing Complete
 
 Необходимые компоненты:
 * [Conditions](turingcomplete_cpu_architecture.html#conditions)
+* [Program Counter (PC): Controlled Counter](turingcomplete_cpu_architecture.html#circuit-simulation-program-counter-pc-controlled-counter)
 
 
 
-
----
-
-## Turing Complete
-
-> [!TIP]
-> Разблокирует компонент RAM (ПЗУ).
- 
-
-В инструкции два старших бита M1 M0 отвечают за режимы MODE, в котором нам нужно реализовать `11xxxxxx` Conditions. 
-
-До этого момента все программы ограничивались выполнением байт за байтом.
-
-До сих пор только код из Program влиял на память (REG0,...), теперь память должна влиять на код. 
-
-До этого:
-* PC (Program Counter счётчик) всегда делал PC = PC + 1
-* Код → влиял на данные
- 
-С добавлением условной логики Conditions, наш компьютер теперь может выполнить любой алгоритм и вычислить все что вычислимо.
-
-Теперь:
-* Данные → могут влиять на код
-* Мы можем изменить PC из инструкции
-* Это и есть условные переходы (branch / jump)
-
-
-Последний недостающий кусок CPU которую нам нужно добавить, это механизм для изменения текущего значения счётчика через **инструкции**, при определённых услових.
-
-В режим Conditions мы попадаем при инструкции `11xxxxxx`
-
-В этом режиме, значение `REG3` проверяется на условие заданное тремя младшими битами инструкции `xxxxxD2D1D0`.  
-Если условие выполняется, мы записываем значение `REG0` в счётчик.
-Изменение значения счетка с помощью условия означает, что мы можем пропускать инструкции основываясь на условиях или запускать инструкции в цикле.
-
-Эти условия соответствуют компоненту Conditions который был сохранён в завод компонентов:
-```
-0 0 0 Никогда т.е. не должны ничего делать
-0 0 1 Если REG3 = 0
-0 1 0 Если REG3 < 0
-0 1 1 Если REG3 ≤ 0 
-1 0 0 Всегда
-1 0 1 Если REG3 ≠ 0 
-1 1 0 Если REG3 ≥ 0
-1 1 1 Если REG3 > 0
-```
-
-Реализация:
-* Данные для проверки условий в компоненте Conditions. Берём `REG3` — это результат вычислений (для этого нужен 1 битный переключатель (подойдет и `Switch 8 bit` (MUX)) чтобы в компонент вычисления условий Conditions пошли данные из `REG3`)
-* Если условие = 1 → берем данные с `REG0` и записываем в PC
-* Иначе → PC просто увеличится на 1, как обычно
-
-
-![Turing Complete](/Computer-Science-Bookshelf/img/tc/Turing_Complete.png)
-
+<div class="sim-wrapper" data-circuit-id="38">
+  <button class="sim-fullscreen-btn" data-circuit-id="38">⛶</button>
+  <iframe 
+      id="38"
+      data-circuit-id="38"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/38_tc.txt"
+      loading="lazy">
+  </iframe>
+</div> 
 
 ---
 

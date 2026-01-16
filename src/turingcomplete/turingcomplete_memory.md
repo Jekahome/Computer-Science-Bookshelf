@@ -166,7 +166,7 @@ Input → [Delay 1] → [Delay 2] → Output
 
 ![Byte Switch](/Computer-Science-Bookshelf/img/tc/Byte_Switch.png)
 
-#### Circuit Simulation (gate XOR)
+#### Circuit Simulation: gate XOR
 (Собрать gate XOR используя два переключателя switch и два gate NOT)
 
 Если учитывать состояние Z, то при A=1, B=1 оба tri-state буфера отключены, и линия оказывается в состоянии Z — никто не тянет её ни в 0, ни в 1.
@@ -185,7 +185,7 @@ Input → [Delay 1] → [Delay 2] → Output
   </iframe>
 </div> 
  
-#### Circuit Simulation (Bit Switch)
+#### Circuit Simulation: Bit Switch
 (также часто называют "pass transistor logic", "передающий транзистор" или "ключ") 
 
 В CircuitJS нет прямого “tri-state buffer” как в игре Turing Complete.
@@ -449,7 +449,7 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
  
 ![Saving Bytes](/Computer-Science-Bookshelf/img/tc/Saving_Bytes.png)
 
-#### Circuit Simulation Saving Bytes
+#### Circuit Simulation: Saving Bytes
 
 Необходимые компоненты:
 * [Delayed Lines](turingcomplete_memory.html#delayed-lines)
@@ -584,7 +584,7 @@ MUX
 
 
 > [!TIP]
-> Этот уровень сумирует наши предущие полученные знания для построения счетчика PC (Program Counter счётчик)
+> Этот уровень суммирует наши предущие полученные знания для построения счетчика PC (Program Counter счётчик)
 > 
 > Необходимые знания для построния счетчика:
 > * полусумматор
