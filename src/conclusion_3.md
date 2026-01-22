@@ -517,12 +517,24 @@ H(A) L(B) = H - Когда на вентиле A HIGH, а на вентиле B 
 Точно так же схема, которая производит подсчет (описанная далее), требует наличия триггеров.
 Существуют два различных типа триггеров. Тот, что я показал выше, является самым простым и называется RS-триггером (Reset/Set, сброс/установка).
 
-Схема D-триггер со срабатыванием по уровню. 
-Буква D означает «данные» (Data). Срабатывание по уровню указывает на то, что триггер сохраняет значение входа «Данные» в тот момент, когда сигнал на входе «Запомнить этот бит» достигает определенного уровня, в данном случае 1.
+#### D-trigger может хранит один бит информации.
+Основное назначение D-триггеров - задержка сигнала, поданного на вход D.
 
-![D-триггер](img/D-триггер.png)
+* Вход D для данных DATA
+* Вход C для синхронизации и управление моментом записи CLK
+* Выход Q для выхода данных QUIT
+* Выход !Q для выхода инферсии данных NOT QUIT
 
-[D-триггер (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0lwrCATJALNAHAdg2gbPJCpAJwYiEUWQUCmAtGGAFAAeIAzKkiI0h5xI8+NVMjEARAIYAXKcwCyILBzy8weGrhqNNUZNHjMAMiFR4xfcqg3qk5GhABmUgDYBnWlUgmKYYUioorb0gTThIC4eXog+YPACeIHqeipquhE8iEbxicn0HGjKqryFYjQ8NEYA7iBJlvbk9bxI8Go+tWkpNM2hbVDMtb1gWGq9KA6DxelldfkTA0pdBUXapUUVhmwgGPwtZCAkkAKhJIhiyQCKADruABQAjgCuAJYyAJTbuyfxiGCQ-nU8B4FzEAEIbvcXgA7AButAATu4XgB7aG3Z5vT7xKqAgooOaWDgEir6HKUeB4sCoMTDGn6SoUKaU4SzFktIIDACSZgsdmsfNCkAcUEMTNq5iJJXZBRKHT8wn8AssSoG7CQQhaHGsxy153EIAAwq4ANa3O4AY1cKItJs+tRlYQV3QGEsFHBKkpawrVFAw5HoNkQOGENhB1BAEnoMgRLwA5nHEVMkMkSGoUxd+vKnWnkKn2sweUweMXwKNwIDwmKauJHPZa4cC7UnRoKpywJr5bMOzwW52pt3NR61D3XWWxmIRiPK1MpxWS+XW2OW3o50vs5y+XO+T5TBnG+BNbnHJE3J5vMx4lgG3ykFgeDvlPp5fBNbgKJqFvKLI5yz-kFmUz-o0H69v6Y6vjw77-u+Pg8pByDgQhX6itkQHtoC-5znElDAfeyjAsg+GkmhOJ1JyuZYIRx7IGS2xnBASB4BATCckxYigiAELmjC8JIqi6LuJiHz0ag14kJORDidenGQo8rwibUGBboCVG9j68pqQ2WlflMymZmoWnrlMRn1kZeg4QIRmAvp84MlQ5JWYRrRqLZLn2VUig7Le-RCOQ7mbEY7BgAI4F4AIJAQJx0hyMyQ6EQhqCwehohJeRVT1t+nJtFUmo5RB8UPpyHCEXBoEUHoiWwah4rpZwGC0pyNKTGR-7wPSWnteUtGea1xV4OQWmqCKWRMuwDEUB6FbZZ6BrcVCcKIsiaIYgpnzjagiCqI4RBbeFZgGnJwn2t5YjamIWlJeEJkJaphFXWOtnAoN93EmOl1wARIJvZZX31WItnnR5TK5H9z2nRQmW0WhShPfWfmQyNWzBf5CR1KjajRbI8hXuAGoTuAxJNN117XaYSo0Lm-hpTRzhnjEY7+LmW78EVjP4+Aq6s5z121P4b2lvzJYWbO3MswLM589th4lhwmqjvKIWrvLHMK6LVNc1T-Z86r9ZM2ox6FhWA12ULdlVmhOu5lT9iU02ePvjb74BZe8DXvreaTkTnv6KT7O5vuZv7orHPEnWb1h+zb13iW3ORyH0fJEHxGztLJWy4VjNp4RHvp-7aiR7npXq+m4Eey7RYaP5+HJ4yMCW3jAf9BTAH27ZgtV+bel8kDTAm0DiudzHxvkAPrvXk6+7D8HT68w2gflsHybFQSc7x7Oi81+W6984vSeb5UA5FHnw6cMXtSzHnTp5xuNCR9f5-z+Bk+AZXvZb+mxE1TWL-pskLsOk-OBIIFRwKDxLICUsP1ZyAjeiAzgh8JSfTgZ9EC4CiIQJ4MNRmsCTbwOwfKfBeDPr5RfHlPQ8DSG+A7sLc24BTzRAvOTQEw9bDDwiFEc8sRfC5l0JzFI+g6aMO4UMJqaVUC5mamOCRmNxFU3LFlX8mN5H2xkeOMwvDbCEM0QbdIWjtj-F4JtPGEBAzhmSMaM09wrQ2jtMwAARgI+g75qQYGyNgAYjjXGIGcaYsAAZNoFiAA)
+D-trigger не блокирует выход, т.е. данные DATA на его выходах Q и !Q есть всегда, а вот какие он выдает данные зависит от его типа срабатывания при записи.
+  
+Типы срабатывания:
+* Динамический т.е. срабатывание **по фронту** (edge-triggered/D-flip-flop) — запись (т.е. сохранение) происходит только при смене уровня, либо с LOW на HIHG либо с HIHG на LOW т.е. не сразу. Применяется в синхронных цифровых систем.
+Типы срабатывание на фронте такта:
+  * передний фронт (rising edge, 0→1, LOW→HIGH) чаще всего
+  * задний фронт (falling edge, 1→0, HIGH→LOW)
+* Статический т.е. срабатывание **по уровню** (level-triggered) — запись (т.е. сохранение) сразу и пока CLK = HIHG и тут же вывод этого значения (прозрачный режим, обычно называют «защёлкой», latch). Срабатывание по уровню указывает на то, что триггер сохраняет значение входа «DATA» в тот момент, когда сигнал на входе «CLK» достигает уровня HIHG. Современная электроника использует статический d-latch в ОЗУ (RAM) ячейках, дешифраторах
+
+Схема D-latch со срабатыванием по уровню. 
 
 <div class="sim-wrapper" data-circuit-id="4">
   <button class="sim-fullscreen-btn" data-circuit-id="4">⛶</button>
@@ -530,7 +542,7 @@ H(A) L(B) = H - Когда на вентиле A HIGH, а на вентиле B 
       data-circuit-id="4"
       id="4"
       class="sim-iframe"
-      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/4_d_trigger.txt"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/4_d_latch.txt"
       loading="lazy">
   </iframe>
 </div>
@@ -547,9 +559,23 @@ H(A) L(B) = H - Когда на вентиле A HIGH, а на вентиле B 
 
 `X` означает «неважно». Значение входа «Данные» неважно, поскольку в случае, когда значение входа «Запомнить этот бит» равно 0, выход Q остается прежним.
 
+
+Схема динамического триггера D-trigger со срабатыванием по переднему фронту (rising edge, 0→1, LOW→HIGH)
+
+<div class="sim-wrapper" data-circuit-id="5">
+  <button class="sim-fullscreen-btn" data-circuit-id="5">⛶</button>
+  <iframe 
+      data-circuit-id="5"
+      id="5"
+      class="sim-iframe"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_d_trigger.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
 ## Глава 16. Сборка памяти
 
-Мы хотим выбирать одну из восьми однобитных защелок, используя переключатели.
+Мы хотим выбирать одну из восьми однобитных защелок (latch), используя переключатели.
 
 Сколько переключателей нужно? Если хотим выбрать один из восьми элементов, потребуются три переключателя. 
 Три переключателя (Sel 0, Sel 1, Sel 2) могут представлять восемь разных значений: 000, 001, 010, 011, 100, 101, 110 и 111, которые будут соответвовать вомьми нашим вводам данных (D0...D7).

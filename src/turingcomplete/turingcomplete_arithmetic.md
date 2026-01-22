@@ -423,7 +423,8 @@ fn main() {
 
 ### Карта Карно
 
-[Using REAL Computer Engineering Skills to Avoid Getting Eaten](https://youtu.be/XFPGruPhTvM?si=0-b7ATIEEsgCh0U_&t=1802)
+* [Using REAL Computer Engineering Skills to Avoid Getting Eaten](https://youtu.be/XFPGruPhTvM?si=0-b7ATIEEsgCh0U_&t=1802)
+* [Karnaugh Maps (learnabout-electronics.org)](https://learnabout-electronics.org/Digital/dig24.php)
 
 Карта Карно = таблица истинности, разложенная так, чтобы одинаковые случаи стояли рядом.
 Это нужно, чтобы видеть, какие входы можно “выкинуть” из формулы.
@@ -768,6 +769,8 @@ fn main() {
     00000110 #6
 ```
 
+Параллельный многоразрядный сумматор:
+
 [Сумматор на 8 разрядов (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKABkRMUQmNDxi3XvypUAZgEMANgGc61SO04YhYQlTCCea0VBCTZ8pIo5dtAFnMDVlveOlyFSs0xR5r2t3f0OjUZyraYNyaqsHeBo7GAULE-KE8cRG+TqaBDHgaWhm6EJF+JiDYhO4MhFYJZVYaPoapytxJCUk1+fVmmR6drSnRadzlHoO6bX0NIObuCZPJdWNm2CFai7NR-v3g8VpqqwUxegm69nPr40xbqiJ6o-4AHpvkvBV4ELwQFdwAghgs92AYVCYSDAeCsrgm4G4ACEfhtzINpsNrr07uBzFR4eQQe8ARDwgBhT4AJSJAE0WJp+MV3OiMStaZxwL8HjxCCEXjwEMQ8V9FH9CI8MFMOQwMEgPiBPqx+Y9iM9XsR3pDJShmWpHswNCKwJByBLPtg1QLPPFtShsDzJeYjRrzOzXmBsNz9QgbdoEMKHQhxcrPoQ1bidVqKpALRKoXzwLjQeAY3g9cqodKo1QSrGrBgleEoaq-riEOyrN7LVDDXmqMV00VnYnreXOMHOGHE67688MyX-QB3cbwqzUibDClJPtFSsF9zYSshFg9lydbAxnL+SkUdTjNlWMwz1eEBD8NDuFRUQ+M1irsUhWwveK2HdJUHuTqK7ide-8OUVeJwKYHpmrnV0R4GZNTBGYZx7ZhKx2ZgYx2RRIMgIDOlgqxulnEBPzRCoQQqWxFAAWXAXDNkhFZ4M4aBXSI1CQBQ81X10FAqJYGiSLAWxgnI-DKNdHtHwbKYSNPBCQEvcZaLMUS9ypaCSKnEQMP3DE4GImMGVE0dR1o0dCLUrd8DI7gRN41j9IkhjxhPFi2JjBSjLHK5mOo8yGS47gNNM2yrG0yzdNMxCgPOM54Iwlx-m-IKIv8QLAWiwDARmUSpMwrxRAwwR3CoTKJiyjKvBmLCkrC9IdEw2xznSnssMq8qvxiuiZk6ASmHwjCWo4rdSra-jyP4PByPCUSBOYV9Bu4Ya+okxSe3EzqxILTw8tmxbXHccK0ownAqW4baoxmhaQj4MToOO0S9pWBYJowmTBJAW6mCGm79yCYzSqentygxdwvs4IDpKAlAgNuoGqvuoDwMCYqe2U8ZYYYFolPXBGD3SRGYdsQYEFsXBqiUnGkLXCtCdE7GrEGMwhx7Ud7NHZdNMGZdFzBdDqaajEZgHTTObTGm025p8T0CVmil51SByqBqzCSbBFvRoo5apRbzBWUTZY8lYBxV662MrBgQMs-WstMv4gaQBhKEhPB+H1hMCWJMlh34cwdluyZUxe19mWwDjysnLxiAQLNoX9e4fasYgFwDgaS1bIpfZ1cJFimSAwB9bM63jkMca8QC7ehMss+QY7k+Lmts1zIvNX9oTmBLZNw+IoDS+YFWS0jH2IBICsUCQEhm3CP1vbrlRuEWJAVHTr4487hb+17hb86tYeICFHaJ7wcuvkL2eXn9pACGDlUV7oy3x9Pgevgbuu8AIIoF9vqfJQ733FQtUvFWdxMfjDuu933+6hAj7fCUC7D8SdKwvl2PUMBdVHJwJGCiQosCyCyQ-GdZEJxkEwR-PAoMxtjhrGwZFCs0EkJHFqEQ0BODAj2R1IERBWDqHxEAng1hPQmEcFgVBNBxFKwcKoVwnYt9SH9W6OAShewhH9U5pWASAipETGETseyN5oFjFgUKfslYtHqNOJoxa9lxKMMEUo-gx54EWJMYo2BJRJyVjsXo4h90Xr2VutYpw9w3A4UzPfYE-wfLKkJCSck0jiJpjoWoAhkjPEUF8f-e64RCBAMtMEx2REg4DBerDdxXkKDhAsbDKxeTMmHSJmU6yLlSm6KKTGSpZlSlqNhmo+pGTwgCWaUlEp7TOjNPEc5Bp4QoGwyga0-JjRbAjJ4gM3+fc65clTL7LcVhACEIIAYRBAA8IBswADCCACEQQAfCCAAEQAAOjIQAvCDbNOXgU5hztmAHYQQ5gB5EEACwg+zABMICwIAA)
 
 <div class="sim-wrapper" data-circuit-id="13">
@@ -861,6 +864,106 @@ fn main() {
 ![Adding Bytes](/Computer-Science-Bookshelf/img/tc/Signed_Negator.png)
 
 ---
+
+## Coder или encoder (шифратор)
+
+Логическая схема, которая преобразует номер активного входа (уровень HIGH может быть только у одного из входов) в двоичный код.
+
+Шифратор — это комбинационная логическая схема, которая: принимает `2ⁿ` входов, выдаёт `n` выходов, кодирует индекс активного входа.
+
+Например закодируем числа 0-9 в двоичный код. Тогда мы имеем 10 входов и минимум 4 выхода (`2⁴ = 16 ≥ 10`) (так как мы имея 4 выхода можем закодировать числа 0-15 т.е. 16 чисел но реализуем только 10 из них то наз. это неполным кодером)
+
+Формулы:
+```
+0 = I1 OR I3 OR I5 OR I7 OR I9
+1 = I2 OR I3 OR I6 OR I7
+2 = I4 OR I5 OR I6 OR I7
+3 = I8 OR I9
+
+```
+
+Как получить формулы:
+```
+Смотрим на двоичное представление кодируемого входа 
+
+N  pos 3 2 1 0 
+--------------
+0      0 0 0 0
+1      0 0 0 1
+2      0 0 1 0
+3      0 0 1 1
+4      0 1 0 0
+5      0 1 0 1
+6      0 1 1 0
+7      0 1 1 1
+8      1 0 0 0
+9      1 0 0 1
+
+Смотрим только HIGH уровень в расчитываемой позиции бита выхода.
+Для позиции 0 (т.е. первый младший бит) на выходах с HIGH уровнем только вход для 1,3,5,7,9
+Для позиции 1 на выходах с HIGH уровнем только вход для 2,3,6,7
+Для позиции 2 на выходах с HIGH уровнем только вход для 4,5,6,7
+Для позиции 4 на выходах с HIGH уровнем только вход для 8,9
+
+```
+ 
+<div class="sim-wrapper" data-circuit-id="40">
+  <button class="sim-fullscreen-btn" data-circuit-id="40">⛶</button>
+  <iframe 
+      id="40"
+      data-circuit-id="40"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/40_coder.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+> [!NOTE]
+> реальная микросхема шифратора К155ИВ1 8806 
+
+[Шифраторы, дешифраторы](https://www.youtube.com/watch?v=vsX4xMseF14)
+
+---
+
+## Decoder  (дешифратор)
+
+Decoder — это схема, которая превращает бинарное число в один выход.
+
+Количество выходов `2ⁿ` где `n` это число входов.
+
+Например декодируем 4 бита в диапазон чисел от 0-9. 
+
+Как получить формулы:
+```
+Каждый выход - это AND всех входов,
+где:
+    бит 1 → прямой вход
+    бит 0 → инверсия входа
+
+Для выхода 9 смотрим его декодирующий бинарный вид 1001
+
+pos_3 1
+pos_2 0
+pos_1 0
+pos_0 1
+
+Переводим в формулу, все входы с 0 инфертируем: pos_3 AND NOT pos_2 AND NOT pos_1 AND pos_0
+```
+
+Декодер 4 на 10 (неполный декодер)
+
+<div class="sim-wrapper" data-circuit-id="41">
+  <button class="sim-fullscreen-btn" data-circuit-id="41">⛶</button>
+  <iframe 
+      id="41"
+      data-circuit-id="41"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/41_decoder.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+p.s. схему можно упростить, уменьшив количество элементов NOT. Необходимо создать для каждого входа инверсионный аналог через NOT, тогда не нужно будет для каждого gate AND использовать собственное отрицание, а просто подключится к нужной линии.
 
 ## 1 Bit Decoder
 

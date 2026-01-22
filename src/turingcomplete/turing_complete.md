@@ -43,6 +43,10 @@
 
 Я постараюсь дублировать смысл поведения компонента/идеи в виде кода или реальной схемы, там где это уместно.
 
+Симулятор электрических цепей [Falstad](https://www.falstad.com/circuit/) — это интерактивный, упрощённый SPICE-подобный симулятор **физических процессов**. Он полезен для использования в браузере. 
+
+Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution) — это **цифровой** симулятор архитектуры.
+
 ---
 
 1. [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
