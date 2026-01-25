@@ -429,10 +429,10 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 Классификация триггеров:
 * Тип синхронизации
   * синхронный - изменение состояния только по входу синхронизации CLK (clock). Позволяет избежать гонки данных, когда сингалы приходят в разное время.
-    * тип синхронизации высокий уровень CLK=HIHG
-    * тип синхронизации низкий уровень CLK=LOW
-    * тип синхронизации передний фронт CLK=LOW -> CLK=HIHG
-    * тип синхронизации задний фронт CLK=HIHG -> CLK=LOW
+    * тип синхронизации высокий уровень CLK=1
+    * тип синхронизации низкий уровень CLK=0
+    * тип синхронизации передний фронт CLK=0 -> CLK=1
+    * тип синхронизации задний фронт CLK=1 -> CLK=0
   * асинхронный - изменение состояния сразу в момент появляния данных (вход D)
 * Тип реализации
   * однотактные (одноступенчатые)
@@ -444,10 +444,12 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
   * T-trigger (с одним счетным входом)
 
 
-**RS-trigger**
+**Асинхронный RS-trigger**
 
 
 * Реализация через gate NOR управление HIGH уровнем
+  * Операция Reset - установить выход Q=0, управляется HIGH уровнем т.е. R=1 S=0 Q=0
+  * Операция Set - установить выход Q=1, управляется HIGH уровнем т.е. R=0 S=1 Q=1
   * Комбинация R=1 и S=1 запрещена, триггер в этом состоянии имеет неопределенное поведение. (Неопределенное состояние возникает при переходе с запещенного состояния в состояние хранения, тогда неопредленно что хранится)
 
   |Set|Reset|Q|!Q|состояние|
@@ -458,6 +460,8 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
   | 1 | 1 | 0 | 0 | ошибка (запрещено)|
 
 * Реализация через gate NAND управление LOW уровнем
+  * Операция Reset - установить выход Q=0, управляется LOW уровнем т.е. R=0 S=1 Q=0
+  * Операция Set - установить выход Q=1, управляется LOW уровнем т.е. R=1 S=0 Q=1
   * Комбинация R=0 и S=0 запрещена, триггер в этом состоянии имеет неопределенное поведение.
 
   | Set|Reset|  Q | !Q | состояние |
@@ -466,6 +470,8 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
   |  0 |   1 |  1 |  0 | set                |
   |  1 |   0 |  0 |  1 | reset              |
   |  0 |   0 |  1 |  1 | ошибка (запрещено) |
+
+
 
 
 <div class="sim-wrapper" data-circuit-id="42">
@@ -480,11 +486,19 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 </div> 
 
 
-Синхронный RS-trigger
-* вход CLK управляет временем для записи/чтения
-* запещенное состояние при одновременном снятии двух входов R и S. Например переход с состояния R=1, S=1, CLK=1 на режим хранения R=0, S=0, CLK=1
+**Синхронный RS-trigger**
+
+> [!TIP]
+> В синхронной реализации RS-trigger, входы S/R не меняют свое расположение относительно реализаций через NOR или NAND, в отличии от асинхронных вариантов, где входы противоположны при сохранении позиций выходов Q/!Q
+
+* вход CLK управляет временем для записи/чтения, т.е. при CLK=1 это режим записи, при CLK=0 режим чтения (запись заблокирована) в обоих реализациях
+
 
 Реализация синхронного rs-trigger через gate NOR управление HIGH уровнем
+* Операция **технические работы** при CLK=0 мы изменяем состояние входов S/R триггера что-бы не попасть в неопредленное состояние
+* Операция Reset - установить выход Q=0, управляется HIGH уровнем т.е. CLK=1 R=1 S=0 Q=0
+* Операция Set - установить выход Q=1, управляется HIGH уровнем т.е. CLK=1 R=0 S=1 Q=1
+* запещенное состояние при одновременном снятии двух входов R и S. Например для реализации через gate NOR, переход с состояния R=1, S=1, CLK=1 на режим хранения R=0, S=0, CLK=1
 
   |Set|Reset|CLK|Q|!Q|состояние|
   |---|---|---| ---|---|---|
@@ -494,7 +508,20 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
   | 1 | 0 | 1 | 1 | 0 | set   |
   | 1 | 1 | 1 | 0 | 0 | ошибка|
 
-<br>
+Реализация синхронного rs-trigger через gate NAND управление LOW уровнем
+* Операция **технические работы** при CLK=0 мы изменяем состояние входов S/R триггера что-бы не попасть в неопредленное состояние
+* Операция Reset - установить выход Q=0, управляется LOW уровнем т.е. CLK=1 R=0 S=1 Q=0
+* Операция Set - установить выход Q=1, управляется LOW уровнем т.е. CLK=1 R=1 S=0 Q=1
+* запещенное состояние при одновременном снятии двух входов R и S. Например для реализации через gate NAND, переход с состояния R=0, S=0, CLK=1 на режим хранения R=1, S=1, CLK=1
+
+|Set|Reset|CLK| Q | !Q | состояние          |
+| - | - | --- | - | -- | -----------------  |
+| ~ | ~ | 0   | Q | !Q | память (чтение)    |
+| 1 | 1 | 1   | Q | !Q | память (чтение)    |
+| 1 | 0 | 1   | 0 | 1  | reset              |
+| 0 | 1 | 1   | 1 | 0  | set                |
+| 0 | 0 | 1   | 1 | 1  | ошибка (запрещено) |
+
 
 <div class="sim-wrapper" data-circuit-id="42">
   <button class="sim-fullscreen-btn" data-circuit-id="42">⛶</button>
@@ -518,7 +545,7 @@ D-trigger (англ. Delay-задержка) может хранит один б
 
 D-trigger не блокирует выход, т.е. данные DATA на его выходах Q и !Q есть всегда, а вот какие он выдает данные зависит от его типа срабатывания при записи.
   
-Типы срабатывания:
+Типы срабатывания (захват):
 * Динамический т.е. срабатывание по фронту (edge-triggered/D-flip-flop) — запись (т.е. сохранение) происходит только при смене уровня, либо с LOW на HIHG либо с HIHG на LOW т.е. не сразу. Применяется в синхронных цифровых систем.
 Типы срабатывание на фронте такта:
   * передний фронт (rising edge, 0→1, LOW→HIGH) чаще всего
@@ -527,62 +554,16 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
 
 Схема динамического триггера D-trigger со срабатыванием по переднему фронту (rising edge, 0→1, LOW→HIGH). Комбинированный D-trigger собран на шести элементах И-НЕ (NAND) по схеме трех RS-триггеров. Двухступенчатый синхронный D-триггер с асинхронными сбросом и установкой.
  
-Обычно активные  - **низкие** (чтобы избежать случайного срабатывания от помех)
+> [!TIP]
+> Обычно активные - **LOW** (чтобы избежать случайного срабатывания от помех). Такое поведение с управлением LOW режимом при реализации триггеров через gate NAND
+>
+> Это означает захват по заднему фронту (falling edge CLK 1→0, HIGH→LOW)
 
-У стандартного D flip-flop:
-* R = 0 → Reset (активен)
-* S = 0 → Set (активен)
-* R = 1, S = 1 → нормальная работа
+**D-latch**
 
-То есть:
-* R и S — асинхронные входы, активные нулём. Асинхронные Set/Reset = работают **независимо** от тактового сигнала CLK.
+Статический т.е. срабатывание при наличии уровня т.е. прозрачный, реагирует сразу без задержки.
 
-Что значит «срабатывает при R=0 S=0». при R=0 и S=0 триггер не работает как D-триггер
-
-Это состояние:
-* либо запрещённое
-* либо имеет фиксированный приоритет (чаще Reset)
-
-Если на входы /S и /R одновременно подать сигнал низкого уровня (логический нуль), то на обоих выходах триггера Q и /Q будет высокий уровень (логическая единица). Однако после снятия этих сигналов со входов /S и /R состояние триггера будет неопределенным. **Поэтому комбинация /S=/R=0 для этих входов является запрещенной**.
-
-
-<div class="sim-wrapper" data-circuit-id="25">
-  <button class="sim-fullscreen-btn" data-circuit-id="25">⛶</button>
-  <iframe 
-      data-circuit-id="25"
-      id="25"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_d_trigger.txt"
-      loading="lazy">
-  </iframe>
-</div>
- 
-Схема D-trigger rising edge (master slave) двухтактный (двухступенчатый)
-* Задаржка (delay) данных происходит в первом MASTER rs-trigger,а на следующем такте MASTER в режиме чтения отдает на вход SLAVE rs-trigger данные, которые сразу идут на выход так как это статические триггеры, но вместе они дают динамическое поведение.
-
-<div class="sim-wrapper" data-circuit-id="26">
-  <button class="sim-fullscreen-btn" data-circuit-id="26">⛶</button>
-  <iframe 
-      data-circuit-id="26"
-      id="26"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_d_trigger_ms.txt"
-      loading="lazy">
-  </iframe>
-</div>
-
-Positive Edge Triggered D Flip Flop
-<div class="sim-wrapper" data-circuit-id="27">
-  <button class="sim-fullscreen-btn" data-circuit-id="27">⛶</button>
-  <iframe 
-      data-circuit-id="27"
-      id="27"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_positive_edge_triggered_d_flip_flop.txt"
-      loading="lazy">
-  </iframe>
-</div>
-
+Цель D-latch (синхронной) в любой реализации — при активном такте (CLK=1) Q = D
 
 Схема статического триггера D-latch со срабатыванием по уровню (level-triggered) 
 * основан на реализации синхронного rs-trigger через gate NOR управление HIGH уровнем
@@ -600,11 +581,116 @@ Positive Edge Triggered D Flip Flop
 </div>
 
 
+
+
+
+
+
+**D flip-flop**
+
+Динамический т.е. срабатывание по фронту.
+ 
+[D Type Flip Flop](https://www.youtube.com/watch?v=RP00R9uf004)
+* Захват по заднему фронту (falling edge CLK 1→0, HIGH→LOW)
+* Когда CLK переходит c 0 → 1 (подьем), Master захватывает вход D (сохраняет),а Slave закрыт для записи.
+* Когда CLK переходит с 1 → 0 (спад), Master закрывает вход D и его выход Q_m содержит предыдущее состояние входа D,а Slave теперь открывается и принимает предыдущее состояние D c Q_m и сразу выдает его на выход Q  
+
+<div class="sim-wrapper" data-circuit-id="44">
+  <button class="sim-fullscreen-btn" data-circuit-id="44">⛶</button>
+  <iframe 
+      data-circuit-id="44"
+      id="44"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/44_d_type_flip_flop.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
+D Type Flip Flop (falling edge)
+* Захват по заднему фронту (falling edge CLK 1→0, HIGH→LOW)
+* Reset синхронный при CLK=0 и тоже по заднему фронту (falling edge CLK 1→0, HIGH→LOW) т.е. активный LOW 
+
+<div class="sim-wrapper" data-circuit-id="45">
+  <button class="sim-fullscreen-btn" data-circuit-id="45">⛶</button>
+  <iframe 
+      data-circuit-id="45"
+      id="45"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/45_d_trigger_neg_reset.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
+Positive Edge Triggered D Flip Flop
+* Захват по переднему фронту (rising edge, 0→1, LOW→HIGH)
+<div class="sim-wrapper" data-circuit-id="27">
+  <button class="sim-fullscreen-btn" data-circuit-id="27">⛶</button>
+  <iframe 
+      data-circuit-id="27"
+      id="27"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_positive_edge_triggered_d_flip_flop.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
+
+
+
+У стандартного D flip-flop:
+* R = 0 → Reset (активен)
+* S = 0 → Set (активен)
+* R = 1, S = 1 → нормальная работа
+
+То есть:
+* R и S — асинхронные входы, активные нулём. Асинхронные Set/Reset = работают **независимо** от тактового сигнала CLK.
+
+
+Реализация D-trigger (rising edge)
+* Захват по переднему фронту (rising edge, 0→1, LOW→HIGH)
+* С асинхронными Set/Reset управляемые LOW уровнем
+* Режим записи CLK=1 S=1 R=1
+* Запрещенный режим при CLK=1 S=0 R=0
+<div class="sim-wrapper" data-circuit-id="25">
+  <button class="sim-fullscreen-btn" data-circuit-id="25">⛶</button>
+  <iframe 
+      data-circuit-id="25"
+      id="25"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_d_trigger.txt"
+      loading="lazy">
+  </iframe>
+</div>
+ 
+Схема D-trigger rising edge (master slave) 
+* Задаржка (delay) данных происходит в первом MASTER rs-trigger,а на следующем такте MASTER в режиме чтения отдает на вход SLAVE rs-trigger данные, которые сразу идут на выход так как это статические триггеры, но вместе они дают динамическое поведение.
+* Реализация через gate NOR управление HIGH уровнем. Управление передним фронтом т.е. при переходе CLK=LOW -> CLK=HIGH
+* Реализация через gate NAND управление LOW уровнем. Управление задним фронтом т.е. при переходе CLK=HIGH -> CLK=LOW
+
+<div class="sim-wrapper" data-circuit-id="26">
+  <button class="sim-fullscreen-btn" data-circuit-id="26">⛶</button>
+  <iframe 
+      data-circuit-id="26"
+      id="26"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/5_d_trigger_ms.txt"
+      loading="lazy">
+  </iframe>
+</div>
+ 
+* [74HC74](https://learnabout-electronics.org/Downloads/74HC74-%20Dual-D-Type-flip-flops.pdf) Двойной D-триггер с функциями установки и сброса от ON Semiconductors.
+Четырехканальные D-защелки данных 74LS75 от Texas Instruments.
+* [74HC174](https://learnabout-electronics.org/Downloads/74hc174-D-type-flip-flop-with-reset.pdf) Шестиканальный D-триггер с функцией сброса от NXP.
+* [74HC175](https://learnabout-electronics.org/Downloads/74hc175-Quad-D-Type-Flip-Flops-with-reset.pdf) Четырехканальный D-триггер с функцией сброса от NXP.
+Восьмиразрядный D-триггер 74HC273 с функцией сброса от компании Texas Instruments.
+* [74HC373](https://learnabout-electronics.org/Downloads/74HC373%20Octal-Transparent-D-Type-Latches.pdf) Восьмиканальные прозрачные D-триггеры данных с трехстабильными выходами от Texas Instruments.
+* [74HC374A](https://learnabout-electronics.org/Downloads/74HC374-Octal-3-state-Non-inverting-flip-flop.pdf) Восьмиканальный 3-состоятельный неинвертирующий D-триггер от ON Semiconductors.
+ 
 D-триггер с динамическим входом C может работать как T-триггер. Для этого необходимо вход С соединить с инверсным выходом триггера /Q
 
 Если на входе D поставить дополнительный двухвходовый элемент И и инверсный выход триггера /Q соединить с одним из входов элемента И, а на второй вход подать сигнал EI, то получим T-триггер с дополнительным разрешением по входу
  
-
+ 
 
 ---
 

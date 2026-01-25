@@ -1,5 +1,5 @@
 
-# Turing Complete. Basic logic
+# Turing Complete 
 
 * [Turing Complete](https://turingcomplete.game/) — это игра о компьютерных науках.
 * [Turing Complete youtube channel](https://www.youtube.com/@TuringCompleteGame)
@@ -43,11 +43,16 @@
 
 Я постараюсь дублировать смысл поведения компонента/идеи в виде кода или реальной схемы, там где это уместно.
 
-Симулятор электрических цепей [Falstad](https://www.falstad.com/circuit/) — это интерактивный, упрощённый SPICE-подобный симулятор **физических процессов**. Он полезен для использования в браузере. 
+### Симуляторы
 
-Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution) — это **цифровой** симулятор архитектуры.
+1. Симулятор электрических цепей [Falstad](https://www.falstad.com/circuit/) — это интерактивный, упрощённый SPICE-подобный симулятор **физических процессов**. Он полезен для использования в браузере. 
+2. Симулятор электрических цепей [Digital](https://github.com/hneemann/Digital?tab=readme-ov-file) — это **цифровой** симулятор архитектуры ([Обзор. Hneemann Digital Tutorial](https://www.youtube.com/watch?v=agO4eO-bamk)).
+   * (устарел) Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution)
+3. Другие [бесплатные симуляторы](https://crimmscoolclass.github.io/software.html) 
 
 ---
+
+## Turing Complete levels
 
 1. [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
 2. [Arithmetic](turingcomplete/turingcomplete_arithmetic.md)  
