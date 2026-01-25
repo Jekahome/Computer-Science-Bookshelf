@@ -671,6 +671,10 @@ fn main() {
   </iframe>
 </div> 
 
+В симуляторе [Digital](https://github.com/hneemann/Digital?tab=readme-ov-file) есть возможность зафиксировать свою реализацию компонента с помощью тестов.
+
+![Full adder Digital](/Computer-Science-Bookshelf/img/tc/full_adder_digital.png)
+
 ---
 
 ## Double the number

@@ -329,6 +329,31 @@ Multuplexers (MUX / Мультиплексер)
 
 ![The Bus (Шина)](/Computer-Science-Bookshelf/img/tc/The_Bus.png)
  
+<br>
+
+[шинный формирователь (3-state buffer)](https://settis.github.io/2021/03/15/3-state-buffer/)
+
+```
+EO=0, D=0, Output=Z 
+EO=0, D=1, Output=Z 
+EO=1, D=1, Output=1
+EO=1, D=0, Output=0
+```
+
+Выход `Q` через один транзистор подсоединён к питанию, а через другой - к земле. Таким образом, если открыть верхний транзистор, то напряжение питания через него пойдет на выход. Если открывать нижний транзистор, то всё с выхода будет стекать на землю. В случае, когда оба транзистора закрыты, то выход Q ни к чему не присоединён, а значит это Z-состояние. И для полноты картины можно получить короткое замыкание (КЗ), если открыть оба транзистора. Управляющая логика из двух AND и одного NOT будет правильно открывать транзисторы, не допуская КЗ.
+
+
+<div class="sim-wrapper" data-circuit-id="46">
+  <button class="sim-fullscreen-btn" data-circuit-id="46">⛶</button>
+  <iframe 
+      id="46"
+      data-circuit-id="46"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/46_tri_state_buffer.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 ---
 
 ## Saving Gracefully
@@ -536,6 +561,8 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 
 #### D-trigger
 
+[Electra Academy (001-D-Latch)](https://electra.academy/simulator/?global=/8-bit-computer/001-D-Latch.brain)
+
 D-trigger (англ. Delay-задержка) может хранит один бит информации. Основное назначение D-триггеров - задержка сигнала, поданного на вход D.
 
 * Вход D для данных DATA
@@ -580,12 +607,7 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
   </iframe>
 </div>
 
-
-
-
-
-
-
+ 
 **D flip-flop**
 
 Динамический т.е. срабатывание по фронту.
@@ -633,10 +655,7 @@ Positive Edge Triggered D Flip Flop
       loading="lazy">
   </iframe>
 </div>
-
-
-
-
+ 
 У стандартного D flip-flop:
 * R = 0 → Reset (активен)
 * S = 0 → Set (активен)
