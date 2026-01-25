@@ -325,7 +325,7 @@ fn main() {
 [Из AND можно получить NAND и наоборот](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgpABZsKBTAWjDACgwEIUUaQUEhENkJ5+gqP0kIOlfr3AoxIsWCWSU1GQA9+hPoSTYwBsXwUBBAHIARNrsya0SGmDFoz-Ples2AOgDOfgAOgVYA8gAqbACywqKKZjSq6lQo0DJxrkICQjTJ4kJpGWwAMuCEVKya1eBqkhAAZgCGADYBDNSQZRVV+XU1-VUgLe2dSN0A7r0D4MQ19VPyfLVg87NLaws167xUSzzmNFW7x1Bs02CV4P1gGEImfJv3NysvjufTh-wYNe+-n2Wr3AL0e5wAkvF3BJsoVJDAkDIgA):
 * NAND можно получить через AND, так как `A && B ≡ !(A NAND B)`
 * NAND можно получить через OR `!(A && B) ≡ (!A) || (!B)`
-  * ![NAND](img/tc/NAND.png)
+  * ![NAND](/Computer-Science-Bookshelf/img/tc/NAND.png)
 * NAND можно получить через NOR `!(A && B) ≡ (A NOR A) OR (B NOR B)`
 
 ```rust
