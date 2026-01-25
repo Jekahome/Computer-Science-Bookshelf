@@ -1028,7 +1028,7 @@ A B C | Активный выход
 
 ![3 Bit Decoder](/Computer-Science-Bookshelf/img/tc/3_Bit_Decoder.png)
 
-Или с помощью открытого компонета `1 Bit Decoder`
+Или с помощью открытого компонента `1 Bit Decoder`
 
 ![3 Bit Decoder](/Computer-Science-Bookshelf/img/tc/3_Bit_Decoder2.png)
 
