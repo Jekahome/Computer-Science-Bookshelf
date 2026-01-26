@@ -1342,6 +1342,19 @@ Instruction: 10_000_110 # 134
 
 ![Turing Complete](/Computer-Science-Bookshelf/img/tc/Turing_Complete.png)
 
+#### Circuit Simulation: Priority input
+
+<div class="sim-wrapper" data-circuit-id="47">
+  <button class="sim-fullscreen-btn" data-circuit-id="47">⛶</button>
+  <iframe 
+      id="47"
+      data-circuit-id="47"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/47_priority_input.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
 
 #### Circuit Simulation: Program Counter (PC): Controlled Counter
 
