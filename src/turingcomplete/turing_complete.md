@@ -17,7 +17,7 @@
 > **Существа, которые смогут завершить создание компьютера, по закону считаются разумными.**
 >
 
-Всё в компьютере может быть построено из базового компонента, называемого логическим элементом NAND. Вам предстоит решить ряд головоломок, чтобы проложить путь от элементов NAND к арифметике, памяти и вплоть до полноценных архитектур центрального процессора. Пройдя эту игру, вы получите глубокое понимание взаимосвязи между ассемблером, наборами инструкций ЦП и базовыми компонентами. А также поймете, как работают такие концепции программирования, как условные операторы, циклы и функции, на уровне ассемблера и аппаратного обеспечения.
+Всё в компьютере может быть построено из базового компонента, называемого логическим элементом [NAND](turingcomplete_basic_logic.html#nand--a--b). Вам предстоит решить ряд головоломок, чтобы проложить путь от элементов NAND к арифметике, памяти и вплоть до полноценных архитектур центрального процессора. Пройдя эту игру, вы получите глубокое понимание взаимосвязи между ассемблером, наборами инструкций ЦП и базовыми компонентами. А также поймете, как работают такие концепции программирования, как условные операторы, циклы и функции, на уровне ассемблера и аппаратного обеспечения.
 
 ![you learn this](/Computer-Science-Bookshelf/img/tc/turingcomplete_1.png)
 
@@ -43,21 +43,21 @@
 
 Я постараюсь дублировать смысл поведения компонента/идеи в виде кода или реальной схемы, там где это уместно.
 
-### Симуляторы
+### Симуляторы электрических цепей
 
 1. Симулятор электрических цепей [Falstad](https://www.falstad.com/circuit/) — это интерактивный, упрощённый SPICE-подобный симулятор **физических процессов**. Он полезен для использования в браузере. 
 2. Симулятор электрических цепей [Digital](https://github.com/hneemann/Digital?tab=readme-ov-file) — это **цифровой** симулятор архитектуры ([Обзор. Hneemann Digital Tutorial](https://www.youtube.com/watch?v=agO4eO-bamk)).
-   * (устарел) Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution)
+   * Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution) (устарел) 
 3. Другие [бесплатные симуляторы](https://crimmscoolclass.github.io/software.html) 
 
 ---
 
 ## Turing Complete levels
 
-1. [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
-2. [Arithmetic](turingcomplete/turingcomplete_arithmetic.md)  
-3. [Memory](turingcomplete/turingcomplete_memory.md)      
-4. [CPU Architecture](turingcomplete/turingcomplete_cpu_architecture.md) 
+1. [Basic logic](turingcomplete_basic_logic.md)
+2. [Arithmetic](turingcomplete_arithmetic.md)  
+3. [Memory](turingcomplete_memory.md)      
+4. [CPU Architecture](turingcomplete_cpu_architecture.md) 
  
 
 ---

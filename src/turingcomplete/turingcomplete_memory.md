@@ -5,6 +5,7 @@
 * [Odd ticks](#odd-ticks)
 * [Bit Inverter](#bit-inverter)
 * [Bit Switch](#bit-switch-tri-state-buffer)
+  * [Multuplexers (MUX)](#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
 * [Input Selector](#input-selector)
 * [The Bus](#the-bus)
 * [Saving Gracefully](#saving-gracefully)
@@ -631,6 +632,10 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
 D Type Flip Flop (falling edge)
 * Захват по заднему фронту (falling edge CLK 1→0, HIGH→LOW)
 * Reset синхронный при CLK=0 и тоже по заднему фронту (falling edge CLK 1→0, HIGH→LOW) т.е. активный LOW 
+
+> [!IMPORTANT]
+> Для синхронной архитектуры ресгистров построенных на основе D-trigger, имеет решающее значение соблюдение очередности установки входных пинов CLK и Data.
+> Если CLK и Data устанавливаются на одном тике то присутствует гонка данных, если CLK первым установился то новые Data не используется на этом тике, поэтому нужно соблюсти очередность, сперва Data потом CLK. 
 
 <div class="sim-wrapper" data-circuit-id="45">
   <button class="sim-fullscreen-btn" data-circuit-id="45">⛶</button>
