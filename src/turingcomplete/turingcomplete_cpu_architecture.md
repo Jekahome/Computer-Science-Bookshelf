@@ -297,6 +297,9 @@ OPCODE MODE:
 >
 > Еще, в этом уровне, модифицированные регистры, у них есть дополнительно ножка "Always output", т.е. всегда можно его прочитать без необходимости выставлять сигнал HIGH на pin Load.
 
+> Так как режим MODE CALC использует младшие 6 бит не по назначению, тогда нужно убедится, что они не влияют на шину и регистры, для этого нужно что бы декодеры Source и Destination не декодировали инструкцию, а выдавали такие сигналы которые отключают регистры от входа и выхода. 
+>
+
 Для двух старших бит можно использовать декодер 2 на 4 который мы построили ранее на уровне [Instruction Decoder](#instruction-decoder) он тоже принимает 8 бит но реагирует только на первые два старших, в принципе его можно переделать, для этого нам есть завод компонентов, заменим 8-ми битный вход на 2-х битный. Или можно взять еще один декодер 3 на 8 (избыточно). 
 
 Наш компонет ALU принимает 8 бит инструкцию, входом для нее будет служить младшие биты которые мы используем для адресации выхода Destination: `D2  D1  D0`
@@ -318,8 +321,7 @@ OPCODE MODE:
 * [ALU](turingcomplete_cpu_architecture.html#arithmetic-engine)
 * [8 bit Multuplexers (MUX) Tri-state buffer](turingcomplete_memory.html#bit-switch-tri-state-buffer)
 
-У компонента tri-state-buffer в декодере Source/Destination мы наоборот посылаем сигнал выключения для режима MODE COPY/. А для 
-
+В режиме CALC (ALU) и Immediate Values декодеры для Source/Destination не нужны
 <div class="sim-wrapper" data-circuit-id="32">
   <button class="sim-fullscreen-btn" data-circuit-id="32">⛶</button>
   <iframe 
@@ -1554,18 +1556,91 @@ Instruction: 10_000_110 # 134
   </iframe>
 </div> 
 
-## Logisim-evolution
+## Digital simulator
 
-File data for ROM:
 
-Format: v3.0 hex/words/plain
+> В режиме calc и immediate values декодеры sorce и destination должны выдавать нули, 
+> так как если их отключить состоянием Z то шина имеет К.З.
 
-ROM.txt
 ```
-03
-02
-02
-02
+[ x  x | S2  S1  S0 | D2  D1  D0  ]
+[ MODE | Source     | Destination ]
+
+OPCODE MODE:
+---------------------------------
+00xxxxxx Immediate values
+01xxxxxx CALC (ALU) 
+10xxxxxx COPY
+11xxxxxx Conditions
+
+OPCODE Source:
+
+S2 S1 S0
+--------------
+0  0  0  REG 0
+0  0  1  REG 1
+0  1  0  REG 2
+0  1  1  REG 3
+1  0  0  REG 4
+1  0  1  REG 5
+1  1  0  INPUT # использовать внешний вход
+1  1  1  UNUSED
+
+
+OPCODE Destination:
+
+D2 D1 D0 
+--------------
+0  0  0  REG 0
+0  0  1  REG 1
+0  1  0  REG 2
+0  1  1  REG 3
+1  0  0  REG 4
+1  0  1  REG 5
+1  1  0  OUTPUT # использовать внешний выход
+1  1  1  UNUSED
+
+```
+
+
+Проверка mode calc:
+```
+INPUT: 00000111 # 7
+
+# tick=0 clk=0 addr=0 
+# tick=1 clk=1 addr=1 
+
+    Instruction: 10110001
+        MODE COPY
+        Source 110 (INPUT)
+        Destination 001 (REG 1)
+
+# tick=2 clk=0 addr=1
+# tick=3 clk=1 addr=2
+
+    Instruction: 10110010
+        MODE COPY
+        Source 110 (INPUT)
+        Destination 010 (REG 2)
+
+# tick=4 clk=0 addr=2
+# tick=5 clk=1 addr=3
+
+    Instruction: 01000100 # 68 
+        MODE CALC
+        Source REG 1 и REG 2
+        Destination REG 3
+        100 ADD
+
+# tick=6 clk=0 addr=3
+# tick=7 clk=1 addr=4
+
+Instruction: 10011110
+    MODE COPY
+    Source 011 (REG 3)
+    Destination 110 (OUTPUT)
+
+OUTPUT: 00001110 #14
 ```
 
 
