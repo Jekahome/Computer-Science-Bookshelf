@@ -58,7 +58,7 @@
 2. [Arithmetic](turingcomplete_arithmetic.md)  
 3. [Memory](turingcomplete_memory.md)      
 4. [CPU Architecture](turingcomplete_cpu_architecture.md) 
- 
+5. [Programming](turingcomplete_programming.md) 
 
 ---
 

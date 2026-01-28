@@ -1234,7 +1234,8 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 
 #### Circuit Simulation: Program Counter (PC): Controlled Counter
 
-[Альтернативная реализация Counter](turingcomplete_memory.html#counter)
+* [Альтернативная реализация Counter](turingcomplete_memory.html#counter)
+* [Counter из JK-триггеров (рис. 6)](https://mrmcsoftware.wordpress.com/2017/03/07/testing-and-improving-my-cpu-design-with-logisim-and-digital-logic-basics/)
 
 Необходимые компоненты:
 * [Full Adder](turingcomplete_arithmetic.html#full-adder)
