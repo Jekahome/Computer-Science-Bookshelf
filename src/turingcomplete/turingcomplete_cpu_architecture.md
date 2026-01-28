@@ -1695,32 +1695,30 @@ File turing_complete_cpu_rising:
 ![Turing Complete](/Computer-Science-Bookshelf/img/tc/turing_complete.gif)
 
 
-[Все файлы симулятора Digital](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu) для сборки уровня "CPU Architecture":
+Все файлы симулятора Digital для сборки уровня "CPU Architecture":
 
-* dec_2_4.dig
-* dec_3_8.dig
-* dec_3_8_disable.dig
-* full_adder_1bit.dig
-* full_adder_8bit.dig
-* mux_1bit.dig
-* mux_8bit.dig
-* mux_8bit_Z.dig
-* switch_8bit.dig
-* neg_8bit.dig
-* d_trigger_falling_sync.dig
-* d_trigger_rising_async.dig
-* register_8bit_falling.dig
-* register_8bit_falling_we_bus.dig
-* register_8bit_rising.dig
-* register_8bit_rising_we_bus.dig
-* alu.dig
-* conditions.dig
-* program_counter_8bit.dig
-* turing_complete_cpu_falling.dig
-* turing_complete_cpu_rising.dig
-* ROM.hex
-
-
+* [dec_2_4.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/dec_2_4.dig)
+* [dec_3_8.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/dec_3_8.dig)
+* [dec_3_8_disable.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/dec_3_8_disable.dig)
+* [full_adder_1bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/full_adder_1bit.dig)
+* [full_adder_8bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/full_adder_8bit.dig)
+* [mux_1bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/mux_1bit.dig)
+* [mux_8bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/mux_8bit.dig)
+* [mux_8bit_Z.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/mux_8bit_Z.dig)
+* [switch_8bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/switch_8bit.dig)
+* [neg_8bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/neg_8bit.dig)
+* [d_trigger_falling_sync.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/d_trigger_falling_sync.dig)
+* [d_trigger_rising_async.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/d_trigger_rising_async.dig)
+* [register_8bit_falling.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/register_8bit_falling.dig)
+* [register_8bit_falling_we_bus.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/register_8bit_falling_we_bus.dig)
+* [register_8bit_rising.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/register_8bit_rising.dig)
+* [register_8bit_rising_we_bus.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/register_8bit_rising_we_bus.dig)
+* [alu.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/alu.dig)
+* [conditions.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/conditions.dig)
+* [program_counter_8bit.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/program_counter_8bit.dig)
+* [turing_complete_cpu_rising.dig](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/turing_complete_cpu_rising.dig)
+* [ROM.hex](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu/ROM.hex)
+  
 ---
 
 <!-- Feedback -->
