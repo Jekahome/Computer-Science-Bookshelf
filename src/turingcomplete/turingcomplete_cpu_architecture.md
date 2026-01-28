@@ -321,17 +321,8 @@ OPCODE MODE:
 * [ALU](turingcomplete_cpu_architecture.html#arithmetic-engine)
 * [8 bit Multuplexers (MUX) Tri-state buffer](turingcomplete_memory.html#bit-switch-tri-state-buffer)
 
-В режиме CALC (ALU) и Immediate Values декодеры для Source/Destination не нужны
-<div class="sim-wrapper" data-circuit-id="32">
-  <button class="sim-fullscreen-btn" data-circuit-id="32">⛶</button>
-  <iframe 
-      id="32"
-      data-circuit-id="32"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/32_calculations.txt"
-      loading="lazy">
-  </iframe>
-</div> 
+В режиме CALC (ALU), Conditions и Immediate Values декодеры для Source/Destination не нужны
+ 
 
 ---
 
@@ -1023,90 +1014,7 @@ number:address
 * [8-ми битный счетчик](turingcomplete_memory.html#counter)
 
 Для корретного старта программы, первый адрес в памяти RAM должен быть больше чем 0, т.е. 1 или 2 и т.д. но не 0.
-
-
-Программа:
-```
-INPUT: 00000111 # 7
-
-# tick 1
-Instruction: 10_110_000 # 176  
-    Source 110 (INPUT)
-    Destination 000 (REG 0)
-
-# tick 2
-Instruction: 10_000_110 # 134
-    Source 000 (REG 0)
-    Destination 110 (OUTPUT)
-
-# Program RAM:
-# когда счетчик достигнет значения 1 выдать из RAM инструкцию 176, что означает режим MODE COPY скопировать данные с INPUT и записать их в REG 0
-# когда счетчик достигнет значения 2 выдать из RAM инструкцию 134, что означает режим MODE COPY скопировать данные с REG 0 и отправить их на OUTPUT
-
-1: 176
-2: 134
-
-Ожидаемый OUTPUT: 7
-```
-
-<details>
-<summary>address (decimal form):decimal form</summary> 
-
-```rust
-fn main() {
-    // --- raw data instruction ---
-    let raw_data: [u8; 256] = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-        10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
-        30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-        40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-        50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
-        60, 61, 62, 63, 64, 65, 66, 67, 68, 69,
-        70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
-        80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
-        90, 91, 92, 93, 94, 95, 96, 97, 98, 99,
-        100, 101, 102, 103, 104, 105, 106, 107, 108, 109,
-        110, 111, 112, 113, 114, 115, 116, 117, 118, 119,
-        120, 121, 122, 123, 124, 125, 126, 127, 128, 129,
-        130, 131, 132, 133, 134, 135, 136, 137, 138, 139,
-        140, 141, 142, 143, 144, 145, 146, 147, 148, 149,
-        150, 151, 152, 153, 154, 155, 156, 157, 158, 159,
-        160, 161, 162, 163, 164, 165, 166, 167, 168, 169,
-        170, 171, 172, 173, 174, 175, 176, 177, 178, 179,
-        180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
-        190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
-        200, 201, 202, 203, 204, 205, 206, 207, 208, 209,
-        210, 211, 212, 213, 214, 215, 216, 217, 218, 219,
-        220, 221, 222, 223, 224, 225, 226, 227, 228, 229,
-        230, 231, 232, 233, 234, 235, 236, 237, 238, 239,
-        240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
-        250, 251, 252, 253, 254, 255,
-    ];
-
-    for (addr, &num) in raw_data.iter().enumerate() {
-        println!("{}:{}", addr+1, num);
-    }
-}
-```
-</details>
-
-Оптимизация производительности симулятора:
-* 0.01 c (10m) - время шага моделирования 
-* Speed 10% - скорость симуляции
-* Clock 10 Hz - тактовый сигнал CLK
-
-<div class="sim-wrapper" data-circuit-id="33">
-  <button class="sim-fullscreen-btn" data-circuit-id="33">⛶</button>
-  <iframe 
-      id="33"
-      data-circuit-id="33"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/33_program.txt"
-      loading="lazy">
-  </iframe>
-</div> 
-
+ 
 ---
 
 ## Conditions
@@ -1245,41 +1153,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 Необходимые компоненты:
 * [8 bit и 1 bit Multuplexers (MUX)](turingcomplete_memory.html#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
 
-
-Программа:
-```
-# tick 1
-Instruction: 00_000_100 # 4
-    Для режима MODE Immediate values в роли Source жестко назначены первые 6 младших бит из самой программы
-    А в роли Destination выступает `REG 0`
-
-# tick 2
-Instruction: 10_000_110 # 134
-    Source 000 (REG 0)
-    Destination 110 (OUTPUT)
-
-# Program RAM:
-# когда счетчик достигнет значения 1 выдать из RAM инструкцию 4, что означает в режиме MODE Immediate values, скопировать данные с инструкции программы первые 6 младших бит и записать их в REG 0
-# когда счетчик достигнет значения 2 выдать из RAM инструкцию 134, что означает в режиме MODE COPY скопировать данные с REG 0 и отправить их на OUTPUT
-
-1: 4
-2: 134
-
-Ожидаемый вывод: 4
-```
-
  
-<div class="sim-wrapper" data-circuit-id="37">
-  <button class="sim-fullscreen-btn" data-circuit-id="37">⛶</button>
-  <iframe 
-      id="37"
-      data-circuit-id="37"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/37_immediate_values.txt"
-      loading="lazy">
-  </iframe>
-</div> 
-
 ---
 
 ## Turing Complete
@@ -1428,139 +1302,20 @@ Immediate ──────────────┘
 > [!FAILURE]
 > Program counter не должен инкрементировать значение с Load сразу после получения.
 > Начинается счетчик с Full adder у которого второе слогаемое 1, результат идет в первый вход MUX, а второй это Load внешние данные, выход MUX сохраняется в register, выход с register идет на выход и во вход Full adder тем самым замыкая цикл. 
-
-
-<div class="sim-wrapper" data-circuit-id="36">
-  <button class="sim-fullscreen-btn" data-circuit-id="36">⛶</button>
-  <iframe 
-      id="36"
-      data-circuit-id="36"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/36_controlled_counter.txt"
-      loading="lazy">
-  </iframe>
-</div> 
-
+  
 
 #### Circuit Simulation: Turing Complete
 
 Необходимые компоненты:
 * [Conditions](turingcomplete_cpu_architecture.html#conditions)
 * [Program Counter (PC): Controlled Counter](turingcomplete_cpu_architecture.html#circuit-simulation-program-counter-pc-controlled-counter)
-
-Программа:
-```
-INPUT: 00000111 # 7
-
-# tick 1
-Instruction: 10_110_001 # 177  
-    Source 110 (INPUT)
-    Destination 001 (REG 1)
-
-# tick 2
-Instruction: 10_110_010 # 178  
-    Source 110 (INPUT)
-    Destination 010 (REG 2)
-
-# tick 3
-Instruction: 01_000_100 # 68 
-    Source REG 1 и REG 2
-    Destination REG 3
-
-
-# tick 4
-Instruction: 10_011_110 # 158  
-    Source 011 (REG 3)
-    Destination 110 (OUTPUT)
-
-# tick 5
-Instruction: 00_000_001 # 1
-    Для режима MODE Immediate values в роли Source жестко назначены первые 6 младших бит из самой программы
-    А в роли Destination выступает REG 0
-
-
-# tick 6
-Instruction: 11_000_111 # 199
-    В роли Source в режиме MODE Conditions выступает REG 3 данные из которого проверяются в блоке Conditions
-    В роли Destination выступает RAM 
-    Условие для блока Conditions 111 означает "HIGH Если значение > 0"
-
-# Program RAM:
-# на тике 1 выдать из RAM инструкцию 177, что означает режим MODE COPY скопировать данные с INPUT и записать их в REG 1
-# на тике 2 выдать из RAM инструкцию 178, что означает режим MODE COPY скопировать данные с INPUT и записать их в REG 2
-# на тике 3 выдать из RAM инструкцию 68, что означает режим MODE CALC c инструкцией ADD, в результате в REG 3 должно записаться значение 14
-# на тике 4 выдать из REG 3 значение на OUTPUT
-
-# на тике 5 записать данные из инструкции значение 1 в REG 0
-# на тике 6 выдать данные из REG 3 (должно быть значение 14) в блок Conditions на выходе ожидаем HIGH, так как 14 > 0 и тогда значение 1 из REG 0 запишется в счетчик, что являетсяя адресом запускаемой программы. Для значения 1 в RAM программа снова начинается сначала, т.е. это цикл!
-
-1: 177
-2: 178 
-3: 68
-4: 158
-5: 1
-6: 199
-
-Ожидаемый OUTPUT: 14, 14, ....
-```
-
-p.s. счетчик сходит с ума под нагрузкой, не ясно из-за чего имеено, возможно из-за большого количества активных компонентов, симулятор не успевает синхронизировать тики.
-
-
-<div class="sim-wrapper" data-circuit-id="38">
-  <button class="sim-fullscreen-btn" data-circuit-id="38">⛶</button>
-  <iframe 
-      id="38"
-      data-circuit-id="38"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/38_tc.txt"
-      loading="lazy">
-  </iframe>
-</div> 
-
  
-Много ресурсов потребляет полный сумматор, заменил на свою многобитную реализацию. 
-
-Программа:
-```
-INPUT: 00000111 # 7
-
-# tick 1
-Instruction: 10_110_000 # 176  
-    Source 110 (INPUT)
-    Destination 000 (REG 0)
-
-# tick 2
-Instruction: 10_000_110 # 134
-    Source 000 (REG 0)
-    Destination 110 (OUTPUT)
-
-# Program RAM:
-# когда счетчик достигнет значения 1 выдать из RAM инструкцию 176, что означает режим MODE COPY скопировать данные с INPUT и записать их в REG 0
-# когда счетчик достигнет значения 2 выдать из RAM инструкцию 134, что означает режим MODE COPY скопировать данные с REG 0 и отправить их на OUTPUT
-
-1: 176
-2: 134
-
-Ожидаемый OUTPUT: 7
-```
-
-<div class="sim-wrapper" data-circuit-id="39">
-  <button class="sim-fullscreen-btn" data-circuit-id="39">⛶</button>
-  <iframe 
-      id="39"
-      data-circuit-id="39"
-      class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/39_tc_custom_full_adder.txt"
-      loading="lazy">
-  </iframe>
-</div> 
 
 ## [Digital simulator](https://github.com/hneemann/Digital/tree/master)
 
 
-> В режиме calc, conditions и immediate values декодеры sorce и destination должны выдавать нули, 
-> так как если их отключить состоянием Z то шина имеет К.З.
+> В режиме calc, conditions и immediate values, декодеры sorce и destination не должны влиять на шину, 
+> но если их перевести в состояние Z то шина имеет К.З.
 
 ```
 [ x  x | S2  S1  S0 | D2  D1  D0  ]
@@ -1690,7 +1445,7 @@ c6
 ff
 ```
 
-File turing_complete_cpu_rising:
+File turing_complete_cpu_rising.dig:
 
 ![Turing Complete](/Computer-Science-Bookshelf/img/tc/turing_complete.gif)
 
