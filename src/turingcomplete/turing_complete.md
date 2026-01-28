@@ -46,7 +46,7 @@
 ### Симуляторы электрических цепей
 
 1. Симулятор электрических цепей [Falstad](https://www.falstad.com/circuit/) — это интерактивный, упрощённый SPICE-подобный симулятор **физических процессов**. Он полезен для использования в браузере. 
-2. Симулятор электрических цепей [Digital](https://github.com/hneemann/Digital?tab=readme-ov-file) — это **цифровой** симулятор архитектуры ([Обзор. Hneemann Digital Tutorial](https://www.youtube.com/watch?v=agO4eO-bamk)).
+2. Симулятор электрических цепей [Digital](https://github.com/hneemann/Digital/tree/master) — это **цифровой** симулятор архитектуры ([Обзор. Hneemann Digital Tutorial](https://www.youtube.com/watch?v=agO4eO-bamk)).
    * Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution) (устарел) 
 3. Другие [бесплатные симуляторы](https://crimmscoolclass.github.io/software.html) 
 

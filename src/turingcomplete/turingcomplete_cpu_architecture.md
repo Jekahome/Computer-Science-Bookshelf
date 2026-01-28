@@ -344,7 +344,7 @@ OPCODE MODE:
 Что бы их достать нам нужно их поочередно брать по индексу, для этого нам нужно использовать [8-ми битный счетчик](turingcomplete_memory.html#counter) который будет с каждым тактом увеличиваться и мы будем получать следующую инструкцию из блока Program Memory.
 
 В блоке Program Memory инструкции хранятся в определенной последовательности.
-Это и есть последовательное выполнение программы.
+Это и есть последовательное выполнение программы, код языка программирования выполняется последовательно.
 
 ![Program](/Computer-Science-Bookshelf/img/tc/Program.png)
 
@@ -1224,9 +1224,9 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 >
 > `IMMEDIATE = NOT M1 AND NOT M0`
 
-Если 6 бит инструкции после бит MODE и есть наши данные `(S2 S1 S0 D2  D1  D0)` то мы можем закодировать значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
+Если шесть бит инструкции после бит MODE и есть наши данные `(S2 S1 S0 D2  D1  D0)` то мы можем закодировать значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
 
-Тогда мы берем 6 младших бит инструкции и превращаем их в байт, и записываем в `REG0`
+Тогда мы берем шесть младших бит инструкции и превращаем их в байт, и записываем в `REG0`
 
 Нам нужно:
 * отключить декодеры для Source и Destination, так как в роли Source у нас данные инструкции,а в роли Destination `REG0`
@@ -1556,10 +1556,10 @@ Instruction: 10_000_110 # 134
   </iframe>
 </div> 
 
-## Digital simulator
+## [Digital simulator](https://github.com/hneemann/Digital/tree/master)
 
 
-> В режиме calc и immediate values декодеры sorce и destination должны выдавать нули, 
+> В режиме calc, conditions и immediate values декодеры sorce и destination должны выдавать нули, 
 > так как если их отключить состоянием Z то шина имеет К.З.
 
 ```
@@ -1567,7 +1567,7 @@ Instruction: 10_000_110 # 134
 [ MODE | Source     | Destination ]
 
 OPCODE MODE:
----------------------------------
+------------------------- 
 00xxxxxx Immediate values
 01xxxxxx CALC (ALU) 
 10xxxxxx COPY
@@ -1600,17 +1600,29 @@ D2 D1 D0
 1  1  0  OUTPUT # использовать внешний выход
 1  1  1  UNUSED
 
+ 
+Conditions:
+
+0 0 0 Никогда т.е. не должны ничего делать
+0 0 1 Если REG3 = 0
+0 1 0 Если REG3 < 0
+0 1 1 Если REG3 ≤ 0 
+1 0 0 Всегда
+1 0 1 Если REG3 ≠ 0 
+1 1 0 Если REG3 ≥ 0
+1 1 1 Если REG3 > 0
+
 ```
 
 
-Проверка mode calc:
+Проверка всех режимов:
 ```
 INPUT: 00000111 # 7
 
 # tick=0 clk=0 addr=0 
 # tick=1 clk=1 addr=1 
 
-    Instruction: 10110001
+     Instruction: 10110001
         MODE COPY
         Source 110 (INPUT)
         Destination 001 (REG 1)
@@ -1618,30 +1630,95 @@ INPUT: 00000111 # 7
 # tick=2 clk=0 addr=1
 # tick=3 clk=1 addr=2
 
-    Instruction: 10110010
-        MODE COPY
-        Source 110 (INPUT)
-        Destination 010 (REG 2)
+     Instruction: 00000001 # 1
+        MODE Immediate values
+        Source Instruction
+        Destination (REG 0)
 
 # tick=4 clk=0 addr=2
 # tick=5 clk=1 addr=3
 
-    Instruction: 01000100 # 68 
+    Instruction: 10000010
+        MODE COPY
+        Source 000 (REG 0)
+        Destination 010 (REG 2)
+ 
+# tick=6 clk=0 addr=3
+# tick=7 clk=1 addr=4
+
+    Instruction: 01000100   
         MODE CALC
         Source REG 1 и REG 2
         Destination REG 3
         100 ADD
 
-# tick=6 clk=0 addr=3
-# tick=7 clk=1 addr=4
+# tick=7 clk=0 addr=4
+# tick=8 clk=1 addr=5
 
-Instruction: 10011110
-    MODE COPY
-    Source 011 (REG 3)
-    Destination 110 (OUTPUT)
+    Instruction: 10011110
+        MODE COPY
+        Source 011 (REG 3)
+        Destination 110 (OUTPUT)
 
-OUTPUT: 00001110 #14
+OUTPUT: 00001000 # 8
+
+
+# tick=8 clk=0 addr=5
+# tick=9 clk=1 addr=6
+
+    Instruction: 11000110
+    MODE Conditions
+    Source (REG 3) данные из которого проверяются в блоке Conditions
+        Условие для блока Conditions 110 означает "Выдать 1 если REG3 ≥ 0"
+        Ожидаем выход блока условий 1, так как в REG 3 содержится значение 8
+    Destination Program counter (PC)
+        Program counter (PC) перезапишется данными из REG 0 т.е. 1
+        В ROM по адресу 1 начинается снова выполнение этого цикла программы
+        Ожидаем зацикленный вывод 00001000 # 8
 ```
+
+File ROM.txt:
+```
+v2.0 raw
+0
+b1
+1
+82
+44
+9e
+c6
+ff
+```
+
+File turing_complete_cpu_rising:
+
+![Turing Complete](/Computer-Science-Bookshelf/img/tc/turing_complete.gif)
+
+
+[Все файлы симулятора Digital](/Computer-Science-Bookshelf/img/tc/digital_level_turing_complete_cpu) для сборки уровня "CPU Architecture":
+
+* dec_2_4.dig
+* dec_3_8.dig
+* dec_3_8_disable.dig
+* full_adder_1bit.dig
+* full_adder_8bit.dig
+* mux_1bit.dig
+* mux_8bit.dig
+* mux_8bit_Z.dig
+* switch_8bit.dig
+* neg_8bit.dig
+* d_trigger_falling_sync.dig
+* d_trigger_rising_async.dig
+* register_8bit_falling.dig
+* register_8bit_falling_we_bus.dig
+* register_8bit_rising.dig
+* register_8bit_rising_we_bus.dig
+* alu.dig
+* conditions.dig
+* program_counter_8bit.dig
+* turing_complete_cpu_falling.dig
+* turing_complete_cpu_rising.dig
+* ROM.hex
 
 
 ---
