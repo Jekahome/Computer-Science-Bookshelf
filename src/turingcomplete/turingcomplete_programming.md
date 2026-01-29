@@ -6,17 +6,19 @@
 
 ---
 
+Справка opcode:
 
 ```
-[ x  x | S2  S1  S0 | D2  D1  D0  ]
-[ MODE | Source     | Destination ]
+[ x  x | S2 S1 S0 | D2  D1  D0  ]
+[ MODE | Source   | Destination ]
 
 OPCODE MODE:
 ------------------------- 
-00xxxxxx Immediate values
-01xxxxxx CALC (ALU) 
-10xxxxxx COPY
-11xxxxxx Conditions
+00xxxxxx Immediate values. Source 6 bit instruction, Destination REG 0
+01xxxxxx CALC (ALU).       Source REG 1 and REG 2, Destination REG 3 
+10xxxxxx COPY.             Source ..[S1,S2,S3]..., Destination .....[D1,D2,D3]
+11xxxxxx Conditions.       Source REG 3 and REG 0, Destination Program counter (PC)
+
 
 OPCODE Source:
 
@@ -78,7 +80,7 @@ V| OPCODE
 >
 > Внесите инструкции в компонент памяти PROGRAM, что бы ваш компьютер считал входные данные, добавил к ним значение 5 и вывел результат.
 
-```
+```asm
 Address 0 # копируем входные данные в REG 1
 Instruction: 10110001 # 177
     MODE COPY
@@ -139,7 +141,7 @@ Instruction: 10011110 # 158
 
 
 Assembly Editor:
-```
+```asm
 # Получить входные данные r
 0b10110001 # copy input (r) to reg_1
 0b10001010 # copy reg_1 to reg_2
@@ -230,7 +232,7 @@ add # reg_1 + reg_2 => reg_3
 fn main() {
     let nmod = 4;
     let n = 13;
-    println!("mod 4={:08b}\n", n%nmod);
+    println!("{n} mod 4={:08b}\n", n%nmod);
     
     /*
      n & mask 
@@ -242,7 +244,7 @@ fn main() {
 
 
 Assembly Editor:
-```
+```asm
 # Получить входные данные n
 0b10110001 # copy input (n) to reg_1
 
@@ -251,23 +253,321 @@ Assembly Editor:
 0b10000010 # copy reg_0 to reg_2
 
 # and ( n & mask )
-0b01000011 # reg_1 AND reg_2 to reg_3
+0b01000011 # calc reg_1 AND reg_2 to reg_3
 
 0b10011110 # copy reg_3 to output 
 
 ```
 
+---
+
+## Storage cracker
+
+Построение цикла.
+
+> Задача:
+> 
+> Вы выигрываете этот уровень, если отправите на output правильный пароль; ни один output не приведет к провалу уровня. Кроме того, после попытки угадать пароль которая превысила его значение, на входе мы дадим вам 1, в противном случае — 0.
+
+Можно применить метод brute force, будем перебирать все возможные варианты, начиная с 0. 
+
+Мы могли бы передавать само значения счетчика (PC) на выход, но эта возможность не реализована в нашей архитектуре.
+ 
+Тогда мы можем создать цикл и последовательно выводить значения от 0 до 255, **НО** уровень игры так не работает.
+
+Assembly Editor:
+```asm
+# prepare -------------------------------------
+
+# ROM[0]
+0b00000001 # reg_0 = 1
+
+# ROM[1]
+0b10000001 # copy reg_0 to reg_1 (set reg_1 = 1, reg_1 is const)
+
+# ROM[2]
+0b00000000 # reg_0 = 0
+
+# ROM[3]
+0b10000010 # copy reg_0 to reg_2 (set reg_2 = 0)
+
+# ROM[4]
+0b00000101 # reg_0 = 5 (index ROM for start while)
+
+# while ----------------------------------------
+
+# ROM[5] 
+0b01000100 # calc reg_1 ADD reg_2 to reg_3
+
+# ROM[6]
+0b10011110 # copy reg_3 to output 
+
+# ROM[7]
+0b10011010 # copy reg_3 to reg_2 (reg_2 is cumulative)
+
+# ROM[8]
+0b11000110 # conditions 110 "REG3 ≥ 0" (rewriting to start while)
+           # PC=reg_0
+
+```
+
+По наличию логики обратной связи, когда нам присылают 1 если мы превысили число пароля, следует что в пароле несколько чисел. И если мы превысили значение то нужно начать перебор с 0.
 
 
+Assembly Editor:
+```asm
+# prepare -------------------------------------
+
+# ROM[0]
+0b00000001 # reg_0 = 1
+
+# ROM[1]
+0b10000001 # copy reg_0 to reg_1 (set reg_1 = 1, reg_1 is const)
+
+# ROM[2]
+0b00000000 # reg_0 = 0
+
+# ROM[3]
+0b10000010 # copy reg_0 to reg_2 (set reg_2 = 0)
+
+# ROM[4]
+0b00000101 # reg_0 = 5 (index ROM for start while)
+
+# while ----------------------------------------
+
+# ROM[5] 
+0b01000100 # calc reg_1 ADD reg_2 to reg_3
+
+# ROM[6]
+0b10011110 # copy reg_3 to output 
+ 
+# ROM[7]
+0b10011010 # copy reg_3 to reg_2 (reg_2 is cumulative)
+
+# ROM[8]
+0b10110011 # copy input to reg_3
+
+# ROM[9]
+0b11000001 # conditions: if reg_3 == 0 { continue PC=reg_0 (rewriting to start while) }else{ reset }
+
+# else reset --------------------------------------
+
+# ROM[10]
+0b00000000 # reg_0 = 0
+
+# ROM[11]
+0b11000100 # conditions: 100 always 1. For rewrite PC=0
+
+```
+
+---
+
+## Spacial Invasion
+
+> [!TIP]
+> Разблокирует `Run fast`
+
+Написать бота, сценарий для автоматического управления поведением робота с целью истребления космических крыс. 
+
+> Задача:
+> 
+> Мы подключили ваш компьютер к нашему современному `Robot 9000+`, и мы хотим, чтобы вы запрограммировали его на стрельбу лазером по космическим крысам. Лазер не может стрелять пока выпущенный ранее лазер не долетит.
+>
+> 
+
+Robot 9000+ page:
+
+![Spacial Invasion](/Computer-Science-Bookshelf/img/tc/Spacial_Invasion.png)
 
 
+Action:
+```
+0b00000000 # 0 cursor turn left
+0b00000001 # 1 move forward with the cursor
+0b00000010 # 2 cursor turn right
+0b00000011 # 3 skip action
+0b00000100 # 4 skip action
+0b00000101 # 5 shoot laser
+
+```
+
+Сперва поиграем и найдем оптимальные шаги победы, потом запишем каждый шаг.
+
+Создадим именованные команды для ассемблера:
+* out = `0b10000110` # copy reg_o to output
+* move = `0b00000001`
+* shoot = `0b00000101`
+* left = `0b00000000`  # 0 cursor turn left
+* right = `0b00000010`  # 2 cursor turn right
+
+
+<details>
+
+<summary>Assembly Editor:</summary>
+
+```asm
+shoot
+out
+
+move
+out
+
+move
+out
+move
+out
+move
+out
+move
+out
+
+skip
+out
+skip
+out
+
+shoot
+out
+shoot
+out
+shoot
+out
+shoot
+out
+shoot
+out
+
+right
+out
+
+shoot
+out
+
+left
+out
+
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+
+shoot
+out
+shoot
+out
+shoot
+out
+
+move
+out
+left
+out
+shoot
+out
+
+left
+out
+move
+out
+right
+out
+right
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+shoot
+out
+shoot
+out
+shoot
+out
+shoot
+out
+shoot
+out
+
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+skip
+out
+
+shoot
+out
+shoot
+out
+shoot
+out
+shoot
+out
+
+```
+</details>
  
 
-
-
-
-
-
+<video controls width="100%">
+    <source src="/Computer-Science-Bookshelf/img/tc/Spacial_Invasion.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+</video>
 
 ---
 

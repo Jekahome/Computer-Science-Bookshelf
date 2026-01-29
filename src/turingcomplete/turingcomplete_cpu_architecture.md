@@ -1318,16 +1318,17 @@ Immediate ──────────────┘
 > В режиме calc, conditions и immediate values, декодеры sorce и destination не должны влиять на шину, 
 > но если их перевести в состояние Z то шина имеет К.З.
 
+Справка opcode:
 ```
 [ x  x | S2  S1  S0 | D2  D1  D0  ]
 [ MODE | Source     | Destination ]
 
 OPCODE MODE:
 ------------------------- 
-00xxxxxx Immediate values
-01xxxxxx CALC (ALU) 
+00xxxxxx Immediate values. Source 6 bit instruction, Destination REG 0
+01xxxxxx CALC (ALU). Source REG 1 and REG 2, Destination REG 3 
 10xxxxxx COPY
-11xxxxxx Conditions
+11xxxxxx Conditions. Source REG 3 and REG 0, Destination Program counter (PC)
 
 OPCODE Source:
 
@@ -1367,6 +1368,17 @@ Conditions:
 1 0 1 Если REG3 ≠ 0 
 1 1 0 Если REG3 ≥ 0
 1 1 1 Если REG3 > 0
+
+ALU:
+
+V| OPCODE
+-|---------------
+0| xxxxx000   OR
+1| xxxxx001   NAND
+2| xxxxx010   NOR
+3| xxxxx011   AND
+4| xxxxx100   ADD
+5| xxxxx101   SUB
 
 ```
 
