@@ -629,13 +629,29 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
   </iframe>
 </div>
 
+
+[D-trigger rising edge](https://youtu.be/oOiyHq9MiAM?si=420WhpoOsQ53kNV9&t=4561)
+* Захват по переднему фронту (rising edge CLK 0→1, LOW→HIGH )
+* Reset синхронный, активный уровень переключения высокий (HIGH)
+<div class="sim-wrapper" data-circuit-id="48">
+  <button class="sim-fullscreen-btn" data-circuit-id="48">⛶</button>
+  <iframe 
+      data-circuit-id="48"
+      id="48"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=1&startCircuit=/turingcomplete/48_d_trigger_edge.txt"
+      loading="lazy">
+  </iframe>
+</div>
+
+
 D Type Flip Flop (falling edge)
 * Захват по заднему фронту (falling edge CLK 1→0, HIGH→LOW)
 * Reset синхронный при CLK=0 и тоже по заднему фронту (falling edge CLK 1→0, HIGH→LOW) т.е. активный LOW 
 
 > [!IMPORTANT]
-> Для синхронной архитектуры ресгистров построенных на основе D-trigger, имеет решающее значение соблюдение очередности установки входных пинов CLK и Data.
-> Если CLK и Data устанавливаются на одном тике то присутствует гонка данных, если CLK первым установился то новые Data не используется на этом тике, поэтому нужно соблюсти очередность, сперва Data потом CLK. 
+> Для синхронной архитектуры регистров построенных на основе D-trigger, имеет решающее значение соблюдение очередности установки входных пинов CLK и Data.
+> Если CLK и Data устанавливаются на одном тике то присутствует гонка данных, если CLK первым установился то новые Data не используются на этом тике, поэтому нужно соблюсти очередность, сперва Data потом CLK. 
 
 <div class="sim-wrapper" data-circuit-id="45">
   <button class="sim-fullscreen-btn" data-circuit-id="45">⛶</button>
@@ -710,7 +726,15 @@ Positive Edge Triggered D Flip Flop
 * [74HC373](https://learnabout-electronics.org/Downloads/74HC373%20Octal-Transparent-D-Type-Latches.pdf) Восьмиканальные прозрачные D-триггеры данных с трехстабильными выходами от Texas Instruments.
 * [74HC374A](https://learnabout-electronics.org/Downloads/74HC374-Octal-3-state-Non-inverting-flip-flop.pdf) Восьмиканальный 3-состоятельный неинвертирующий D-триггер от ON Semiconductors.
  
-D-триггер с динамическим входом C может работать как T-триггер. Для этого необходимо вход С соединить с инверсным выходом триггера /Q
+
+Лучший практический вариант (индустриальный стандарт)
+* Асинхронный assert, синхронный deassert
+* То есть:
+  * Reset включается асинхронно
+  * Reset отпускается синхронно по CLK
+
+
+Так же, D-триггер с динамическим входом C может работать как T-триггер. Для этого необходимо вход С соединить с инверсным выходом триггера /Q
 
 Если на входе D поставить дополнительный двухвходовый элемент И и инверсный выход триггера /Q соединить с одним из входов элемента И, а на второй вход подать сигнал EI, то получим T-триггер с дополнительным разрешением по входу
  

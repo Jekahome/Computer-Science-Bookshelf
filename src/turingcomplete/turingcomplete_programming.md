@@ -3,6 +3,8 @@
 * [Add 5](#add-5)
 * [Calibrating Laser Cannons](#calibrating-laser-cannons)
 * [Masking Time](#masking-time)
+* [Spacial Invasion](#spacial-invasion)
+* [The Maze](#the-maze)
 
 ---
 
@@ -80,7 +82,7 @@ V| OPCODE
 >
 > Внесите инструкции в компонент памяти PROGRAM, что бы ваш компьютер считал входные данные, добавил к ним значение 5 и вывел результат.
 
-```asm
+```bash
 Address 0 # копируем входные данные в REG 1
 Instruction: 10110001 # 177
     MODE COPY
@@ -141,7 +143,7 @@ Instruction: 10011110 # 158
 
 
 Assembly Editor:
-```asm
+```bash
 # Получить входные данные r
 0b10110001 # copy input (r) to reg_1
 0b10001010 # copy reg_1 to reg_2
@@ -244,7 +246,7 @@ fn main() {
 
 
 Assembly Editor:
-```asm
+```bash
 # Получить входные данные n
 0b10110001 # copy input (n) to reg_1
 
@@ -276,7 +278,7 @@ Assembly Editor:
 Тогда мы можем создать цикл и последовательно выводить значения от 0 до 255, **НО** уровень игры так не работает.
 
 Assembly Editor:
-```asm
+```bash
 # prepare -------------------------------------
 
 # ROM[0]
@@ -315,7 +317,7 @@ Assembly Editor:
 
 
 Assembly Editor:
-```asm
+```bash
 # prepare -------------------------------------
 
 # ROM[0]
@@ -386,15 +388,15 @@ Action:
 0b00000001 # 1 move forward with the cursor
 0b00000010 # 2 cursor turn right
 0b00000011 # 3 skip action
-0b00000100 # 4 skip action
+0b00000100 # 4 use action
 0b00000101 # 5 shoot laser
 
 ```
 
 Сперва поиграем и найдем оптимальные шаги победы, потом запишем каждый шаг.
 
-Создадим именованные команды для ассемблера:
-* out = `0b10000110` # copy reg_o to output
+Создадим именованные команды (или константы) для ассемблера:
+* out = `0b10000110` # copy reg_0 to output
 * move = `0b00000001`
 * shoot = `0b00000101`
 * left = `0b00000000`  # 0 cursor turn left
@@ -405,7 +407,7 @@ Action:
 
 <summary>Assembly Editor:</summary>
 
-```asm
+```bash
 shoot
 out
 
@@ -563,11 +565,110 @@ out
 ```
 </details>
  
+<br>
 
-<video controls width="100%">
+<video controls width="100%" muted playsinline preload="metadata" 
+       onloadeddata="this.playbackRate = 0.25;">
     <source src="/Computer-Science-Bookshelf/img/tc/Spacial_Invasion.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
 </video>
+
+---
+
+## The Maze
+
+> Задача:
+> 
+> Напишите алгоритм с помощью которого робот сможет пройти лабиринт. Если курсор стоит на стене мы посылаем в input значение 1.
+>
+> Напоминание, в режиме `00xxxxxx` (Immediate values) максимальное значение 0-63, так как доступно только шесть младших бит информации.
+
+
+Алгоритм, приоритет слева:
+* *step 1* Шаг и поворот на лево
+    *  Если есть стена то *step 2*
+    *  Если нет стены то *step 1*
+* *step 2* Поворот на право
+    *  Если есть стена то *step 2*
+    *  Если нет стены то *step 1*
+
+```mermaid
+flowchart TD
+    Start([Начало]) --> step1[step 1: Шаг и поворот налево]
+    
+    step1 --> Check1{Есть стена?}
+    
+    Check1 -->|Да| step2[step 2: Поворот направо]
+    Check1 -->|Нет| step1
+    
+    step2 --> Check2{Есть стена?}
+    
+    Check2 -->|Да| step2
+    Check2 -->|Нет| step1
+    
+    style step1 fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style step2 fill:#fff4e1,stroke:#ff9900,stroke-width:2px
+    style Check1 fill:#f0f0f0,stroke:#666,stroke-width:2px
+    style Check2 fill:#f0f0f0,stroke:#666,stroke-width:2px
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
+```
+
+
+Assembly Editor:
+```bash
+# Создадим команды для ассемблера:
+const left 0b00000000           # reg_0=0
+const move 0b00000001           # reg_0=1
+const right 0b00000010          # reg_0=2
+const out 0b10000110            # copy reg_0 to output
+const input_to_reg_3 0b10110011
+const if_wall 0b11000111        # if reg_3 > 0
+const if_always_move 0b11000100 # always 1 
+
+const use_action 0b00000100       # use action (open a door)
+
+const start_move 0b00000000  # 0 start position ROM program
+const start_right 0b00001011 # 11 start position ROM program
+
+# step 1 ------------ 
+# start_move ROM[0]
+move
+out
+
+# Если есть стена то step 2
+left
+out
+use_action
+out
+input_to_reg_3
+start_right
+if_wall
+
+# Если нет стены то step 1
+start_move      
+if_always_move
+
+# step 2 ------------
+# start_right ROM[11]
+# Если есть стена то step 2
+right
+out
+use_action
+out
+input_to_reg_3
+start_right
+if_wall
+
+# Если нет стены то step 1
+start_move      
+if_always_move
+
+```
+
+p.s. семя не подбирает, так как оно ведет себя как стена, и для этого нужно допилить алгоритм... 
+
+![The Maze](/Computer-Science-Bookshelf/img/tc/The_Maze.gif)
+
 
 ---
 

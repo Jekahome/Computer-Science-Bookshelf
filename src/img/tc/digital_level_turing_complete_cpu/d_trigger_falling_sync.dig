@@ -18,10 +18,6 @@
       </romList>
     </entry>
     <entry>
-      <string>lockedMode</string>
-      <boolean>true</boolean>
-    </entry>
-    <entry>
       <string>Width</string>
       <int>9</int>
     </entry>
@@ -154,8 +150,12 @@
           <string>wideShape</string>
           <boolean>true</boolean>
         </entry>
+        <entry>
+          <string>Inputs</string>
+          <int>3</int>
+        </entry>
       </elementAttributes>
-      <pos x="800" y="440"/>
+      <pos x="820" y="440"/>
     </visualElement>
     <visualElement>
       <elementName>NAnd</elementName>
@@ -165,7 +165,7 @@
           <boolean>true</boolean>
         </entry>
       </elementAttributes>
-      <pos x="920" y="300"/>
+      <pos x="940" y="300"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -175,7 +175,7 @@
           <string>Q</string>
         </entry>
       </elementAttributes>
-      <pos x="1060" y="320"/>
+      <pos x="1080" y="320"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -185,7 +185,7 @@
           <string>!Q</string>
         </entry>
       </elementAttributes>
-      <pos x="1060" y="460"/>
+      <pos x="1080" y="460"/>
     </visualElement>
     <visualElement>
       <elementName>Rectangle</elementName>
@@ -251,7 +251,7 @@
     </wire>
     <wire>
       <p1 x="780" y="480"/>
-      <p2 x="800" y="480"/>
+      <p2 x="820" y="480"/>
     </wire>
     <wire>
       <p1 x="300" y="480"/>
@@ -274,24 +274,28 @@
       <p2 x="680" y="320"/>
     </wire>
     <wire>
-      <p1 x="1020" y="320"/>
-      <p2 x="1040" y="320"/>
-    </wire>
-    <wire>
       <p1 x="1040" y="320"/>
       <p2 x="1060" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="1060" y="320"/>
+      <p2 x="1080" y="320"/>
     </wire>
     <wire>
       <p1 x="60" y="580"/>
       <p2 x="300" y="580"/>
     </wire>
     <wire>
+      <p1 x="300" y="580"/>
+      <p2 x="800" y="580"/>
+    </wire>
+    <wire>
       <p1 x="440" y="340"/>
       <p2 x="460" y="340"/>
     </wire>
     <wire>
-      <p1 x="900" y="340"/>
-      <p2 x="920" y="340"/>
+      <p1 x="920" y="340"/>
+      <p2 x="940" y="340"/>
     </wire>
     <wire>
       <p1 x="440" y="500"/>
@@ -314,8 +318,8 @@
       <p2 x="180" y="440"/>
     </wire>
     <wire>
-      <p1 x="780" y="440"/>
-      <p2 x="800" y="440"/>
+      <p1 x="800" y="440"/>
+      <p2 x="820" y="440"/>
     </wire>
     <wire>
       <p1 x="300" y="440"/>
@@ -335,7 +339,7 @@
     </wire>
     <wire>
       <p1 x="780" y="300"/>
-      <p2 x="920" y="300"/>
+      <p2 x="940" y="300"/>
     </wire>
     <wire>
       <p1 x="300" y="300"/>
@@ -346,8 +350,8 @@
       <p2 x="680" y="460"/>
     </wire>
     <wire>
-      <p1 x="900" y="460"/>
-      <p2 x="1060" y="460"/>
+      <p1 x="920" y="460"/>
+      <p2 x="1080" y="460"/>
     </wire>
     <wire>
       <p1 x="280" y="460"/>
@@ -358,6 +362,10 @@
       <p2 x="440" y="460"/>
     </wire>
     <wire>
+      <p1 x="800" y="460"/>
+      <p2 x="820" y="460"/>
+    </wire>
+    <wire>
       <p1 x="300" y="380"/>
       <p2 x="580" y="380"/>
     </wire>
@@ -366,8 +374,8 @@
       <p2 x="660" y="380"/>
     </wire>
     <wire>
-      <p1 x="780" y="380"/>
-      <p2 x="1040" y="380"/>
+      <p1 x="800" y="380"/>
+      <p2 x="1060" y="380"/>
     </wire>
     <wire>
       <p1 x="160" y="360"/>
@@ -378,8 +386,16 @@
       <p2 x="640" y="520"/>
     </wire>
     <wire>
-      <p1 x="1040" y="320"/>
-      <p2 x="1040" y="380"/>
+      <p1 x="800" y="380"/>
+      <p2 x="800" y="440"/>
+    </wire>
+    <wire>
+      <p1 x="800" y="460"/>
+      <p2 x="800" y="580"/>
+    </wire>
+    <wire>
+      <p1 x="1060" y="320"/>
+      <p2 x="1060" y="380"/>
     </wire>
     <wire>
       <p1 x="580" y="280"/>
@@ -398,8 +414,8 @@
       <p2 x="660" y="460"/>
     </wire>
     <wire>
-      <p1 x="900" y="340"/>
-      <p2 x="900" y="460"/>
+      <p1 x="920" y="340"/>
+      <p2 x="920" y="460"/>
     </wire>
     <wire>
       <p1 x="440" y="340"/>
@@ -428,10 +444,6 @@
     <wire>
       <p1 x="140" y="480"/>
       <p2 x="140" y="520"/>
-    </wire>
-    <wire>
-      <p1 x="780" y="380"/>
-      <p2 x="780" y="440"/>
     </wire>
   </wires>
   <measurementOrdering/>
