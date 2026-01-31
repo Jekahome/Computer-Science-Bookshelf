@@ -143,7 +143,9 @@ Instruction: 10011110 # 158
 * Есть возможно установить breakpoints
 
 
-Assembly Editor:
+<details>
+<summary>Assembly Editor:</summary>
+
 ```bash
 # Получить входные данные r
 0b10110001 # copy input (r) to reg_1
@@ -172,6 +174,7 @@ add # reg_1 + reg_2 => reg_3
 add # reg_1 + reg_2 => reg_3
 0b10011110 # copy reg_3 to output 
 ```
+</details>
 
 ---
 
@@ -278,7 +281,9 @@ Assembly Editor:
  
 Тогда мы можем создать цикл и последовательно выводить значения от 0 до 255, **НО** уровень игры так не работает.
 
-Assembly Editor:
+<details>
+<summary>Assembly Editor:</summary>
+
 ```bash
 # prepare -------------------------------------
 
@@ -313,11 +318,14 @@ Assembly Editor:
            # PC=reg_0
 
 ```
+</details>
 
 По наличию логики обратной связи, когда нам присылают 1 если мы превысили число пароля, следует что в пароле несколько чисел. И если мы превысили значение то нужно начать перебор с 0.
 
 
-Assembly Editor:
+<details>
+<summary>Assembly Editor:</summary>
+
 ```bash
 # prepare -------------------------------------
 
@@ -362,6 +370,7 @@ Assembly Editor:
 0b11000100 # conditions: 100 always 1. For rewrite PC=0
 
 ```
+</details>
 
 ---
 
@@ -616,8 +625,9 @@ flowchart TD
     style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
 ```
 
-
-Assembly Editor:
+<details>
+<summary>Assembly Editor:</summary>
+ 
 ```bash
 # Создадим команды для ассемблера:
 const left 0b00000000           # reg_0=0
@@ -667,7 +677,7 @@ start_move
 if_always_move
 
 ```
-
+</details>
 
 
 ![The Maze](/Computer-Science-Bookshelf/img/tc/The_Maze.gif)
@@ -704,7 +714,10 @@ flowchart TD
     style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
 ```
 
-Assembly Editor:
+<details>
+<summary>Assembly Editor:</summary>
+
+ 
 ```bash
 # Создадим команды для ассемблера:
 const left 0b00000000           # reg_0=0
@@ -715,12 +728,12 @@ const input_to_reg_3 0b10110011
 const if_wall 0b11000111        # if reg_3 > 0
 const if_always_move 0b11000100 # always 1 
 
-const use_action 0b00000100       # use action
+const use_action 0b00000100     # use action
   
-const start_move 0b00000000  # 0 start position ROM program
-const start_right 0b00001110 # 14 start position ROM program
-const start_left 0b00000101 # 5
-const try_take_seed 0b00010111 # 23
+const start_move 0b00000000     # 0 start position ROM program
+const start_right 0b00001110    # 14 start position ROM program
+const start_left 0b00000101     # 5
+const try_take_seed 0b00010111  # 23
 # step 1 ------------ 
 # start_move ROM[0]
 move
@@ -730,8 +743,9 @@ input_to_reg_3
 try_take_seed
 if_wall
 
+# step 2 ------------ 
 # start_left ROM[5]
-# Если есть стена то step 2
+# Если есть стена то step 3
 left
 out
 use_action
@@ -744,9 +758,9 @@ if_wall
 start_move      
 if_always_move
 
-# step 2 ------------
+# step 3 ------------
 # start_right ROM[14]
-# Если есть стена то step 2
+# Если есть стена то step 3
 right
 out
 use_action
@@ -759,12 +773,14 @@ if_wall
 start_move      
 if_always_move
 
+# step 4 ------------
 # try_take_seed ROM[23]
 move
 out
 start_left
 if_always_move
 ```
+</details>
 
 ![The Maze](/Computer-Science-Bookshelf/img/tc/The_Maze2.gif)
 
