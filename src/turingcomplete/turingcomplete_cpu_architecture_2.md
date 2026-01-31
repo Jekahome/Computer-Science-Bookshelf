@@ -8,6 +8,8 @@
 * [Signed Less](#signed-less)
 * [Wide Instructions](#wide-instructions)
 * [Wire Spaghetti](#wire-spaghetti)
+* [Opcodes](#opcodes)
+* [Immediate Values](#immediate-values)
 
 
 ---
@@ -252,7 +254,7 @@ A больше или равно B
 > Поскольку большинство операций возвращают одно значение результата, четвертый байт предназначен для указания результата
 > * байт 4 → Result address (куда направить результат ALU)
 > 
-> [ Opcode ][ Argument 1 ][ Argument 2 ][ Result address ]
+> [ Opcode 8bit][ Argument 1 8bit][ Argument 2 8bit][ Result address 8bit]
 > ```
  
 
@@ -282,7 +284,9 @@ A больше или равно B
 
 На следующем уровне будем реализовывать еще больше команд OPCODE для чего потребуется другой ALU
 
-Для прохождения уровня мы можем использовать уже существующий компонент ALU для операции ADD
+Для прохождения уровня мы можем использовать уже существующий компонент ALU для операции ADD. 
+
+Решение основанно на MUX8Bit который аккумулирует все исчтоники ввода, что избавляет нас от множества tri-state buffers разделяя общую шину.
 
 ![Wire Spaghetti](/Computer-Science-Bookshelf/img/tc/Wire_Spaghetti.png)
 
@@ -290,6 +294,65 @@ A больше или равно B
 
 ![Wire Spaghetti](/Computer-Science-Bookshelf/img/tc/MUX8Buf.png)
  
+[Turing Complete - CPU Architecture 2 (www.youtube.com) ](https://youtu.be/kBXghkY9dqw?si=lgvhaSRQbKwSrywn&t=6111)
+
+---
+
+## Opcodes
+
+> Задача: 
+>
+> Реализовать opcodes:
+> 
+> ```
+> 0 ADD
+> 1 SUB
+> 2 AND
+> 3 OR
+> 4 NOT
+> 5 XOR
+> ```
+> 
+> p.s. операция NOT игнорирует **второй** аргумент
+
+У нас уже есть готовый компонет ALU, но с другими opcodes и без операций NOT и XOR. Создадим на его основе новый компонент.
+
+Компонент ALU_CPU2:
+```
+0 ADD
+1 SUB
+2 AND
+3 OR
+4 NOT
+5 XOR
+6 NAND
+7 NOR
+```
+
+![ALU_CPU2](/Computer-Science-Bookshelf/img/tc/ALU_CPU2.png)
+
+---
+
+## Immediate Values
+
+Иногда бывает полезно загрузить значение непосредственно из программы, а не из регистров. Это называется загрузкой непосредственного значения (Immediate Values). В архитектуре LEG мы указываем, когда хотим это сделать, непосредственно в коде операции. 
+
+Это можно сделать следующим образом:
+* Когда 8-й бит (MSB) opcode `0xxxxxxx` равен HIGH, используйте `Argument 1` в качестве непосредственного значения, а не в качестве адреса регистра.
+    * т.е. теперь в байте `Argument 1` содержатся данные
+* Если 7-й бит opcode `x0xxxxxx` равен HIGH, используйте `Argument 2` в качестве непосредственного значения, а не в качестве адреса регистра.
+    * т.е. теперь в байте `Argument 2` содержатся данные
+ 
+
+![Immediate Values](/Computer-Science-Bookshelf/img/tc/Immediate_Values_CPU2.png)
+ 
+![Immediate Values](/Computer-Science-Bookshelf/img/tc/Solution_Immediate_Values_CPU2.png)
+ 
+Обновим ALU, 8-ми битный вход ему избыточен, достаточно 3 бита.
+
+![ALU CPU2 upgrade](/Computer-Science-Bookshelf/img/tc/ALU_CPU2_upgrade.png)
+ 
+
 
 ---
 
