@@ -11,6 +11,7 @@
 Справка opcode:
 
 ```
+ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 [ x  x | S2 S1 S0 | D2  D1  D0  ]
 [ MODE | Source   | Destination ]
 
@@ -382,7 +383,7 @@ Robot 9000+ page:
 ![Spacial Invasion](/Computer-Science-Bookshelf/img/tc/Spacial_Invasion.png)
 
 
-Action:
+Action for `Robot 9000+`:
 ```
 0b00000000 # 0 cursor turn left
 0b00000001 # 1 move forward with the cursor
@@ -573,6 +574,8 @@ out
     Ваш браузер не поддерживает видео.
 </video>
 
+p.s. script не учитывает входной сигнал 1 - наличия крысы на позиции курсора.
+
 ---
 
 ## The Maze
@@ -665,10 +668,105 @@ if_always_move
 
 ```
 
-p.s. семя не подбирает, так как оно ведет себя как стена, и для этого нужно допилить алгоритм... 
+
 
 ![The Maze](/Computer-Science-Bookshelf/img/tc/The_Maze.gif)
 
+
+Алгоритм с подбором семени.
+
+```mermaid
+flowchart TD
+    Start([Начало]) --> step1[step 1: Шаг]
+    
+    step1 --> Check1{Есть стена?}
+    
+    Check1 -->|Нет| step2[step 2: Поворот налево]
+    Check1 -->|Да| step4[step 4: Шаг <br> *попытка взять семя*]
+    
+    step2 --> Check2{Есть стена?}
+    Check2 -->|Нет| step1
+    Check2 -->|Да| step3[step 3: Поворот направо]
+    
+    step3 --> Check3{Есть стена?}
+    Check3 -->|Да| step3
+    Check3 -->|Нет| step1
+    
+    step4 --> step2
+    
+    style step1 fill:#e1f5ff,stroke:#0066cc,stroke-width:2px
+    style step2 fill:#e8f7e8,stroke:#2e7d32,stroke-width:2px
+    style step3 fill:#fff4e1,stroke:#ff9900,stroke-width:2px
+    style step4 fill:#f9e1ff,stroke:#9c27b0,stroke-width:2px
+    style Check1 fill:#f0f0f0,stroke:#666,stroke-width:2px
+    style Check2 fill:#f0f0f0,stroke:#666,stroke-width:2px
+    style Check3 fill:#f0f0f0,stroke:#666,stroke-width:2px
+    style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
+```
+
+Assembly Editor:
+```bash
+# Создадим команды для ассемблера:
+const left 0b00000000           # reg_0=0
+const move 0b00000001           # reg_0=1
+const right 0b00000010          # reg_0=2
+const out 0b10000110            # copy reg_0 to output
+const input_to_reg_3 0b10110011
+const if_wall 0b11000111        # if reg_3 > 0
+const if_always_move 0b11000100 # always 1 
+
+const use_action 0b00000100       # use action
+  
+const start_move 0b00000000  # 0 start position ROM program
+const start_right 0b00001110 # 14 start position ROM program
+const start_left 0b00000101 # 5
+const try_take_seed 0b00010111 # 23
+# step 1 ------------ 
+# start_move ROM[0]
+move
+out
+ 
+input_to_reg_3
+try_take_seed
+if_wall
+
+# start_left ROM[5]
+# Если есть стена то step 2
+left
+out
+use_action
+out
+input_to_reg_3
+start_right
+if_wall
+
+# Если нет стены то step 1
+start_move      
+if_always_move
+
+# step 2 ------------
+# start_right ROM[14]
+# Если есть стена то step 2
+right
+out
+use_action
+out
+input_to_reg_3
+start_right
+if_wall
+
+# Если нет стены то step 1
+start_move      
+if_always_move
+
+# try_take_seed ROM[23]
+move
+out
+start_left
+if_always_move
+```
+
+![The Maze](/Computer-Science-Bookshelf/img/tc/The_Maze2.gif)
 
 ---
 
