@@ -10,7 +10,7 @@
 * [Wire Spaghetti](#wire-spaghetti)
 * [Opcodes](#opcodes)
 * [Immediate Values](#immediate-values)
-
+* [Conditionals](#conditionals)
 
 ---
 
@@ -352,6 +352,39 @@ A больше или равно B
 
 ![ALU CPU2 upgrade](/Computer-Science-Bookshelf/img/tc/ALU_CPU2_upgrade.png)
  
+---
+
+## Conditionals
+
+> Задача: 
+> 
+> Добавить **Conditionals** (условные выражения). Суть, сравниваются два 8-ми битных аргумента и если условие верно, то счетчик PC перезаписывается адресом прыжка `Jump_address`.
+> 
+> Компонет Program выдает 4 байта: `[Opcode][Argument 1][Argument 2][Jump_address]` 
+> 
+> В дополнение к предыдущим операциям opcode, добавьте:
+> 
+> ```
+> 32 IF_EQUAL (Если равно)
+> 33 IF_NOT_EQUAL (Если не равно)
+> 34 IF_LESS (Если менее)
+> 35 IF_LESS_OR_EQUAL (Если менее или равно)
+> 36 IF_GREATER (Если более)
+> 37 IF_GREATEROR_EQUAL (Если более или равно)
+> ```
+> 
+> Используйте беззнаковое меньше/больше для сравнений.
+> 
+> Например: `IF_LESS REG_0 REG_1 16` - эта инструкция прыгает на 16 байт если REG_0 меньше чем REG_1
+ 
+
+Создадим новый компонет для условий `COND_CPU2`:
+
+![COND_CPU2](/Computer-Science-Bookshelf/img/tc/COND_CPU2.png)
+
+Писать в общую шину ALU может только если не должен работать при этом компонент COND_CPU2, поэтому смотрим на 6-й бит (32) если он установлен в opcode то значит это режим для условий COND_CPU2
+
+![Conditionals](/Computer-Science-Bookshelf/img/tc/Conditionals.png)
 
 
 ---
