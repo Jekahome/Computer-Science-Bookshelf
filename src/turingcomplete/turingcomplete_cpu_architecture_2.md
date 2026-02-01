@@ -294,7 +294,7 @@ A больше или равно B
 
 ![Wire Spaghetti](/Computer-Science-Bookshelf/img/tc/MUX8Buf.png)
  
-[Turing Complete - CPU Architecture 2 (www.youtube.com) ](https://youtu.be/kBXghkY9dqw?si=lgvhaSRQbKwSrywn&t=6111)
+[Turing Complete - CPU Architecture 2 (www.youtube.com)](https://youtu.be/kBXghkY9dqw?si=lgvhaSRQbKwSrywn&t=6111)
 
 ---
 
@@ -378,14 +378,15 @@ A больше или равно B
 > Например: `IF_LESS REG_0 REG_1 16` - эта инструкция прыгает на 16 байт если REG_0 меньше чем REG_1
  
 
-Создадим новый компонет для условий `COND_CPU2`:
+Создадим новый компонент для условий `COND_CPU2`: (можно сразу реализовать вариант для Unsigned/Signed)
 
 ![COND_CPU2](/Computer-Science-Bookshelf/img/tc/COND_CPU2.png)
 
-Писать в общую шину ALU может только если не должен работать при этом компонент COND_CPU2, поэтому смотрим на 6-й бит (32) если он установлен в opcode то значит это режим для условий COND_CPU2
+ALU может писать в общую шину, только если не работает при этом компонент COND_CPU2, поэтому смотрим на 6-й бит (32) opcode если он установлен, то значит это режим для условий COND_CPU2 и мы должны перекрыть ALU.
 
 ![Conditionals](/Computer-Science-Bookshelf/img/tc/Conditionals.png)
 
+[Conditionals (www.youtube.com)](https://youtu.be/kBXghkY9dqw?si=fEDqfM2_G0ykUZKq&t=6167)
 
 ---
 
