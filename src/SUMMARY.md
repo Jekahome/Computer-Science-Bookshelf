@@ -10,7 +10,8 @@
         - [Memory](turingcomplete/turingcomplete_memory.md)      
         - [CPU Architecture](turingcomplete/turingcomplete_cpu_architecture.md)  
         - [Programming](turingcomplete/turingcomplete_programming.md)    
-        - [CPU Architecture 2](turingcomplete/turingcomplete_cpu_architecture_2.md)            
+        - [CPU Architecture 2](turingcomplete/turingcomplete_cpu_architecture_2.md) 
+        - [Functions](turingcomplete/turingcomplete_functions.md)               
     - [Стив Макконнелл - Совершенный код](conclusion_16.md)
     - [Мартин Фаулер. Рефакторинг. Улучшение проекта существующего кода 2019](conclusion_17.md)
     - [Брайан Керниган, Роб Пайк. Практика программирования 2004](conclusion_5.md)
@@ -23,6 +24,7 @@
     - [Владстон Феррейра Фило. Теоретический минимум по Computer Science (краткий справочник; не обязательно читать полностью)](conclusion_9.md)
 
 - [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
+    - [Джастис М. - Как на самом деле работают компьютеры 2022]()
     - [Ulrich Drepper. What Every Programmer Should Know About Memory]()
     - [Паттерсон Д., Хеннесси Дж. - Архитектура компьютеров и проектирование компьютерных систем. 4-е изд. 2012](conclusion_10.md)
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)

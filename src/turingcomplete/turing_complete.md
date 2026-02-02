@@ -60,6 +60,7 @@
 4. [CPU Architecture](turingcomplete_cpu_architecture.md) 
 5. [Programming](turingcomplete_programming.md) 
 6. [CPU Architecture 2](turingcomplete_cpu_architecture_2) 
+7. [Functions](turingcomplete_functions.md) 
 
 ---
 

@@ -604,11 +604,10 @@ p.s. script не учитывает входной сигнал 1 - наличи
     *  Если есть стена то *step 2*
     *  Если нет стены то *step 1*
 
+
 ```mermaid
-flowchart TD
-    Start([Начало]) --> step1[step 1: Шаг и поворот налево]
-    
-    step1 --> Check1{Есть стена?}
+flowchart LR
+    step1[step 1: Шаг и поворот налево] --> Check1{Есть стена?}
     
     Check1 -->|Да| step2[step 2: Поворот направо]
     Check1 -->|Нет| step1
@@ -622,9 +621,7 @@ flowchart TD
     style step2 fill:#fff4e1,stroke:#ff9900,stroke-width:2px
     style Check1 fill:#f0f0f0,stroke:#666,stroke-width:2px
     style Check2 fill:#f0f0f0,stroke:#666,stroke-width:2px
-    style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
 ```
-
 <details>
 <summary>Assembly Editor:</summary>
  
@@ -686,10 +683,8 @@ if_always_move
 Алгоритм с подбором семени.
 
 ```mermaid
-flowchart TD
-    Start([Начало]) --> step1[step 1: Шаг]
-    
-    step1 --> Check1{Есть стена?}
+flowchart LR
+    step1[step 1: Шаг] --> Check1{Есть стена?}
     
     Check1 -->|Нет| step2[step 2: Поворот налево]
     Check1 -->|Да| step4[step 4: Шаг <br> *попытка взять семя*]
@@ -711,7 +706,6 @@ flowchart TD
     style Check1 fill:#f0f0f0,stroke:#666,stroke-width:2px
     style Check2 fill:#f0f0f0,stroke:#666,stroke-width:2px
     style Check3 fill:#f0f0f0,stroke:#666,stroke-width:2px
-    style Start fill:#d4edda,stroke:#28a745,stroke-width:2px
 ```
 
 <details>
