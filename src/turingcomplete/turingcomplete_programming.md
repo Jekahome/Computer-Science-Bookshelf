@@ -636,9 +636,9 @@ const if_wall 0b11000111        # if reg_3 > 0
 const if_always_move 0b11000100 # always 1 
 
 const use_action 0b00000100       # use action (open a door)
-
-const start_move 0b00000000  # 0 start position ROM program
-const start_right 0b00001011 # 11 start position ROM program
+# jump start position ROM program
+const start_move 0
+const start_right 11  
 
 # step 1 ------------ 
 # start_move ROM[0]
@@ -723,11 +723,11 @@ const if_wall 0b11000111        # if reg_3 > 0
 const if_always_move 0b11000100 # always 1 
 
 const use_action 0b00000100     # use action
-  
-const start_move 0b00000000     # 0 start position ROM program
-const start_right 0b00001110    # 14 start position ROM program
-const start_left 0b00000101     # 5
-const try_take_seed 0b00010111  # 23
+# jump start position ROM program
+const start_move 0  
+const start_right 14 
+const start_left 5
+const try_take_seed 23
 # step 1 ------------ 
 # start_move ROM[0]
 move

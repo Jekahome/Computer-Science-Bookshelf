@@ -10,7 +10,7 @@ smart-punctuation = false
 no-section-label = false
 additional-js = ["js/mermaid.min.js", "js/mermaid-init.js", "js/general.js","js/formbutton-v1.min.js"]
 additional-css = ["css/circuitjs.css"]
-
+ 
 
 [output.html.print]
 enable = false    
@@ -55,3 +55,10 @@ exclude = ["mermaid"]
 
 [preprocessor.callouts]
 command = "bin/mdbook-callouts"
+
+[output.html.playground]
+editable = true
+copyable = true 
+copy-js = true
+line-numbers = false
+runnable = true
