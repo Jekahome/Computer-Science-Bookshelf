@@ -4,7 +4,7 @@
 * [Shift](#shift)
 * [RAM](#ram)
 * [Delay](#delay)
-
+* [The Product of Nibbles](#the-product-of-nibbles)
 
 
 ---
@@ -287,6 +287,9 @@ start_continue_output
 ---
 
 ## The Product of Nibbles
+> [!TIP]
+> Разблокирует компоненты Multipliers `MUL 8/16/32/64 bit` 
+
 
 > Задача: 
 >
@@ -294,8 +297,42 @@ start_continue_output
 
 `Умножение = AND + сдвиг + сложение`
 
+Два варианта параллельных умножителей за один такт:
+* Горизонтальный умножитель состоит из 16 AND + 12 сумматоров. Все частичные произведения складываются одновременно по параллельной схеме. Схема физически представляет собой таблицу умножения.
+* Вертикальный умножитель состоит из 16 AND + 4-х Logarithmic Shifter и 3-х 8-битных сумматоров. Есть возможность умножать 8-битные числа.
 
+#### Circuit Simulation: Multiplier
 
+Горизонтальный умножитель:
+
+<div class="sim-wrapper" data-circuit-id="51">
+  <button class="sim-fullscreen-btn" data-circuit-id="51">⛶</button>
+  <iframe 
+      id="51"
+      data-circuit-id="51"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/51_multiplier.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+Вертикальный умножитель:
+
+<div class="sim-wrapper" data-circuit-id="52">
+  <button class="sim-fullscreen-btn" data-circuit-id="52">⛶</button>
+  <iframe 
+      id="52"
+      data-circuit-id="52"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/52_multiplier_v.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+ 
+![The Product of Nibbles](/Computer-Science-Bookshelf/img/tc/The_Product_of_Nibbles.png)
+
+[The Product of Nibbles (youtube)](https://youtu.be/T9gl-hHou-g?si=duwenzOUiuenijRb&t=3137)
 
 ---
 
