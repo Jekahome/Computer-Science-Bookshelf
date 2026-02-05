@@ -1,5 +1,5 @@
 
-[Computer Science Bookshelf (github page)](https://jekahome.github.io/Computer-Science-Bookshelf/)
+[jekahome.github.io/Computer-Science-Bookshelf](https://jekahome.github.io/Computer-Science-Bookshelf/)
 
 **Цель - разобрать склад книг, найти ценное, важное и взять себе**.
 
