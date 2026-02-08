@@ -8,10 +8,11 @@
 
 ---
 
-Справка opcode:
+Текущая архитектура ISA процессора:
+
+ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 
 ```
-ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 [ x  x | S2 S1 S0 | D2  D1  D0  ]
 [ MODE | Source   | Destination ]
 
@@ -23,7 +24,7 @@ OPCODE MODE:
 11xxxxxx Conditions.       Source REG 3 and REG 0, Destination Program counter (PC)
 
 
-OPCODE Source:
+Source:
 
 S2 S1 S0
 --------------
@@ -37,7 +38,7 @@ S2 S1 S0
 1  1  1  UNUSED
 
 
-OPCODE Destination:
+Destination:
 
 D2 D1 D0 
 --------------
@@ -65,7 +66,7 @@ Conditions:
 
 ALU:
 
-V| OPCODE
+V| bits
 -|---------------
 0| xxxxx000   OR
 1| xxxxx001   NAND
@@ -637,11 +638,11 @@ const if_always_move 0b11000100 # always 1
 
 const use_action 0b00000100       # use action (open a door)
 # jump start position ROM program
-const start_move 0
-const start_right 11  
+const jump_move 0
+const jump_right 11  
 
 # step 1 ------------ 
-# start_move ROM[0]
+# jump_move ROM[0]
 move
 out
 
@@ -651,26 +652,26 @@ out
 use_action
 out
 input_to_reg_3
-start_right
+jump_right
 if_wall
 
 # Если нет стены то step 1
-start_move      
+jump_move      
 if_always_move
 
 # step 2 ------------
-# start_right ROM[11]
+# jump_right ROM[11]
 # Если есть стена то step 2
 right
 out
 use_action
 out
 input_to_reg_3
-start_right
+jump_right
 if_wall
 
 # Если нет стены то step 1
-start_move      
+jump_move      
 if_always_move
 
 ```
@@ -724,12 +725,12 @@ const if_always_move 0b11000100 # always 1
 
 const use_action 0b00000100     # use action
 # jump start position ROM program
-const start_move 0  
-const start_right 14 
-const start_left 5
+const jump_move 0  
+const jump_right 14 
+const jump_left 5
 const try_take_seed 23
 # step 1 ------------ 
-# start_move ROM[0]
+# jump_move ROM[0]
 move
 out
  
@@ -738,40 +739,40 @@ try_take_seed
 if_wall
 
 # step 2 ------------ 
-# start_left ROM[5]
+# jump_left ROM[5]
 # Если есть стена то step 3
 left
 out
 use_action
 out
 input_to_reg_3
-start_right
+jump_right
 if_wall
 
 # Если нет стены то step 1
-start_move      
+jump_move      
 if_always_move
 
 # step 3 ------------
-# start_right ROM[14]
+# jump_right ROM[14]
 # Если есть стена то step 3
 right
 out
 use_action
 out
 input_to_reg_3
-start_right
+jump_right
 if_wall
 
 # Если нет стены то step 1
-start_move      
+jump_move      
 if_always_move
 
 # step 4 ------------
 # try_take_seed ROM[23]
 move
 out
-start_left
+jump_left
 if_always_move
 ```
 </details>

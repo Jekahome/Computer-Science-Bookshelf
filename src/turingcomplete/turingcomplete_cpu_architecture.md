@@ -29,7 +29,7 @@ Arithmetic Logic Unit (**ALU**) Арифметико-логическое уст
 >
 > Для 8 комбинаций, нам хватит первых трех младших битов
 > ```
-> V| OPCODE :
+> V| bits :
 > -|---------------
 > 0| xxxxx000   OR
 > 1| xxxxx001   NAND
@@ -138,7 +138,7 @@ Output       00000001 # 1
 
 Адреса для источника Source:
 ```
-OPCODE Source:
+Source:
 
 S2 S1 S0
 --------------
@@ -154,7 +154,7 @@ S2 S1 S0
 
 Адреса для назначения Destination:
 ```
-OPCODE Destination:
+Destination:
 
 D2 D1 D0 
 --------------
@@ -225,14 +225,16 @@ Instruction: 00000110
 
 > Задача: Постройте "декодер", который будет определять в каком режиме наш компьютер находится, основываясь на 2-х битах которые вы до сих пор не использовали.
 
-Что бы отличать 4 инструкции MODE, они будут кодировать первыми (старшими) двумя битами:
+Что бы отличать 4 инструкции OPCODE (Operation Code — код операции), они будут кодировать первыми (старшими) двумя битами:
+
+
 
 ```
 ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 [ M1 M0 | S2 S1 S0 | D2  D1  D0  ]
-[ MODE  | Source   | Destination ]
+[ OPCODE| Source   | Destination ]
 
-OPCODE MODE:
+OPCODE:
 ---------------------------------
 00xxxxxx Immediate values
 01xxxxxx вычислить (ALU) CALC
@@ -273,7 +275,7 @@ OPCODE MODE:
  
 > Задача: 
 > 
-> Используйте декодер (Декодер 2 на 4) который вы построили ранее для OPCODE MODE, чтобы понять, что делать с регистрами `REG1, REG2, REG3`: 
+> Используйте декодер (Декодер 2 на 4) который вы построили ранее для OPCODE, чтобы понять, что делать с регистрами `REG1, REG2, REG3`: 
 > * копировать COPY (OPCODE = 10) 
 > * или вычислять (ALU) CALC (OPCODE = 01). 
 >
@@ -283,9 +285,9 @@ OPCODE MODE:
 > ```
 > ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 > [ M1 M0 | S2 S1 S0 | D2  D1  D0  ]
-> [ MODE  | Source   | Destination ]
+> [ OPCODE| Source   | Destination ]
 >
-> OPCODE MODE:
+> OPCODE:
 > ---------------------------------------
 > 0 0 Immediate values (не нужен сейчас)
 > 0 1 вычислить (ALU) CALC
@@ -295,12 +297,12 @@ OPCODE MODE:
 >  
 > Когда вы находитесь в режиме вычислений (ALU) CALC, используйте `REG 1` и `REG 2` в качестве Source (входов), а Destination (результат) сохраните в `REG 3`.
 > 
-> Не забудьте что у декодера 3 на 8 есть выключающий бит при HIGH сигнале, так как нам в режиме CALC не нужны из OPCODE инструкции Source и Destination, ведь мы жестко фиксировали работу с регистрами `REG1, REG2, REG3`.
+> Не забудьте что у декодера 3 на 8 есть выключающий бит при HIGH сигнале, так как нам в режиме CALC не нужны из инструкции Source и Destination, ведь мы жестко фиксировали работу с регистрами `REG1, REG2, REG3`.
 > Но в режиме COPY, декодеры 3 на 8 должны использоваться для адресации регистров либо внешнего входа/выхода.
 >
 > Еще, в этом уровне, модифицированные регистры, у них есть дополнительно ножка "Always output", т.е. всегда можно его прочитать без необходимости выставлять сигнал HIGH на pin Load.
 
-> Так как режим MODE CALC использует младшие 6 бит не по назначению, тогда нужно убедится, что они не влияют на шину и регистры, для этого нужно что бы декодеры Source и Destination не декодировали инструкцию, а выдавали такие сигналы которые отключают регистры от входа и выхода. 
+> Так как режим OPCODE CALC использует младшие 6 бит не по назначению, тогда нужно убедится, что они не влияют на шину и регистры, для этого нужно что бы декодеры Source и Destination не декодировали инструкцию, а выдавали такие сигналы которые отключают регистры от входа и выхода. 
 >
 
 Для двух старших бит можно использовать декодер 2 на 4 который мы построили ранее на уровне [Instruction Decoder](#instruction-decoder) он тоже принимает 8 бит но реагирует только на первые два старших, в принципе его можно переделать, для этого нам есть завод компонентов, заменим 8-ми битный вход на 2-х битный. Или можно взять еще один декодер 3 на 8 (избыточно). 
@@ -1031,7 +1033,7 @@ number:address
 > Проверьте значение по выбранному условию и выведите 1 если оно выполняется, иначе 0.
 > 
 > ```
-> V| OPCODE:    Выведите 1 когда: 
+> V| bits:      Выведите 1 когда: 
 > -|-----------------------------------------
 > 0| 0  0  0    Никогда т.е. ничего не делать
 > 1| 0  0  1    Если значение = 0
@@ -1049,7 +1051,7 @@ number:address
 
 Есть:
 * VALUE — обычно результат ALU (последняя операция)
-* OPCODE (3 бита) — код условия
+* 3 бита — код условия
 * Выход Conditions — COND_OK 
     * COND_OK = 1 → условие выполнено → переход разрешён
     * COND_OK = 0 → переход запрещён
@@ -1064,7 +1066,7 @@ number:address
 
 Схема Conditions — это и есть “блок условий процессора”. Он отвечает на один вопрос: разрешён ли переход? (1 или 0)
 
-| Ассемблер | Условие | OPCODE      | Проверка |
+| Ассемблер | Условие | Код         | Проверка |
 | --------- | ------- | ----------- | -------- |
 |           | никогда | 000         | 0        |
 | JMP       | всегда  | 100         | 1        |
@@ -1118,13 +1120,13 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 Иногда бывает полезно загрузить значение непосредственно из программы, а не из регистров. Это называется загрузкой непосредственного значения (Immediate Values).
 
 Ключевая идея уровня - Инструкция сама является данными!
-(Как в уровне [Calculations](turingcomplete_cpu_architecture.html#calculations), мы использовали младшие биты предназначенные для адреса Destination `xxxxxD2D1D0` в режиме MODE `01` не для адреса Destination, а для блока ALU)
+(Как в уровне [Calculations](turingcomplete_cpu_architecture.html#calculations), мы использовали младшие биты предназначенные для адреса Destination `xxxxxD2D1D0` в режиме OPCODE `01` не для адреса Destination, а для блока ALU)
 
 > ```
 > [ M1 M0 | S2 S1 S0 | D2  D1  D0  ]
-> [ MODE  | Source   | Destination ]
+> [ OPCODE| Source   | Destination ]
 >
-> OPCODE MODE:
+> OPCODE:
 > ------------
 > 0 0 Immediate values непосредственные значения
 > ```
@@ -1137,7 +1139,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 >
 > `IMMEDIATE = NOT M1 AND NOT M0`
 
-Если шесть бит инструкции после бит MODE и есть наши данные `(S2 S1 S0 D2  D1  D0)` то мы можем закодировать значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
+Если шесть бит инструкции после бит OPCODE и есть наши данные `(S2 S1 S0 D2  D1  D0)` то мы можем закодировать значение от 0 до 63 включительно (`xxxxxx = 2⁵ + 2⁴ + 2³ + 2² + 2¹ + 2⁰ = 32 + 16 + 8 + 4 + 2 + 1 = 64`)
 
 Тогда мы берем шесть младших бит инструкции и превращаем их в байт, и записываем в `REG0`
 
@@ -1153,7 +1155,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 ![Immediate values](/Computer-Science-Bookshelf/img/tc/Immediate_values.png)
  
  
-#### Circuit Simulation: MODE Immediate values
+#### Circuit Simulation: OPCODE Immediate values
 
 Необходимые компоненты:
 * [8 bit и 1 bit Multuplexers (MUX)](turingcomplete_memory.html#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
@@ -1176,7 +1178,7 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 > 4. Бесконечный цикл (или возможность продолжать)
 > 
 
-В инструкции два старших бита `M1, M0` отвечают за режимы MODE, в котором нам нужно реализовать `11xxxxxx` Conditions. 
+В инструкции два старших бита `M1, M0` отвечают за режимы OPCODE, в котором нам нужно реализовать `11xxxxxx` Conditions. 
 
 До этого момента все программы ограничивались выполнением байт за байтом.
 
@@ -1323,19 +1325,19 @@ Immediate ──────────────┘
 > В режиме calc, conditions и immediate values, декодеры sorce и destination не должны влиять на шину, 
 > но если их перевести в состояние Z то шина имеет К.З.
 
-Справка opcode:
+Архитектура ISA процессора:
 ```
 [ x  x | S2  S1  S0 | D2  D1  D0  ]
-[ MODE | Source     | Destination ]
+[OPCODE| Source     | Destination ]
 
-OPCODE MODE:
+OPCODE:
 ------------------------- 
 00xxxxxx Immediate values. Source 6 bit instruction, Destination REG 0
 01xxxxxx CALC (ALU). Source REG 1 and REG 2, Destination REG 3 
 10xxxxxx COPY
 11xxxxxx Conditions. Source REG 3 and REG 0, Destination Program counter (PC)
 
-OPCODE Source:
+Source:
 
 S2 S1 S0
 --------------
@@ -1349,7 +1351,7 @@ S2 S1 S0
 1  1  1  UNUSED
 
 
-OPCODE Destination:
+Destination:
 
 D2 D1 D0 
 --------------
@@ -1376,7 +1378,7 @@ Conditions:
 
 ALU:
 
-V| OPCODE
+V| bits
 -|---------------
 0| xxxxx000   OR
 1| xxxxx001   NAND
@@ -1396,7 +1398,7 @@ INPUT: 00000111 # 7
 # tick=1 clk=1 addr=1 
 
      Instruction: 10110001
-        MODE COPY
+        OPCODE COPY
         Source 110 (INPUT)
         Destination 001 (REG 1)
 
@@ -1404,7 +1406,7 @@ INPUT: 00000111 # 7
 # tick=3 clk=1 addr=2
 
      Instruction: 00000001 # 1
-        MODE Immediate values
+        OPCODE Immediate values
         Source Instruction
         Destination (REG 0)
 
@@ -1412,7 +1414,7 @@ INPUT: 00000111 # 7
 # tick=5 clk=1 addr=3
 
     Instruction: 10000010
-        MODE COPY
+        OPCODE COPY
         Source 000 (REG 0)
         Destination 010 (REG 2)
  
@@ -1420,7 +1422,7 @@ INPUT: 00000111 # 7
 # tick=7 clk=1 addr=4
 
     Instruction: 01000100   
-        MODE CALC
+        OPCODE CALC
         Source REG 1 и REG 2
         Destination REG 3
         100 ADD
@@ -1429,7 +1431,7 @@ INPUT: 00000111 # 7
 # tick=8 clk=1 addr=5
 
     Instruction: 10011110
-        MODE COPY
+        OPCODE COPY
         Source 011 (REG 3)
         Destination 110 (OUTPUT)
 
@@ -1440,7 +1442,7 @@ OUTPUT: 00001000 # 8
 # tick=9 clk=1 addr=6
 
     Instruction: 11000110
-    MODE Conditions
+    OPCODE Conditions
     Source (REG 3) данные из которого проверяются в блоке Conditions
         Условие для блока Conditions 110 означает "Выдать 1 если REG3 ≥ 0"
         Ожидаем выход блока условий 1, так как в REG 3 содержится значение 8

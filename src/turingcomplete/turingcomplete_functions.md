@@ -10,6 +10,8 @@
 * [The Lab](#the-lab)
 * [Push and Pop](#push-and-pop)
 * [Functions](#functions-1)
+    * [Текущая архитектура ISA процессора LEG](#Текущая-архитектура-isa-процессора-leg)
+* [Расширение opcode инструкций](#Расширение-opcode-инструкции)    
 
 ---
 
@@ -202,9 +204,9 @@ fn main() {
 <summary>Assembly Editor:</summary>
 
 ```bash
-const start_save_to_ram 4
-const start_output_ram 20
-const start_continue_output 24
+const jump_save_to_ram 4
+const jump_output_ram 20
+const jump_continue_output 24
 const iterations 32
 # reg_0 SP (Stack Pointer)
 
@@ -214,7 +216,7 @@ const iterations 32
 0b00000000 #3 arg2 source ImVal
 0b00000000 #4 destination reg_0
 
-# start_save_to_ram ROM[4] -------------------
+# jump_save_to_ram ROM[4] -------------------
 # копировать с input в RAM
 # (через ALU ADD с нулем)
 0b01000000 #1 opcode ADD INPUT 0
@@ -233,22 +235,22 @@ const iterations 32
 0b01100101 #1 cond reg_0 >= arg2
 0b00000000 #2 arg1 source reg_0
 iterations #3 arg2 source ImVal
-start_output_ram #4
+jump_output_ram #4
 
 # всегда прыгать 
 0b11100000 #1 cond arg1 == arg2
 0b00000000 #2 arg1 source ImVal
 0b00000000 #3 arg2 source ImVal
-start_save_to_ram #4
+jump_save_to_ram #4
 
-# start_output_ram ROM[20] -------------------
+# jump_output_ram ROM[20] -------------------
 # сброс index RAM, reg_0=0 
 0b11000000 #1 opcode ADD 0+0
 0b00000000 #2 arg1 source ImVal
 0b00000000 #3 arg2 source ImVal
 0b00000000 #4 destination reg_0
 
-# start_continue_output ROM[24]
+# jump_continue_output ROM[24]
 0b01000000 #1 opcode ADD RAM + 0
 0b00001000 #2 arg1 source RAM
 0b00000000 #3 arg2 source ImVal
@@ -264,7 +266,7 @@ start_save_to_ram #4
 0b11100000 #1 cond arg1 == arg2
 0b00000000 #2 arg1 source ImVal
 0b00000000 #3 arg2 source ImVal
-start_continue_output
+jump_continue_output
 
 ```
 </details>
@@ -409,8 +411,8 @@ fn main() {
 <summary>Assembly Editor:</summary>
 
 ```bash
-const start_while 12  
-const start_output 28
+const jump_while 12  
+const jump_output 28
 # 1. Dividend input to reg_1
 0b01000000 #1 opcode ADD INPUT 0
 0b00000111 #2 arg1 source INPUT
@@ -429,12 +431,12 @@ const start_output 28
 0b00000000 #3 arg2 source ImVal
 0b00000011 #4 destination reg_3
 
-# start_while ROM[12]
+# jump_while ROM[12]
 # 4. IF_LESS  
 0b00100010   #1 opcode Cond IF_LESS
 0b00000001   #2 arg1 source reg_1
 0b00000010   #3 arg2 source reg_2
-start_output #4 destination
+jump_output #4 destination
 
 # 5. SUB reg_1 - reg_2 = reg_1
 0b00000001 #1 opcode SUB
@@ -452,9 +454,9 @@ start_output #4 destination
 0b11100000  #1 cond arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-start_while #4 destination
+jump_while #4 destination
 
-# start_output ROM[28]
+# jump_output ROM[28]
 # 7. Output Quotient
 0b10000000 #1 opcode ADD 0 Quotient
 0b00000000 #2 arg1 source ImVal
@@ -562,6 +564,7 @@ expect 0 8 # expect reg_0 8
 * Разместить стек в RAM
     * Чтобы RAM превратилась в стек, процессору нужен специальный регистр — `Stack Pointer` (SP) (Указатель стека).
     * Начало адресов стека это последний индекс (255) в RAM и расти он будет к середине адресов RAM, т.е. уменьшаться `Descending Stack` (убывающий стек)
+        * **Heap в начале адресов RAM, в Stack в конце**
 * **Гибрид**, аппаратный стек для стека возвратов (Return Stack), и стек в RAM для стека данных (Data Stack)
     * Достоинство: надежность - программа всё равно сможет корректно выполнить `RET` и вернуться в основное меню, потому что адрес возврата лежит отдельно от данных
 * и другие гибриды:
@@ -577,8 +580,8 @@ expect 0 8 # expect reg_0 8
 Схема не изменилась с уровня [RAM](#ram).
 
 ```bash
-const start_while 4  
-const start_pop 28
+const jump_while 4  
+const jump_pop 28
 
 # reg_4 - Stack Pointer (SP)
 # reg_1 - INPUT
@@ -593,7 +596,7 @@ const start_pop 28
 
  
 #-------------------------------
-# start_while
+# jump_while
  
 # take INPUT
 0b10000000 #1 opcode ADD 0 INPUT
@@ -605,7 +608,7 @@ const start_pop 28
 0b10100000 #1 opcode cond IF_EQUAL 
 0b00000000 #2 arg1 source ImVal
 0b00000001 #3 arg2 source reg_1
-start_pop #4 destination jump
+jump_pop #4 destination jump
 
 # start push--------------------
 # reg_0=reg_4
@@ -630,10 +633,10 @@ start_pop #4 destination jump
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-start_while #4 destination
+jump_while #4 destination
 
 
-# start_pop------------------
+# jump_pop------------------
 # pop значение из стека и вывести его 
 # SP+1 pop
 0b10000000 #1 opcode ADD 1+reg_4
@@ -659,7 +662,7 @@ start_while #4 destination
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-start_while #4 destination
+jump_while #4 destination
 
 ```
 
@@ -709,13 +712,18 @@ start_while #4 destination
 0b00001011	jump reg_4       # return address
 ```
 
+> [!IMPORTANT]
+>
+> Команда CALL увеличивает стек адресом возврата, поэтому следует помнить о переполнении стека (Stack Overflow) если не вызывать после команду RET, которая уменьшает стек.
+> Для простых переходов (прыжков) JUMP следует использовать прямое указание адреса, что неувеличивает стек адресов возврата. 
 
 > Задача: 
 >
 > На этом уровне вам поручено реализовать вызовы функций и возвраты с помощью инструкций **call** и **ret**.
 >
 > Обратите внимание, что при возврате из функции следует переходить к адресу, который был указан ПОСЛЕ инструкции call, иначе возникнет бесконечный цикл.
-> 
+> (нужно что бы после счетчика PC стоял инкремент и это уже значение сохранять в стек возвратов)
+>
 > Инструкция по вызову должна содержать следующее:
 > * Добавьте ширину инструкции к значению счетчика и поместите его в стек.
 > * Перейти (jump) к адресу функции
@@ -758,7 +766,7 @@ start_while #4 destination
 С 4-байтовыми инструкциями адрес возврата меняется. Если наша инструкция занимает 4 ячейки памяти, то следующая команда начинается через 4 адреса.
 Инкрементатор перед стеком должен делать не `+1`, а `+4`. Поскольку каждая наша инструкция занимает 4 байта, адрес "возврата" всегда равен **текущий адрес + 4**. Нужно: `PC -> Сумматор (+4) -> Stack Input`
 
-Текущая **Архитектура ISA процессора LEG:**
+### *Текущая архитектура ISA процессора LEG:*
 
 ```
 [первый байт][второй байт    ][трейтий байт   ][четвертый байт       ]
@@ -769,25 +777,26 @@ start_while #4 destination
 Opcode 8bit:
 ```
 биты xxxxx111 режима ALU, результат его работы в общую шину:
+(По умолчанию все команды для ALU. Source данные всегда идут через ALU)
 0: ALU xxxxxxx1 #1
 1: ALU xxxxxx1x #2
 2: ALU xxxxx1xx #4
 
-бит режима CALL, данные из Result address (четвертый байт ISA инструкции) в общую шину для PC:
-3: CALL xxxx1xxx #8
+бит режима CALL, данные из Result address (четвертый байт ISA инс.) в общую шину для PC:
+3: CALL 00001000 #8 идентификатор режима
 
-бит режима RET, данные из Result address (четвертый байт ISA инструкции) в общую шину для PC:
-4: RET xxx1xxxx #16
+бит режима RET, данные из Result address (четвертый байт ISA инс.) в общую шину для PC:
+4: RET 00010000 #16 идентификатор режима
 
-биты xx1xx111 режима COND, данные из Result address (четвертый байт ISA инструкции) в общую шину для PC. 
+биты xx1xx111 режима COND, данные из Result address (четвертый байт ISA инс.) в общую шину для PC. 
 0: COND xxxxxxx1 #1
 1: COND xxxxxx1x #2
 2: COND xxxxx1xx #4
-5: COND xx1xxxxx #32
+5: COND xx1xxxxx #32 идентификатор режима, если бит установлен
 
 биты 11xxxxxx режима Immediate values:
-6: x1xxxxxx #64 выбор в роли Immediate values Argument 2 (трейтий байт ISA инструкции)
-7: 1xxxxxxx #128 выбор в роли Immediate values Argument 1 (второй байт ISA инструкции)
+6: x1xxxxxx #64 выбор в роли Immediate values Argument 2 (трейтий байт ISA инс.) идентификатор режима, если бит установлен
+7: 1xxxxxxx #128 выбор в роли Immediate values Argument 1 (второй байт ISA инс.) идентификатор режима, если бит установлен
 ```
 
 Argument 1/Argument 2/Result address 8bit:
@@ -811,8 +820,11 @@ Argument 1/Argument 2/Result address 8bit:
 
 И мы выбрали `REG_0` для роли `Stack Pointer` (SP) (Указатель стека) для RAM (ОЗУ).
 
+Схема уровня Functions:
 
 ![Functions](/Computer-Science-Bookshelf/img/tc/Functions.png)
+
+(p.s. есть ошибка в схеме, в режиме условий COND мы должны перекрыть общую шину на пути к счетчику и открыть шину только для данных Result address)
 
 <details>
 <summary>Assembly Editor:</summary>
@@ -826,7 +838,7 @@ Argument 1/Argument 2/Result address 8bit:
 # reg_2 - result
 # CALL opcode `xxxx1xxx` (8)
 # RET opcode `xxx1xxxx` (16)
-const start_fn_double 24
+const jump_fn_double 24
 const CALL 0b00001000
 const RET 0b00010000
 
@@ -841,7 +853,7 @@ const RET 0b00010000
 CALL        #1 opcode CALL
 0b00000000  #2 arg1 source unused
 0b00000000  #3 arg2 source unused
-start_fn_double #4 destination PC
+jump_fn_double #4 destination PC
 
 # output result
 0b10000000 #1 opcode ADD 0+reg_2
@@ -861,7 +873,7 @@ start_fn_double #4 destination PC
 CALL        #1 opcode CALL
 0b00000000  #2 arg1 source unused
 0b00000000  #3 arg2 source unused
-start_fn_double #4 destination PC
+jump_fn_double #4 destination PC
 
 # output result
 0b10000000 #1 opcode ADD 0+reg_2
@@ -872,7 +884,7 @@ start_fn_double #4 destination PC
  
 # HALT (!unimplemented opcode)
 
-# start_fn_double ---------------------
+# jump_fn_double ---------------------
 # function implementation 
 # fn double(arg_1){reg_2=arg_1+arg_1; return reg_2}
 0b00000000 #1 opcode ADD arg_1+arg_1
@@ -894,8 +906,13 @@ RET         #1 opcode RET
 ---
 
 
-*Логика разбора Opcode напрашивается в отдельную коробочку*
+*Логика разбора Opcode напрашивается в отдельную коробочку Control Unit (CU) — Блок управления*
  * (чтобы код не сломал процессор) Убедиться, что RET и CALL не конфликтуют с COND. Например, что будет, если написать инструкцию, где включены RET и/или CALL в opcode для COND?
+
+Control Unit (CU) — Блок управления:
+
+![Control Unit (CU) — Блок управления](/Computer-Science-Bookshelf/img/tc/Control_Unit.png)
+ 
 
 Что есть:
 * режим COND 
@@ -912,57 +929,790 @@ RET         #1 opcode RET
     * всегда работа через него, что бы скопировать один исчочник в другой нужно выполнять обработку + ADD что занимает 104 тика задержки
 
 
+Обновленная версия (более понятная)
+
+![Functions Review](/Computer-Science-Bookshelf/img/tc/FunctionsReview.png)
+
+
+## Расширение opcode инструкции 
+(пусть компилятор выдохнет)
+
+У нас есть четыре бита `xx1111xx` для кодирования дополнительных инструкций, за вычетом пересечений получим +9 свободных комбинаций. 
+Не трогаем два старших бита, чтобы иметь возможность напрямую их использовать (Immediate values) с новыми режимами, более того `xxxxx1xx` 3-й бит конфликтует с режимом COND в новых комбинациях.
+Поэтому из двух комбинаций `xxxxx1xx` и `xxxxx0xx` мы получаем одну полноценную для совместного использования с режимом COND. 
+ 
+```
+xx0011xx MOV
+xx0101xx mix (PUSH,POP,SWAP,RJ)
+xx0110xx CRJ (+ изменить 6-й (32) бит режима COND на 1)
+xx0111xx CRJ (+ изменить 6-й (32) бит режима COND на 1)
+xx1010xx CC для разных условий где 3-й бит 0
+xx1011xx CC для разных условий где 3-й бит 1
+xx1100xx ICC для разных условий где 3-й бит 0
+xx1101xx ICRC для разных условий где 3-й бит 1
+xx1110xx ICRC для разных условий где 3-й бит 0
+xx1111xx ICC для разных условий где 3-й бит 1
+```
+  
+И зафиксируем режим ALU явно: 
+```
+xx000xxx
+```
+(именно эти три бита LOW идентифицируют режим ALU, так как эти биты в HIGH включают режимы COND,RET,CALL которые не нуждаются в вычислениях) 
+
+Для увеличения количества команд, можно взять одну команду `xx0101xx` и закодить ее в четыре (PUSH,POP,RJ,SWAP) которые не используют режим COND.
 
 ```
-1. У нас еще не реализована возможность завершить работу процессора, остановив счетчик программ PC или CLOCK - `HALT` (можно реализовать через 5-1 бит или 0 в Opcode)
+128 64|xxxx|2 1
+------------
+x    x|0101|x x
 
-2. Поддержка относительных переходов (Relative Jumps)
-    Сейчас твой Result address — это всегда абсолютный адрес (например, "прыгни на 100"). Это мешает делать перемещаемый код (когда ты можешь скопировать кусок программы в другое место памяти, и он продолжит работать).
+Биты 128 и 64 это старшие биты для Immediate values, для покрытия всех их пересечений map'им четыре комбинации на одну: 
 
-    * Улучшение: Добавь бит режима Relative.
-
-    * Логика: Если бит активен, то значение из Result address не просто заменяет PC, а складывается с текущим PC. Это позволит делать короткие циклы типа "прыгни на 5 байт назад".
-
-3. Условный CALL (Conditional CALL)
-    Сейчас нет возможности одной инструкцией выполнить проверку условия и выполнить вызов CALL.
-    Это позволит писать код типа if (a == 10) run_function(). 
-    Сейчас тебе для этого нужно две инструкции (сначала COND для прыжка на вызов, а потом сам CALL с запоминанием адреса возврата).
-
-4. Косвенный переход (Indirect Jump)
-    Сейчас твой Result address (4-й байт) — это всегда число (адрес в RAM). Но что, если ты захочешь прыгнуть по адресу, который лежит в регистре?
-    Это нужно для реализации оператора switch (таблицы переходов)
-    "Возьми адрес для прыжка не из 4-го байта Result address, а из reg_N, на который этот байт указывает".
-
-5. Бит записи (Write Enable) для ALU
-    У тебя сейчас ALU всегда пишет результат в Result address. Но иногда нам нужно выполнить операцию только ради того, чтобы увидеть результат на шине (например, вывести в OUTPUT), не затирая регистры. 
-    Если ты добавишь возможность отключать запись в регистр/память, твоя архитектура станет еще гибче.
-
-
-
-6. Расширение работы со Стеком (Push / Pop для данных)
-    Это концепция «Программного стека». Сейчас у тебя есть «Железный стек» (только для адресов возврата), но программисту часто нужно спрятать в безопасное место не адрес, а данные (значения регистров).
-    Представь ситуацию:
-        В reg_1 лежит очень важное число (например, баланс игрока).
-        Тебе нужно вызвать функцию double(), но она внутри себя тоже использует reg_1 для своих расчетов.
-        Беда: Функция затрет твой баланс!
-    Чтобы этого не случилось, в начале функции делают PUSH (кладут значение в RAM «на хранение»), а в конце — POP (забирают обратно).    
-
-    У тебя есть аппаратный стек для CALL/RET (адреса возврата), но программисту часто нужно сохранить значения регистров (например, перед вызовом функции спасти reg_1).
-
-    Улучшение: Добавь команды PUSH и POP для обычных регистров, используя твой REG_0 (SP) и RAM.
-    Как это работает:
-        PUSH reg_1: RAM[SP] = reg_1, затем SP = SP + 1.
-        POP reg_1: SP = SP - 1, затем reg_1 = RAM[SP].
-        Зачем: Это позволит делать функции с любым количеством аргументов, не боясь, что они перезапишут регистры основной программы.
-
-
-    Если ты хочешь сделать жизнь программиста легче, не убирая аппаратный стек, добавь в свою "коробочку" (Декодер) автоматику для RAM:
-        Бит AUTO_INC: Если он включен вместе с записью в RAM, то reg_0 сам прибавляет +1 после операции.
-        Бит AUTO_DEC: Если он включен вместе с чтением из RAM, то reg_0 сам вычитает -1 перед операцией.
-        Это позволит тебе превратить ADD reg_1, 0 -> RAM[reg_0] в полноценный PUSH, но при этом не смешивать его с адресами возврата.
+128 64 1 2|command|
+----------|-------|
+1 1 1 1   | PUSH
+0 1 1 1   |
+1 0 1 1   |
+0 0 1 1   |
+----------|-------|
+1 1 0 1   | POP
+0 1 0 1   |
+1 0 0 1   |
+0 0 0 1   |
+----------|-------|
+1 1 1 0   | RJ
+0 1 1 0   |
+1 0 1 0   |
+0 0 1 0   |
+----------|-------|
+1 1 0 0   | SWAP  (unimplemented)
+0 1 0 0   |
+1 0 0 0   |
+0 0 0 0   |
+----------|-------|
 
 ```
 
+
+Для декодирования 4 бит на 10 вариантов, реализуем неполный декодер 4 на 10 `DEC4_10`
+
+![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
+
+
+#### 1. Передача данных
+
+<details>
+<summary>Команды MOV/LOAD/STORE:</summary>
+
+* **MOV**: регистр → регистр
+* **LOAD**: память → регистр
+* **STORE**: регистр → память
+
+```bash
+Команда MOV
+Нам нужна операция MOV, что бы мы могли записать данные, минуя ALU
+
+Opcode: xx0011xx
+Arg 1: Source
+Arg 2: Unused
+Result addr: Destination
+
+Как работают регистры при одновременном чтении и записи? - Они могут одновременно выдавать своё старое значение и принимать новое.
+ 
+-----------------------------------------
+# Сценарий проверки режима MOV/LOAD/STORE
+# reg_4 - Stack Pointer (SP)
+# reg_0 - RAM Pointer
+# CALL opcode 00001000 (8)
+# RET opcode 00010000 (16)
+# MOV opcode xx0011xx
+ 
+const CALL 0b00001000
+const RET 0b00010000
+ 
+# MOV ImVal to reg_1
+0b10001100 #1 opcode MOV
+0b00000101 #2 arg1 source ImVal
+0b00000000 #3 arg2 source unused
+0b00000001 #4 destination reg_1
+
+# MOV reg_1 to reg_2
+0b00001100 #1 opcode MOV
+0b00000001 #2 arg1 source reg_1
+0b00000000 #3 arg2 source unused
+0b00000010 #4 destination reg_2
+
+# MOV reg_2 to OUTPUT
+0b00001100 #1 opcode MOV
+0b00000010 #2 arg1 source reg_2
+0b00000000 #3 arg2 source unused
+0b00000111 #4 destination OUTPUT
+
+# MOV (STORE) 
+# reg_2 to RAM 
+0b00001100 #1 opcode MOV
+0b00000010 #2 arg1 source ImVal
+0b00000001 #3 arg2 source unused
+0b00001000 #4 destination RAM
+
+# MOV (LOAD)
+# RAM to reg_3
+0b00001100 #1 opcode MOV
+0b00001000 #2 arg1 source RAM
+0b00000001 #3 arg2 source unused
+0b00000011 #4 destination reg_3
+
+# JMP (MOV)  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000001 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+```
+
+</details>
+
+---
+
+#### 2. Сравнение и переходы (ветвления)
+
+Без них нет циклов, условий (if, while, for, match), функций.
+
+<details>
+<summary>Команда Conditional Jump (CJMP)</summary>
+
+**CJMP** - Условный переход реализован через команду COND с Result Address в PC:
+
+```bash
+# CJMP always 
+0b11100000  #1 cond IF_EQUAL arg1 == arg2
+0b00000000  #2 arg1 source ImVal
+0b00000000  #3 arg2 source ImVal
+0           #4 destination
+```
+
+</details>
+
+<br>
+
+<details>
+<summary>Команда JMP</summary>
+
+**JMP** безусловный переход реализован через MOV с Result Address в PC:
+
+```bash
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+```
+ 
+</details>
+
+---
+
+#### 3. Работа со стеком или вызовами
+ 
+<details>
+<summary>CALL и RET</summary>
+
+Проверка механизма **CALL** и **RET**. Реализуем функцию удвоения числа и вызовем ее два раза.
+
+```bash 
+# reg_4 - Stack Pointer (SP)
+# reg_0 - RAM Pointer
+# reg_1 - arg_1
+# reg_2 - result
+# CALL opcode xxxx1xxx (8)
+# RET opcode xxx1xxxx (16)
+const jump_fn_double 24
+const CALL 0b00001000
+const RET 0b00010000
+
+# first call fn ----------------------
+# set arg_1=5 
+0b11000000 #1 opcode ADD 5+0
+0b00000101 #2 arg1 source ImVal
+0b00000000 #3 arg2 source ImVal
+0b00000001 #4 destination reg_1
+
+# CALL fn double
+CALL        #1 opcode CALL
+0b00000000  #2 arg1 source unused
+0b00000000  #3 arg2 source unused
+jump_fn_double #4 destination PC
+
+# output result
+0b10000000 #1 opcode ADD 0+reg_2
+0b00000000 #2 arg1 source ImVal
+0b00000010 #3 arg2 source reg_2
+0b00000111 #4 destination OUTPUT
+# ------------------------------------
+
+# second call fn----------------------
+# set arg_1=8 
+0b11000000 #1 opcode ADD 8+0
+0b00001000 #2 arg1 source ImVal
+0b00000000 #3 arg2 source ImVal
+0b00000001 #4 destination reg_1
+
+# CALL fn double
+CALL        #1 opcode CALL
+0b00000000  #2 arg1 source unused
+0b00000000  #3 arg2 source unused
+jump_fn_double #4 destination PC
+
+# output result
+0b10000000 #1 opcode ADD 0+reg_2
+0b00000000 #2 arg1 source ImVal
+0b00000010 #3 arg2 source reg_2
+0b00000111 #4 destination OUTPUT
+# -------------------------------------
+ 
+# HALT (!unimplemented opcode)
+
+# jump_fn_double ---------------------
+# function implementation 
+# fn double(arg_1){reg_2=arg_1+arg_1; return reg_2}
+0b00000000 #1 opcode ADD arg_1+arg_1
+0b00000001 #2 arg1 source reg_1
+0b00000001 #3 arg2 source reg_1
+0b00000010 #4 destination reg_2
+
+# RET
+RET         #1 opcode RET
+0b00000000  #2 arg1 source unused
+0b00000000  #3 arg2 source unused
+0b00000000  #4 destination unused
+# ------------------------------------
+
+```
+
+</details>
+
+
+<br>
+
+<details>
+<summary>Режим PUSH/POP</summary>
+
+* **PUSH** - добавить в стек
+* **POP** - забрать из стека
+
+Мы можем использовать RAM как стек с последних адресов и использовать регистр REG_0 в роли Stack Pointer (SP) (Указатель стека).
+
+На данный момент для реализации поведения стека мы используем две инструкции
+* изменение индекса регистра Stack Pointer (SP)
+* запись/чтение из стека RAM[SP]
+
+Для команд PUSH/POP необходимо ограничится одной инструкцией т.е. изменение SP должно происходить в железе. (unimplemented)
+
+
+Чтобы не потерять/затереть значение в регистре, в начале вызова функции делают PUSH (кладут значение в RAM «на хранение»), а в конце — POP (забирают обратно).    
+Это позволит делать функции с любым количеством аргументов, не боясь, что они перезапишут регистры основной программы.
+
+
+**Push**
+
+```bash
+Opcode: xx010111
+Arg 1: Source  
+Arg 2: Unused
+Result addr: Unused (target RAM) 
+
+```
+
+**Pop**
+
+```bash
+Opcode: xx010101
+Arg 1: 0b00001000 зафиксирован источник RAM  
+Arg 2: Unused
+Result addr: Destination
+```
+
+```bash
+# test PUSH 
+
+# 1. set index
+# 2. PUSH
+
+# 1. POP
+# 2. set index
+# -------------
+# set SP 255
+0b10001100 #1 opcode MOV source destination
+0b11111111 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000000 #4 destination reg_0
+
+# PUSH
+0b10010111 #1 opcode PUSH
+0b00000001 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000100 #4 destination stack RAM
+# -------------
+# set SP 254
+0b10001100 #1 opcode MOV source destination
+0b11111110 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000000 #4 destination reg_0
+
+# PUSH
+0b10010111 #1 opcode PUSH
+0b00000010 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000100 #4 destination stack RAM
+# -------------
+# set SP 253
+0b10001100 #1 opcode MOV source destination
+0b11111101 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000000 #4 destination reg_0
+
+# PUSH
+0b10010111 #1 opcode PUSH
+0b00000011 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000100 #4 destination stack RAM
+# -------------
+# POP
+0b00010101 #1 opcode POP
+0b00001000 #2 arg1 stack RAM
+0b00000000 #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+
+# set SP 254
+0b10001100 #1 opcode MOV source destination
+0b11111110 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000000 #4 destination reg_0
+# -------------
+# POP
+0b00010101 #1 opcode POP
+0b00001000 #2 arg1 stack RAM
+0b00000000 #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+
+# set SP 255
+0b10001100 #1 opcode MOV source destination
+0b11111111 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000000 #4 destination reg_0
+
+# POP
+0b00010101 #1 opcode POP
+0b00001000 #2 arg1 stack RAM
+0b00000000 #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+ 
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+```
+
+
+</details>
+
+<br>
+
+<details>
+<summary>Режим Conditional CALL (CC):</summary>
+
+**CC** - Условный CALL (Conditional CALL)
+
+Сейчас нет возможности одной инструкцией выполнить проверку условия и выполнить вызов CALL.
+
+Это позволит писать код типа if (a == 10) run_function(). 
+* Если arg1 == arg2, мы не просто меняем PC, мы сначала запоминаем, где мы стояли, чтобы потом вернуться (командой RET)
+* Нужно в «железе» объединить логику записи в стек и логику проверки условия.
+
+Сейчас для этого нужно две инструкции (сначала COND для прыжка на вызов, а потом сам CALL с запоминанием адреса возврата).
+
+
+```
+Режим CC
+
+Opcode: xx1010xx и xx1011xx
+Arg 1: Source  
+Arg 2: Source 
+Result addr: Destination 
+
+xx1011xx - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+xx1010xx - для остальных условий COND
+```
+
+```
+# Поведение сейчас:
+    # always jump
+    0b11100000  #1 cond IF_EQUAL arg1 == arg2
+    0b00000000  #2 arg1 source ImVal
+    0b00000000  #3 arg2 source ImVal
+    jump_while #4 destination
+
+    # и тут мы не можем выполнить RET так как адрес возврата никто не запоминал. Адрес возврата запоминается при команде CALL но не COND
+    # ...
+
+# Поведение которое нам нужно:
+    # always jump
+    0b11010100  #1 COND_CALL IF_EQUAL arg1 == arg2
+    0b00000000  #2 arg1 source ImVal
+    0b00000000  #3 arg2 source ImVal
+    jump_while #4 destination
+
+    # метка jump_while и нас сюда перебросил PC
+    # мы выполняем RET и нас перебрасывает на следующую инструкцию после места с которого мы пришли по условию COND_CALL
+    RET         #1 opcode RET
+    0b00000000  #2 arg1 source unused
+    0b00000000  #3 arg2 source unused
+    0b00000000  #4 destination unused
+```
+
+```bash
+# Сценарий проверки режима CC
+# reg_4 - Stack Pointer (SP)
+# reg_0 - RAM Pointer
+# CALL opcode 00001000 (8)
+# RET opcode 00010000 (16)
+# MOV opcode xx0011xx
+# CC opcode xx1010xx для остальных условий COND
+# CC opcode xx1011xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+const CALL 0b00001000
+const RET 0b00010000
+ 
+# test CC IF 0==0
+0b11101000 #1 opcode CC
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 source ImVal
+12         #4 destination
+
+# print 5
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# always jump 
+0b11100000  #1 cond IF_EQUAL arg1 == arg2
+0b00000000  #2 arg1 source ImVal
+0b00000000  #3 arg2 source ImVal
+0           #4 destination
+
+# print 6
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000010 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+ 
+# RET
+RET        #1 opcode RET
+0b00000000 #2 arg1 source
+0b00000000 #3 arg2 source 
+0b00000000 #4 destination
+
+```
+
+</details>
+
+
+<br>
+
+
+<details>
+<summary>Режим Indirect Jump (ICC):</summary>
+
+Про Indirect Jump:
+* Косвенный переход (Indirect Jump)
+* Сейчас Result address (4-й байт) — это всегда число (адрес в RAM). Но что, если мы захотим прыгнуть по адресу, который лежит в регистре?
+* Это нужно для реализации оператора switch (таблицы переходов)
+* "Возьми адрес для прыжка не из 4-го байта Result address (Immediate values), а из reg_N, на который этот байт указывает".
+    * И эта возможность у нас уже реализованна в режиме ALU (или MOV), мы просто для Result address выбираем PC и результат операции ADD данных из reg_N + 0 перезапишет PC
+ 
+
+Про Indirect Conditional CALL (ICC):
+* Реализуя поведение Indirect Jump вместе с Conditional и CALL, получим Indirect Conditional CALL (**ICC**), что позволит выполнять переход на указанный адрес из регистра/RAM по условию с сохранением адреса возврата.
+
+```bash
+Opcode: xx1111xx и xx1100xx 
+Arg 1: Source  
+Arg 2: Source
+Result addr: используется в роли Source для Result addr 
+
+xx1111xx - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+xx1100xx - для остальных условий COND
+```
+
+```bash
+# Сценарий проверки режима ICC
+# reg_4 - Stack Pointer (SP)
+# reg_0 - RAM Pointer
+# CALL opcode 00001000 (8)
+# RET opcode 00010000 (16)
+# MOV opcode xx0011xx
+# CC opcode xx1011xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+# CC opcode xx1010xx для остальных условий COND
+# ICC opcode xx1111xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+# ICC opcode xx1100xx для остальных условий COND
+
+# MOV 12 to reg_4
+0b10001100 #1 opcode MOV
+0b00001100 #2 arg1 source ImVal
+0b00000000 #3 arg2 source unused
+0b00000100 #4 destination reg_4
+
+# ICC cond IF_EQUAL reg_1==reg_2
+0b11110000 #1 opcode ICC
+0b00000001 #2 arg1 source reg_1
+0b00000001 #3 arg2 source reg_2
+0b00000100 #4 destination reg_4
+
+# print 5
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# print 6
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000010 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# ICC cond IF_EQUAL reg_1==reg_2
+0b11110000 #1 opcode ICC
+0b00000001 #2 arg1 source reg_1
+0b00000000 #3 arg2 source reg_2
+0b00000100 #4 destination reg_4
+
+# print 7
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000011 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+
+```
+
+Плюс третий декодер источников специально для этого режима, и регистры заменились на прозрачные т.е. всегда LOAD, тогда может и декодеры для выбора источника не нужны?
+
+
+</details>
+
+<br>
+
+<details>
+<summary>Команды Relative Jumps: IRJ, CRJ, ICRC</summary>
+
+Поддержка относительных переходов (Relative Jumps)
+* Сейчас в режиме COND Result address — это всегда абсолютный адрес (например, "прыгни на 100"). 
+* Это мешает делать перемещаемый код (когда мы можем скопировать кусок программы в другое место памяти, и он продолжит работать).
+* Логика: Значение из Result address не просто заменяет PC, а складывается с текущим PC. Это позволит делать короткие циклы типа "прыгни на 5 байт назад".
+
+Про Relative Jumps (**RJ**): (unimplemented)
+* RJ относительный переход
+
+p.s. команда RJ не использует старшие биты, что дает возможность закодировать еще +3 команды без условных операций.
+
+Про Indirect Relative Jumps (**IRJ**): 
+* IRJ относительный переход
+
+
+```bash
+Opcode: xx010110 
+Arg 1: Source  
+Arg 2: Source
+Result addr: Unused (target ADD Source+Source=PC) 
+
+ 
+------------------------
+# test IRJ:
+# если 4 текущая + 8
+# должен прыгнуть на 12 
+
+# MOV 6 to reg_3
+0b10001100 #1 opcode MOV
+0b00000110 #2 arg1 source ImVal
+0b00000000 #3 arg2 unused
+0b00000011 #4 destination reg_3
+ 
+# IRJ ADD source+source=PC
+0b10010110 #1 opcode IRJ 6+2=8 result addr
+0b00000010 #2 arg1 source ImVal
+0b00000011 #3 arg2 source reg_3
+0b00000000 #4 unused
+
+# print 5
+0b10001100 #1 opcode MOV
+0b00000101 #2 arg1 source ImVal
+0b00000001 #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+
+# print 3
+0b10001100 #1 opcode MOV
+0b00000011 #2 arg1 source ImVal
+0b00000010 #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+```
+
+
+
+
+
+
+Про Conditional Relative Jumps (**CRJ**):
+* CRJ условный относительный переход, т.е. мы по условию выполняем прыжок по результату сложения адреса в PC
+* Применяется когда мы хотим просто прыгнуть по условию внутри if или цикла (без возврата) но без сохранения адреса возврата в стеке.
+
+```bash
+Opcode: xx0110xx и xx0111xx 
+Arg 1: Source  
+Arg 2: Source
+Result addr: ImVal 
+
+xx0111xx CRJ - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+xx0110xx CRJ - для остальных условий COND
+
+ 
+--------------------------
+# test CRJ:
+# если 4 текущая + 8
+# должен прыгнуть на 12 
+
+# print 1
+0b11000000 #1 opcode ADD
+0b00000000 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+ 
+# CRJ cond IF_EQUAL reg_1==reg_2
+0b11011000 #1 opcode CRJ +8
+0b00000001 #2 arg1 source reg_1
+0b00000010 #3 arg2 source reg_2
+0b00001000 #4 destination ImVal
+
+# print 5
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# print 6
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000010 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+```
+
+
+Про Indirect Conditional Relative CALL (**ICRC**):  
+* ICRC условный относительный переход с сохранением адреса возврата (т.е нам нужно выполнять RET)
+
+```bash
+Opcode: xx1101xx и xx1110xx 
+Arg 1: Source  
+Arg 2: Source
+Result addr: используется в роли Source для Result addr 
+
+xx1101xx ICRC - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
+xx1110xx ICRC - для остальных условий COND
+
+
+--------------------------------
+ 
+# test ICRC 
+# RET opcode 00010000 (16)
+const RET 0b00010000
+ 
+# MOV reg_4 8
+0b10001100 #1 opcode MOV
+0b00001000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000100 #4 destination reg_4
+
+# CRC cond IF_EQUAL reg_1==reg_2
+0b11111000 #1 opcode CRC +12
+0b00000001 #2 arg1 source reg_1
+0b00000010 #3 arg2 source reg_2
+0b00000100 #4 destination reg_4
+
+# print 4
+0b11000000 #1 opcode ADD
+0b00000011 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+
+# print 5
+0b11000000 #1 opcode ADD
+0b00000100 #2 arg1 source ImVal
+0b00000001 #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# RET
+RET        #1 opcode RET
+0b00000000 #2 arg1 source
+0b00000000 #3 arg2 source 
+0b00000000 #4 destination
+
+
+# JMP  
+0b10001100 #1 opcode MOV source destination
+0b00000000 #2 arg1 source ImVal
+0b00000000 #3 arg2 Unused
+0b00000110 #4 destination PC
+
+```
+  
+</details>
+
+<br>
+
+<details>
+<summary>Команда HALT: (unimplemented)</summary>
+
+У нас еще не реализована возможность завершить работу процессора, остановив счетчик программ PC или CLOCK - `HALT`  
+
+</details>
+
+<br>
+
+<details>
+<summary>Двухуровневая архитектура: (unimplemented)</summary>
+
+Двухуровневая архитектура, с 8-ми битными инструкциями для скорости и 32-х битными для мощности.
+
+</details>
 
 ---
 
