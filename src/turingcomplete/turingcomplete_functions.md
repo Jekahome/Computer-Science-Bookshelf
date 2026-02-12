@@ -1207,8 +1207,7 @@ RET         #1 opcode RET
 * изменение индекса регистра Stack Pointer (SP)
 * запись/чтение из стека RAM[SP]
 
-Для команд PUSH/POP необходимо ограничится одной инструкцией т.е. изменение SP должно происходить в железе. (unimplemented)
-
+Для команд PUSH/POP необходимо ограничится одной инструкцией т.е. изменение SP должно происходить в железе. А возможность реализовать стек используя REG_0 в роли SP осталась, просто область адресов нужно выбирать выше адресов стека. 
 
 Чтобы не потерять/затереть значение в регистре, в начале вызова функции делают PUSH (кладут значение в RAM «на хранение»), а в конце — POP (забирают обратно).    
 Это позволит делать функции с любым количеством аргументов, не боясь, что они перезапишут регистры основной программы.
@@ -1233,45 +1232,29 @@ Arg 2: Unused
 Result addr: Destination
 ```
 
+
+
+Реализация без 
 ```bash
 # test PUSH 
 
-# 1. set index
 # 2. PUSH
-
 # 1. POP
-# 2. set index
 # -------------
-# set SP 255
-0b10001100 #1 opcode MOV source destination
-0b11111111 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
-0b00000000 #4 destination reg_0
-
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000001 #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000100 #4 destination stack RAM
 # -------------
-# set SP 254
-0b10001100 #1 opcode MOV source destination
-0b11111110 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
-0b00000000 #4 destination reg_0
-
+ 
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000010 #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000100 #4 destination stack RAM
 # -------------
-# set SP 253
-0b10001100 #1 opcode MOV source destination
-0b11111101 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
-0b00000000 #4 destination reg_0
-
+ 
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000011 #2 arg1 source ImVal
@@ -1284,24 +1267,13 @@ Result addr: Destination
 0b00000000 #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
 
-# set SP 254
-0b10001100 #1 opcode MOV source destination
-0b11111110 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
-0b00000000 #4 destination reg_0
 # -------------
 # POP
 0b00010101 #1 opcode POP
 0b00001000 #2 arg1 stack RAM
 0b00000000 #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
-
-# set SP 255
-0b10001100 #1 opcode MOV source destination
-0b11111111 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
-0b00000000 #4 destination reg_0
-
+ 
 # POP
 0b00010101 #1 opcode POP
 0b00001000 #2 arg1 stack RAM

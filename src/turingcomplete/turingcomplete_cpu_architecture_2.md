@@ -343,14 +343,14 @@ B = 00000011 # 3
 
 Компонент ALU_CPU2:
 ```
-0 ADD
-1 SUB
-2 AND
-3 OR
-4 NOT
-5 XOR
-6 NAND
-7 NOR
+000 ADD
+001 SUB
+010 AND
+011 OR
+100 NOT
+101 XOR
+110 NAND
+111 NOR
 ```
 
 ![ALU_CPU2](/Computer-Science-Bookshelf/img/tc/ALU_CPU2.png)
