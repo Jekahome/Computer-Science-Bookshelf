@@ -1674,8 +1674,7 @@ const jump_start 4
 
 </details>
 
-<video controls width="100%" muted playsinline preload="metadata" 
-       onloadeddata="this.playbackRate = 0.25;">
+<video controls width="100%" playsinline preload="metadata">
     <source src="/Computer-Science-Bookshelf/img/tc/Dancing_Machine.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
 </video>
