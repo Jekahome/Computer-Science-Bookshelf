@@ -3,6 +3,7 @@
 * [Robot Racing](#robot-racing)
 * [AI Showdown](#ai-showdown)
 * [Unseen Fruit](#unseen-fruit)
+* [Delicious Order](#delicious-order)
 
 ---
 
@@ -1059,8 +1060,6 @@ RET 0 0 0
 <summary>Assembly Editor:</summary>
 
 ```bash
-const CALL 0b00001000
-const RET 0b00010000
 const jmp_while 64
 const jump_inc 84
 const jump_set_byte 100
@@ -1087,7 +1086,7 @@ const jump_set_byte 100
 
 # первое число сразу отдаем в REG_2
 0b10001100 19 0 0b00000010  
-#----------------------------
+#-------------------------------
 
 # byte_idx     REG_1
 # current_byte REG_2
@@ -1099,17 +1098,12 @@ const jump_set_byte 100
 0b00000010 # reg_2
 3          # mask для 2 младших бит
 0b00000111 # output
-
-# current_byte = current_byte >> 2;
-# 0b00001100 0b00000010 0 0b00000100 # MOV reg_2 to reg_4
-
+ 
 # ALU DIV
 0b01010100 # DIV reg_2=reg_2/4
 0b00000010
 4
 0b00000010
-
-#CALL 0 0 jump_fn_div
 
 # shift_count += 1;
 0b01000000 # ALU reg_3 ADD 1
@@ -1194,7 +1188,8 @@ jump_set_byte #4 destination
                                
 
 ```
- 
+  
+
 p.s. возможно, случайный перебор значений приведет к финишу, но реализация генератора псевдослучайных чисел требует больше арифметический операций чем в текущем ALU. 
 
 ---
@@ -1255,6 +1250,155 @@ p.s. возможно, случайный перебор значений при
 * 3 Enjoy the moment
 * 4 use action
 * 5 Shoot laser
+
+<details>
+<summary>Прототип:</summary>
+
+```rust
+fn main() {
+    // Входящие фрукты
+    let fruits = vec!["яблоко", "яблоко", "банан", "апельсин", "яблоко", "киви", "апельсин"];
+    
+    // уникальные фрукты
+    let mut unique_fruits = Vec::new();
+    
+    for fruit in fruits {
+
+        let mut found = false;
+        
+        // Проходим циклом по всему тому, что уже запомнили
+        for seen_fruit in &unique_fruits {
+            if seen_fruit == &fruit {
+                found = true;
+                break; // Нашли дубликат, выходим из внутреннего цикла
+            }
+        }
+
+        if found {
+            println!("Повтор: {}! Нажать кнопку.", fruit);
+        } else {
+            // Если не нашли, добавляем
+            unique_fruits.push(fruit);
+            println!("Пропускаем: {}", fruit);
+        }
+    }
+}
+```
+</details>
+
+<br>
+
+<details>
+<summary>Assembly Editor:</summary>
+
+```bash
+const jump_scan 44
+const jump_contains_fruit 60
+const jump_array_iteration 68
+const jump_add_fruit 84
+const jump_button_activation 100
+
+# MOV go to control place
+0b10001100 0 0 0b00000111 
+0b10001100 1 0 0b00000111 
+0b10001100 0 0 0b00000111
+0b10001100 1 0 0b00000111 
+0b10001100 1 0 0b00000111 
+0b10001100 1 0 0b00000111 
+0b10001100 1 0 0b00000111 
+0b10001100 0 0 0b00000111 
+0b10001100 1 0 0b00000111 
+0b10001100 2 0 0b00000111 
+0b10001100 1 0 0b00000111
+
+# jump_scan-----------------------
+# wait
+0b10001100 3 0 0b00000111 
+# MOV INPUT to reg_1
+0b00001100 0b00000111 0 0b00000001
+
+# if reg_1 != 92 
+0b01100001 #1 cond !=
+0b00000001 #2 arg1 source reg_0
+92         #3 arg2 source ImmVal
+jump_contains_fruit  #4
+
+# else continue
+0b10001100 jump_scan 0 6
+
+# -------------------------------
+# jump_contains_fruit
+# save SP reg_0 to reg_2
+0b00001100 0b00000000 0 0b00000010 # MOV
+# reset reg_0=0
+0b10001100 0 0 0b00000000 # MOV
+
+# jump_array_iteration------------ 
+# if reg_0 == reg_2
+0b00100000 #1 cond ==
+0b00000000 #2 arg1 source reg_0
+0b00000010 #3 arg2 source reg_2
+jump_add_fruit #4
+
+# if contains RAM[reg_0] == reg_1
+0b00100000 #1 cond ==
+0b00001000 #2 arg1 source RAM[reg_0]
+0b00000001 #3 arg2 source reg_1
+jump_button_activation #4
+
+# inc reg_0 if < reg_2
+# inc reg_0
+0b01000000 #1 opcode ADD reg_0+1 
+0b00000000 #2 arg1 source reg_0
+1          #3 arg2 source ImVal
+0b00000000 #4 destination reg_0 
+
+0b10001100 jump_array_iteration 0 6
+
+# jump_add_fruit ----------------
+# restore reg_0=reg_2
+0b00001100 0b00000010 0 0b00000000 # MOV
+
+# MOV reg_1 to RAM
+0b00001100 #1 opcode MOV
+0b00000001 #2 arg1 source INPUT
+0          #3 unused
+0b00001000 #4 destination RAM
+
+# inc reg_0
+0b01000000 #1 opcode ADD reg_0+1 
+0b00000000 #2 arg1 source reg_0
+1          #3 arg2 source ImVal
+0b00000000 #4 destination reg_0
+
+0b10001100 jump_scan 0 6
+# -------------------------------
+ 
+# jump_button_activation ------
+# if contains
+0b10001100 2 0 0b00000111 # MOV
+0b10001100 4 0 0b00000111 # MOV
+0b10001100 0 0 0b00000111 # MOV
+
+# restore reg_0=reg_2
+0b00001100 0b00000010 0 0b00000000 # MOV
+
+0b10001100 jump_scan 0 6 
+```
+</details>
+
+![Unseen Fruit](/Computer-Science-Bookshelf/img/tc/Unseen_Fruit.gif)
+
+---
+
+## Delicious Order
+
+
+
+
+
+
+
 
 ---
 

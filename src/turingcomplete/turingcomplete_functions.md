@@ -1233,8 +1233,7 @@ Result addr: Destination
 ```
 
 
-
-Реализация без 
+Реализация (auto-increment/decrement) 
 ```bash
 # test PUSH 
 
