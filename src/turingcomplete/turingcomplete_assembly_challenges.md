@@ -4,6 +4,7 @@
 * [AI Showdown](#ai-showdown)
 * [Unseen Fruit](#unseen-fruit)
 * [Delicious Order](#delicious-order)
+* [Dancing Machine](#dancing-machine)
 
 ---
 
@@ -1409,9 +1410,29 @@ jump_button_activation #4
 Она работает только если числа 8 бит (от 0 до 255)
 
 ```rust
+# fn display_ram_as_grid(counts: &[u8; 256]) {
+#    println!("\n--- RAM GRID DUMP (256 bytes) ---");
+#    println!("    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
+#    println!("  +------------------------------------------------");
+#    for row in 0..16 {
+#        print!("{:X}0| ", row);
+#        for col in 0..16 {
+#            let address = row * 16 + col;
+#            let value = counts[address];
+#            if value > 0 {
+#                print!("{:02X} ", value);
+#            } else {
+#                print!(".. ");
+#            }
+#        }
+#        println!();  
+#    }
+#    println!("-------------------------------------------------\n");
+# }
+
 fn main() {
     // Загрузка данных------------------------
-    let input = vec![10, 5, 1, 10, 2, 100, 5, 42, 15, 8, 4, 3, 250, 12, 7];
+    let input = vec![10, 5, 10, 10, 2, 100, 5, 42, 0, 8, 4, 3, 250, 3, 3];
     
     // Наша RAM. Каждая ячейка — это счетчик того, сколько раз встретилось число.
     // Если в задаче оценки от 0 до 255, массив должен быть на 256.
@@ -1423,14 +1444,15 @@ fn main() {
         let current_count = counts[value as usize];
         counts[value as usize] = current_count + 1;
     }
+    display_ram_as_grid(&counts);
 
-    // Результат---------------------------
+    // Результат-------------------------------
     // Просто проходим по всей памяти по порядку
     for score in 0..256 {
         // Если в ячейке не ноль, значит такое число было
         let mut how_many = counts[score as usize];
         while how_many > 0 {
-            println!("{}", score); // Выводим само число (индекс ячейки)
+            print!("{},", score); // Выводим само число (индекс ячейки)
             how_many -= 1;
         }
     }
@@ -1446,7 +1468,6 @@ fn main() {
 <summary>Assembly Editor:</summary>
 
 ```bash
-  
 const jump_while 124
 const jump_inc 140
 
@@ -1522,7 +1543,142 @@ jump_inc     #4 destination
  
 ![Delicious Order](/Computer-Science-Bookshelf/img/tc/Delicious_Order.gif)
 
+---
 
+## Dancing Machine
+
+> Задача:
+> 
+> На этом уровне вы получите только один вход, мы называем это начальным семенем (`seed`). Семя проходит через следующие шаги для получения псевдо-случайного числа (ГПСЧ).
+> 
+> В алгоритме ниже:
+> * "shl 1" означает сдвиг влево один раз
+> * "shl 2" означает сдвиг влево дважды
+> * "shr 1" означает сдвиг вправо один раз
+> 
+> ```
+> 8-ми битовый xorshift RNG:
+> 
+> temp1     = seed xor (seed shr 1)
+> temp2     = temp1 xor (temp1 sh 1)
+> next_seed = temp2 xor (temp2 shr 2)
+> ```
+> 
+> Затем, выведите `next_seed` по модулю 4, чтобы двигать робота. И наконец, используйте `next_seed` (до модуля) как `seed`, чтобы получить следующее число в танцевальной последовательности и повторите.
+> 
+> (Обратите внимание, что начальное семя никогда не будет 0)
+
+
+<details>
+<summary>Прототип:</summary>
+
+```rust
+fn main() {
+    let mut seed: u8 = 29; 
+    
+    println!("Начальное семя: {:08b} ({})", seed, seed);
+    println!("---------------------------------------");
+
+    for i in 1..=10 {
+        // 1: temp1 = seed xor (seed shr 1) 
+        let shr_1 = seed >> 1;// DIV 2
+        let temp1 = seed ^ shr_1;
+
+        // 2: temp2 = temp1 xor (temp1 shl 1) 
+        // заменяем shl 1 на сложение (temp1 + temp1)
+        // имитировать 8-битное переполнение как в LEG
+        let shl_1 = temp1.wrapping_add(temp1); 
+        let temp2 = temp1 ^ shl_1;
+
+        // 3: next_seed = temp2 xor (temp2 shr 2) 
+        let shr_2 = temp2 >> 2;// DIV 4
+        seed = temp2 ^ shr_2;
+
+        // 4: Получаем направление (next_seed % 4) 
+        // Используем побитовое И (AND 3), чтобы оставить только 2 нижних бита
+        let direction = seed & 3;
+
+        println!("Шаг {}: Направление = {}, Новый seed = {:08b} ({})", 
+                 i, direction, seed, seed);
+
+        // По условию, если seed станет 0, стоп
+        if seed == 0 { break; }
+    }
+}
+```
+
+</details>
+
+<br>
+
+<details>
+<summary>Assembly Editor:</summary>
+
+```bash
+# seed REG_0
+# temp1 REG_1
+# temp2 REG_2
+
+const jump_start 4
+
+0b00001100 7 0 0b00000000 #MOV INPUT to REG_0
+
+# 1: temp1 = seed xor (seed shr 1) 
+# seed shr 1
+ 
+0b01010100 # ALU DIV REG_1=REG_0/2
+0b00000000
+2
+0b00000001
+
+# temp1 = seed xor (seed shr 1) 
+0b00000101 # ALU XOR
+0b00000000 # seed 
+0b00000001 # temp1
+0b00000001 # temp1
+
+# 2: temp2 = temp1 xor (temp1 shl 1) 
+# temp1 shl 1
+0b00000000 # ALU ADD
+0b00000001 # temp1
+0b00000001 # temp1
+0b00000010 # temp2
+
+# temp2 = temp1 xor (temp1 shl 1)
+0b00000101 # ALU XOR
+0b00000001 # temp1 
+0b00000010 # temp2
+0b00000010 # temp2
+
+# 3: next_seed = temp2 xor (temp2 shr 2) 
+# temp2 shr 2
+0b01010100 # ALU DIV REG_0=REG_2/4
+0b00000010
+4
+0b00000000 # next_seed
+
+# next_seed = temp2 xor (temp2 shr 2) 
+0b00000101 # ALU XOR
+0b00000010 # temp2 
+0b00000000 # next_seed
+0b00000000 # next_seed
+
+# 4: direction = (next_seed % 4) 
+0b01000010 # ALU AND
+0b00000000 # next_seed 
+3          # mask 2 bit
+0b00000111 # OUTPUT
+
+0b10001100 jump_start 0 6 
+```
+
+</details>
+
+<video controls width="100%" muted playsinline preload="metadata" 
+       onloadeddata="this.playbackRate = 0.25;">
+    <source src="/Computer-Science-Bookshelf/img/tc/Dancing_Machine.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+</video>
 
 ---
 
