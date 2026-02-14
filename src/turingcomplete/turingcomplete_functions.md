@@ -1220,8 +1220,11 @@ Opcode: xx010111
 Arg 1: Source  
 Arg 2: Unused
 Result addr: Unused (target RAM) 
-
 ```
+
+p.s. свободные два байта можно было бы использовать:
+* `Arg 2` при наличии его, по прямому назначению для ALU
+* `Result addr` в роли инструкций ALU/Cond
 
 **Pop**
 
