@@ -12,6 +12,7 @@
 * [Functions](#functions-1)
     * [Текущая архитектура ISA процессора LEG](#Текущая-архитектура-isa-процессора-leg)
 * [Расширение opcode инструкций](#Расширение-opcode-инструкции)    
+* [Схема LEG](#Схема-leg)
 
 ---
 
@@ -1783,37 +1784,47 @@ jump_start #2 arg1 source ImVal
 
 </details>
 
+### Схема LEG
 
-* Компонент stack с автоматическим счетчиком SP:
+Компонент stack с автоматическим счетчиком SP:
+
 ![StackSP](/Computer-Science-Bookshelf/img/tc/StackSP.png)
 
-* Компонент ALU с DIV:
+Компонент ALU с DIV:
+
 ![ALU_CP2](/Computer-Science-Bookshelf/img/tc/ALU_CP2_DIV.png)
 
-* Компонент DIV:
+Компонент DIV:
+
 ![DIV](/Computer-Science-Bookshelf/img/tc/DIV.png)
 
-* Компонент [COND_CPU2](turingcomplete_cpu_architecture_2.html#conditionals)
+Компонент [COND_CPU2](turingcomplete_cpu_architecture_2.html#conditionals)
 
-* Компонент Control Unit (CU) — Блок управления
+Компонент Control Unit (CU) — Блок управления:
+
 ![Control Unit2](/Computer-Science-Bookshelf/img/tc/Control_Unit2.png)
  
-* Компонент Decoder 4 to 4 
+Компонент Decoder 4 to 4: 
+
 ![DEC4_4](/Computer-Science-Bookshelf/img/tc/DEC4_4.png)
 
-* Компонент Decoder 4 to 10 
+Компонент Decoder 4 to 10: 
+
 ![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
 
-* Компонент Stack адресов возврата
+Компонент Stack адресов возврата:
+
 ![Stack](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
 
-* Компонент Bus Master
+Компонент Bus Master:
+
 ![Bus_Master](/Computer-Science-Bookshelf/img/tc/Bus_Master.png)
 
-* Компонент MUX8Buf
+Компонент MUX8Buf:
+
 ![MUX8Buf](/Computer-Science-Bookshelf/img/tc/MUX8Buf_upg.png)
 
-LEG CPU2:
+**LEG CPU2:**
 
 ![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_CPU2.png)
  
