@@ -8,7 +8,10 @@
 
 ---
 
-Текущая архитектура ISA процессора:
+
+
+<details>
+<summary>Текущая архитектура ISA процессора:</summary>
 
 ISA (Instruction Set Architecture) — это архитектура набора команд ("язык", на котором процессор понимает команды):
 
@@ -76,13 +79,16 @@ V| bits
 5| xxxxx101   SUB
 
 ```
-
+</details>
 
 ## Add 5
 
 > Задача:
 >
 > Внесите инструкции в компонент памяти PROGRAM, что бы ваш компьютер считал входные данные, добавил к ним значение 5 и вывел результат.
+
+<details>
+<summary>Assembly Editor:</summary>
 
 ```bash
 Address 0 # копируем входные данные в REG 1
@@ -116,6 +122,7 @@ Instruction: 10011110 # 158
     Source 011 (REG 3)
     Destination 110 (OUTPUT)
 ```
+</details>
 
 ![Add 5](/Computer-Science-Bookshelf/img/tc/Add_5.png)
  
@@ -623,6 +630,7 @@ flowchart LR
     style Check1 fill:#f0f0f0,stroke:#666,stroke-width:2px
     style Check2 fill:#f0f0f0,stroke:#666,stroke-width:2px
 ```
+
 <details>
 <summary>Assembly Editor:</summary>
  

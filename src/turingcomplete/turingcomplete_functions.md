@@ -1352,7 +1352,6 @@ xx1010xx - для остальных условий COND
 # MOV opcode xx0011xx
 # CC opcode xx1010xx для остальных условий COND
 # CC opcode xx1011xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
-const CALL 0b00001000
 const RET 0b00010000
 #--------------------
 # expected behavior:
