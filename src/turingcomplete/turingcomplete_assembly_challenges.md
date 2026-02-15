@@ -2103,8 +2103,190 @@ RET 0 0 0
 
 ## Water World
 
+> Задача:
+> 
+> Нам нужна ваша помощь в поиске подходящего места для водной горки «Пиратский спуск». В частности, нам нужно место, способное вместить большой объем воды.
+> 
+> Ландшафт состоит из 16 столбцов. Чтобы получить высоту ландшафта в каждом столбце слева направо, прочтите входные данные 16 раз.
+> 
+> Затем в качестве ответа выведите **общий объем**, который может вместить ландшафт.
 
 
+Суть в том, что вода задерживается в "ямах". Чтобы понять, сколько воды над конкретным столбцом, нам нужно знать самый высокий столб слева от него и самый высокий столб справа от него.
+
+Вода над столбцом не может быть выше, чем самый низкий из двух его "крайних" соседей (левого и правого максимумов). Двигаясь с двух сторон, мы всегда уверены, что если мы обрабатываем левую сторону, то где-то справа точно есть стена не ниже текущей max_L.
+
+Алгоритм "Два указателя": 
+
+Идти с двух сторон одновременно.
+
+1. Ставим один указатель (`L`) на начало (0), другой (`R`) на конец (15).
+2. Храним переменные `max_L` (максимальная высота слева) и `max_R` (максимальная высота справа).
+3. **Логика:**
+    * Если `height[L]` меньше `height[R]`:
+        * Если `height[L]` больше или равен `max_L`, обновляем `max_L`.
+        * Иначе (если текущий столб ниже максимума), добавляем в ответ разницу: `max_L - height[L]`.
+        * Сдвигаем `L` вправо.
+    * Иначе (если `height[R]` меньше или равен `height[L]`):
+        * Если `height[R]` больше или равен `max_R`, обновляем `max_R`.
+        * Иначе, добавляем в ответ разницу: `max_R - height[R]`.
+        * Сдвигаем `R` влево.
+
+<br> 
+<details>
+<summary>Прототип:</summary>
+
+```rust
+# fn draw_world(landscape: &[u8; 16]) {
+#     let n = landscape.len();
+#     let mut water_level = [0u8; 16];
+#     
+#     // Предварительно рассчитываем уровень воды для визуализации
+#     // (Используем ту же логику: min(max_L, max_R))
+#     for i in 0..n {
+#         let max_l = *landscape[..=i].iter().max().unwrap_or(&0);
+#         let max_r = *landscape[i..].iter().max().unwrap_or(&0);
+#         water_level[i] = std::cmp::min(max_l, max_r);
+#     }
+# 
+#     let max_h = *landscape.iter().max().unwrap_or(&0);
+# 
+#     for level in (1..=max_h).rev() {
+#         print!("{:2} | ", level); // Шкала высоты слева
+#         for i in 0..n {
+#             if landscape[i] >= level {
+#                 print!("█ "); // Земля
+#             } else if water_level[i] >= level {
+#                 print!("≈ "); // Вода
+#             } else {
+#                 print!("  "); // Пустота
+#             }
+#         }
+#         println!();
+#     }
+# 
+#     println!("   +{}", "――".repeat(n));
+#     print!("     ");
+#     for i in 0..n { print!("{:X} ", i); } // Индексы в hex
+#     println!("\n");
+# }
+fn solve_water_world(ram: [u8; 16]) -> u32 {
+    let mut i_left = 0;           
+    let mut i_right = 15;         
+    let mut max_l = 0;          
+    let mut max_r = 0;          
+    let mut total_water = 0;    
+
+    while i_left <= i_right {
+        // Логика: обрабатываем ту сторону, где высота меньше, 
+        // так как вода ограничена самым низким "краем"
+        if ram[i_left] <= ram[i_right] {
+            if ram[i_left] >= max_l {
+                max_l = ram[i_left]; // Обновили левый пик
+            } else {
+                total_water += (max_l - ram[i_left]) as u32; // Нашли яму!
+            }
+            i_left += 1;
+        } else {
+            if ram[i_right] >= max_r {
+                max_r = ram[i_right]; // Обновили правый пик
+            } else {
+                total_water += (max_r - ram[i_right]) as u32; // Нашли яму!
+            }
+            i_right -= 1;
+        }
+    }
+    total_water
+}
+
+fn main() {
+    // Пример ландшафта (16 столбцов)
+    let landscape: [u8; 16] = [4,6,1,4,6,5,1,4,1,2,6,5,6,1,4,2];
+    draw_world(&landscape);
+    
+    let result = solve_water_world(landscape);
+    println!("Общий объем воды: {}", result);
+}
+```
+
+</details>
+<br>
+<details>
+<summary>Assembly Editor:</summary>
+
+```bash
+const CALL 0b00001000
+const RET 0b00010000
+const i_left 0b00000001  
+const i_right 0b00000010
+const max_l 0b00000011
+const max_r 0b00000100
+const temp_var 0b00000101
+const i_total 16 # результат в RAM[i_total]
+const ram 0b00001000
+const sp 0b00000000
+
+0b10001100 15 0 i_right #MOV 15 to i_right
+
+label jump_load_data
+0b01100100 sp 15 jump_reset_sp #Cond IF_GREATER sp > i_right
+0b00001100 7 0 ram #MOV INPUT to RAM[SP]
+0b01000000 sp 1 sp #ADD SP+=1   
+0b10001100 jump_load_data 0 6 #jump
+
+# reset SP
+label jump_reset_sp
+0b10001100 i_total 0 sp #MOV 0 to sp
+0b10001100 0 0 ram #MOV 0 to RAM[i_total]
+0b10001100 0 0 sp #MOV 0 to sp
+
+label jump_while
+0b00100100 i_left i_right jump_output #Cond IF_GREATER i_left > i_right
+
+0b00001100 i_right 0 sp  #MOV i_right to sp
+0b00001100 ram 0 temp_var #MOV RAM[i_right] to temp_var
+0b00001100 i_left 0 sp  #MOV i_left to sp
+0b00100100 ram temp_var jump_l_greater_r #Cond IF_GREATER RAM[i_left] > RAM[i_right]
+
+0b00100010 ram max_l jump_inc_total_l #Cond IF_LESS RAM[i_left] < max_l
+0b00001100 ram 0 max_l  #MOV RAM[i_left] to max_l
+0b10001100 jump_inc_left 0 6 #jump
+
+label jump_inc_total_l
+0b00000001 max_l ram temp_var #ALU SUB temp_var=max_l-RAM[i_left] 
+0b10001100 i_total 0 sp  #MOV i_total to sp
+0b00000000 ram temp_var ram #ALU ADD RAM[i_total]+=max_l-RAM[i_left]
+
+label jump_inc_left
+0b01000000 i_left 1 i_left #ALU ADD i_left+=1 
+
+0b10001100 jump_while 0 6 #jump
+
+#----------------------
+label jump_l_greater_r
+0b00001100 i_right 0 sp  #MOV i_right to sp
+0b00100010 ram max_r jump_inc_total_r #Cond IF_LESS RAM[i_right] < max_r
+0b00001100 ram 0 max_r  #MOV RAM[i_right] to max_r
+0b10001100 jump_dec_right 0 6 #jump
+
+label jump_inc_total_r
+0b00000001 max_r ram temp_var #ALU SUB temp_var=max_r-RAM[i_right] 
+0b10001100 i_total 0 sp  #MOV i_total to sp
+0b00000000 ram temp_var ram #ALU ADD RAM[i_total]+=max_r-RAM[i_right] 
+
+label jump_dec_right
+0b01000001 i_right 1 i_right #ALU SUB i_right-=1 
+
+0b10001100 jump_while 0 6 #jump
+
+label jump_output
+0b10001100 i_total 0 sp #MOV i_total to sp
+0b00001100 ram 0 7 #MOV RAM[i_total] to OUTPUT
+
+```
+</details>
+
+![Water World](/Computer-Science-Bookshelf/img/tc/Water_World.gif)
 
 ---
 

@@ -934,8 +934,7 @@ Control Unit (CU) — Блок управления:
 ![Functions Review](/Computer-Science-Bookshelf/img/tc/FunctionsReview.png)
 
 
-## Расширение opcode инструкции 
-(пусть компилятор выдохнет)
+## Расширение opcode инструкции
 
 У нас есть четыре бита `xx1111xx` для кодирования дополнительных инструкций, за вычетом пересечений получим +9 свободных комбинаций. 
 Не трогаем два старших бита, чтобы иметь возможность напрямую их использовать (Immediate values) с новыми режимами, более того `xxxxx1xx` 3-й бит конфликтует с режимом COND в новых комбинациях.
@@ -1349,46 +1348,58 @@ xx1010xx - для остальных условий COND
 
 ```bash
 # Сценарий проверки режима CC
-# reg_4 - Stack Pointer (SP)
-# reg_0 - RAM Pointer
-# CALL opcode 00001000 (8)
-# RET opcode 00010000 (16)
 # MOV opcode xx0011xx
 # CC opcode xx1010xx для остальных условий COND
 # CC opcode xx1011xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
 const CALL 0b00001000
 const RET 0b00010000
+#--------------------
+# expected behavior:
+# OUTPUT: 6, 7, 8, 6, 7, 8...
+#--------------------
+label jump_start
  
 # test CC IF 0==0
-0b11101000 #1 opcode CC
-0b00000000 #2 arg1 source ImVal
-0b00000000 #3 arg2 source ImVal
-12         #4 destination
+0b11101000   #1 CC
+0            #2 arg1 source ImVal
+0            #3 arg2 source ImVal
+jump_success #4 destination
+ 
+# print 7
+0b11000000 #1 ALU ADD
+4          #2 arg1 source ImVal
+3          #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
 
-# print 5
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000001 #3 arg2 source ImVal
+# test CC IF 1==0
+0b11101000   #1 CC
+1            #2 arg1 source ImVal
+0            #3 arg2 source ImVal
+jump_success #4 destination
+
+# print 8
+0b11000000 #1 ALU ADD
+4          #2 arg1 source ImVal
+4          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
 # always jump 
-0b11100000  #1 cond IF_EQUAL arg1 == arg2
+0b11100000  #1 COND IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-0           #4 destination
+jump_start  #4 destination
 
+label jump_success
 # print 6
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000010 #3 arg2 source ImVal
+0b11000000 #1 ALU ADD
+4          #2 arg1 source ImVal
+2          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
  
-# RET
-RET        #1 opcode RET
+RET        #1 RET
 0b00000000 #2 arg1 source
 0b00000000 #3 arg2 source 
 0b00000000 #4 destination
-
 ```
 
 </details>
@@ -1423,59 +1434,69 @@ xx1100xx - для остальных условий COND
 
 ```bash
 # Сценарий проверки режима ICC
-# reg_4 - Stack Pointer (SP)
-# reg_0 - RAM Pointer
-# CALL opcode 00001000 (8)
-# RET opcode 00010000 (16)
+
 # MOV opcode xx0011xx
 # CC opcode xx1011xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
 # CC opcode xx1010xx для остальных условий COND
 # ICC opcode xx1111xx для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
 # ICC opcode xx1100xx для остальных условий COND
-
+const RET 0b00010000
+#--------------------
+# expected behavior:
+# OUTPUT: 6,7,8,6,7,8...  
+#--------------------
+ 
+label jump_start
 # MOV 12 to reg_4
-0b10001100 #1 opcode MOV
-0b00001100 #2 arg1 source ImVal
-0b00000000 #3 arg2 source unused
-0b00000100 #4 destination reg_4
+0b10001100   #1 MOV
+jump_success #2 arg1 source ImVal
+0b00000000   #3 arg2 source unused
+0b00000100   #4 destination reg_4
 
-# ICC cond IF_EQUAL reg_1==reg_2
-0b11110000 #1 opcode ICC
-0b00000001 #2 arg1 source reg_1
-0b00000001 #3 arg2 source reg_2
-0b00000100 #4 destination reg_4
-
-# print 5
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000001 #3 arg2 source ImVal
-0b00000111 #4 destination OUTPUT
-
-# print 6
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000010 #3 arg2 source ImVal
-0b00000111 #4 destination OUTPUT
-
-# ICC cond IF_EQUAL reg_1==reg_2
-0b11110000 #1 opcode ICC
-0b00000001 #2 arg1 source reg_1
-0b00000000 #3 arg2 source reg_2
+# ICC cond IF_EQUAL 44==44
+0b11110000 #1 ICC
+44         #2 arg1 source ImVal
+44         #3 arg2 source ImVal
 0b00000100 #4 destination reg_4
 
 # print 7
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000011 #3 arg2 source ImVal
+0b11000000 #1 ALU ADD
+5          #2 arg1 source ImVal
+2          #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+0b10001100 jump_second_step 0 6 #jump
+
+label jump_success
+# print 6
+0b11000000 #1 ALU ADD
+4          #2 arg1 source ImVal
+2          #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+RET        #1 RET
+0b00000000 #2 arg1 source
+0b00000000 #3 arg2 source 
+0b00000000 #4 destination
+
+label jump_second_step
+# ICC cond IF_EQUAL reg_4==0
+0b01110000 #1 ICC
+0b00000100 #2 arg1 source reg_4
+0b00000000 #3 arg2 source ImVal
+0b00000100 #4 destination reg_4
+ 
+# print 8
+0b11000000 #1 ALU ADD
+4          #2 arg1 source ImVal
+4          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
 # JMP  
-0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
+0b10001100 #1 MOV source destination
+jump_start #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000110 #4 destination PC
-
-
 ```
 
 Плюс третий декодер источников специально для этого режима, и регистры заменились на прозрачные т.е. всегда LOAD, тогда может и декодеры для выбора источника не нужны?
@@ -1511,39 +1532,42 @@ Result addr: Unused (target ADD Source+Source=PC)
  
 ------------------------
 # test IRJ:
-# если 4 текущая + 8
-# должен прыгнуть на 12 
-
+#--------------------
+# expected behavior:
+# jump to jump_success
+# OUTPUT: 3,3...  
+#--------------------
+label jump_start
 # MOV 6 to reg_3
-0b10001100 #1 opcode MOV
-0b00000110 #2 arg1 source ImVal
-0b00000000 #3 arg2 unused
+0b10001100 #1 MOV
+6          #2 arg1 source ImVal
+0          #3 arg2 unused
 0b00000011 #4 destination reg_3
  
 # IRJ ADD source+source=PC
-0b10010110 #1 opcode IRJ 6+2=8 result addr
-0b00000010 #2 arg1 source ImVal
+0b10010110 #1 IRJ 2+6=8 result addr
+2          #2 arg1 source ImVal
 0b00000011 #3 arg2 source reg_3
-0b00000000 #4 unused
+0          #4 unused
 
 # print 5
-0b10001100 #1 opcode MOV
-0b00000101 #2 arg1 source ImVal
-0b00000001 #3 arg2 Unused
+0b10001100 #1 MOV
+5          #2 arg1 source ImVal
+0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
-
+ 
+label jump_success
 # print 3
-0b10001100 #1 opcode MOV
-0b00000011 #2 arg1 source ImVal
-0b00000010 #3 arg2 Unused
+0b10001100 #1 MOV
+3          #2 arg1 source ImVal
+0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
 
 # JMP  
-0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0b10001100 #1 MOV source destination
+jump_start #2 arg1 source ImVal
+0          #3 arg2 Unused
 0b00000110 #4 destination PC
-
 ```
 
 
@@ -1552,7 +1576,7 @@ Result addr: Unused (target ADD Source+Source=PC)
 
 
 Про Conditional Relative Jumps (**CRJ**):
-* CRJ условный относительный переход, т.е. мы по условию выполняем прыжок по результату сложения адреса в PC
+* CRJ условный относительный переход, т.е. мы по условию выполняем прыжок по результату сложения текущего адреса PC с значением из Result addr
 * Применяется когда мы хотим просто прыгнуть по условию внутри if или цикла (без возврата) но без сохранения адреса возврата в стеке.
 
 ```bash
@@ -1567,44 +1591,61 @@ xx0110xx CRJ - для остальных условий COND
  
 --------------------------
 # test CRJ:
-# если 4 текущая + 8
-# должен прыгнуть на 12 
-
-# print 1
-0b11000000 #1 opcode ADD
-0b00000000 #2 arg1 source ImVal
-0b00000001 #3 arg2 source ImVal
+#--------------------
+# expected behavior:
+# jump to jump_success
+# OUTPUT: 6,7,6,7...  
+#--------------------
+label jump_start
+# print 7
+0b11000000 #1 ADD
+4          #2 arg1 source ImVal
+3          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
  
-# CRJ cond IF_EQUAL reg_1==reg_2
-0b11011000 #1 opcode CRJ +8
-0b00000001 #2 arg1 source reg_1
-0b00000010 #3 arg2 source reg_2
-0b00001000 #4 destination ImVal
+# CRJ cond IF_EQUAL 0==0
+0b11011000 #1 CRJ +16
+0          #2 arg1 source ImVal
+0          #3 arg2 source ImVal
+16         #4 destination ImVal
 
 # print 5
-0b11000000 #1 opcode ADD
+0b11000000 #1 ADD
 0b00000100 #2 arg1 source ImVal
 0b00000001 #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
+label jump_second_step
+# CRJ cond IF_EQUAL 1==0
+0b11011000 #1 CRJ +8
+1          #2 arg1 source reg_1
+0          #3 arg2 source reg_2
+8          #4 destination ImVal
+
+# JMP  
+0b10001100 #1 MOV source destination
+jump_start #2 arg1 source ImVal
+0          #3 arg2 Unused
+0b00000110 #4 destination PC
+
+label jump_success
 # print 6
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000010 #3 arg2 source ImVal
+0b11000000 #1 ADD
+4          #2 arg1 source ImVal
+2          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
 # JMP  
-0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0b10001100 #1 MOV source destination
+jump_second_step #2 arg1 source ImVal
+0          #3 arg2 Unused
 0b00000110 #4 destination PC
 
 ```
 
 
 Про Indirect Conditional Relative CALL (**ICRC**):  
-* ICRC условный относительный переход с сохранением адреса возврата (т.е нам нужно выполнять RET)
+* ICRC Косвенный условный относительный переход с сохранением адреса возврата (т.е нам нужно выполнять RET)
 
 ```bash
 Opcode: xx1101xx и xx1110xx 
@@ -1618,56 +1659,100 @@ xx1110xx ICRC - для остальных условий COND
 
 --------------------------------
  
-# test ICRC 
+# test ICRC
+#--------------------
+# expected behavior:
+# jump to jump_success
+# OUTPUT: 5,6,7,5,6,7 ...  
+#-------------------- 
 # RET opcode 00010000 (16)
 const RET 0b00010000
- 
-# MOV reg_4 8
-0b10001100 #1 opcode MOV
-0b00001000 #2 arg1 source ImVal
+
+label jump_start
+# MOV reg_4 20
+0b10001100 #1 MOV
+20         #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000100 #4 destination reg_4
 
-# CRC cond IF_EQUAL reg_1==reg_2
-0b11111000 #1 opcode CRC +12
-0b00000001 #2 arg1 source reg_1
-0b00000010 #3 arg2 source reg_2
+# ICRC cond IF_EQUAL 1==1
+0b11111000 #1 ICRC +reg_4
+1          #2 arg1 source ImVal
+1          #3 arg2 source ImVal
 0b00000100 #4 destination reg_4
 
-# print 4
-0b11000000 #1 opcode ADD
-0b00000011 #2 arg1 source ImVal
-0b00000001 #3 arg2 source ImVal
+# print 6
+0b11000000 #1 ADD
+3          #2 arg1 source ImVal
+3          #3 arg2 source ImVal
+0b00000111 #4 destination OUTPUT
+
+# ICRC cond IF_EQUAL 1==0
+0b11111000 #1 ICRC +reg_4
+1          #2 arg1 source ImVal
+0          #3 arg2 source ImVal
+0b00000100 #4 destination reg_4
+
+# print 7
+0b11000000 #1 ADD
+4          #2 arg1 source ImVal
+3          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
 # JMP  
-0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
+0b10001100 #1 MOV source destination
+jump_start #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000110 #4 destination PC
 
-
+label jump_success
 # print 5
-0b11000000 #1 opcode ADD
-0b00000100 #2 arg1 source ImVal
-0b00000001 #3 arg2 source ImVal
+0b11000000 #1 ADD
+4          #2 arg1 source ImVal
+1          #3 arg2 source ImVal
 0b00000111 #4 destination OUTPUT
 
 # RET
-RET        #1 opcode RET
-0b00000000 #2 arg1 source
-0b00000000 #3 arg2 source 
-0b00000000 #4 destination
-
+RET #1 RET
+0 #2 arg1 source
+0 #3 arg2 source 
+0 #4 destination
 
 # JMP  
 0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+jump_start #2 arg1 source ImVal
+0          #3 arg2 Unused
 0b00000110 #4 destination PC
 
 ```
   
+</details>
+
+<br>
+
+<details>
+<summary>Команды ALU MUL,SIN,COS,: (unimplemented)</summary>
+
+Арифметичиеские операции - это основа вычислений, поэтому они должны быть максимально реализованы.
+
+* INC/DEC (увеличение/уменьшение на 1)
+* MUL/IMUL (умножение без/со знаком) 
+* DIV/IDIV (деление)
+
+Архитектура ALU через флаги.
+
+Флаги — это **специальные биты** (Zero, Carry, Sign и др.), которые автоматически обновляются процессором после арифметических или логических операций.
+* Z (Zero) Результат = 0
+* N (Negative) Результат < 0 (старший бит)
+* C (Carry) Была перенос/заём при сложении/вычитании
+* V (Overflow) Переполнение знакового числа
+
+**Зачем они нужны:**
+
+1. **Для условных переходов:** Позволяют выполнять `if/else`, `while` и `for` на основе результата предыдущей операции (например, «если результат равен нулю», «если число отрицательное»).
+2. **Для математики:** Позволяют обрабатывать переносы (carry) при вычислениях с числами больше разрядности процессора (например, 16-битное число на 8-битном процессоре).
+3. **Экономия ресурсов:** Позволяют принимать логические решения, не сохраняя промежуточные результаты вычислений в регистры.
+
 </details>
 
 <br>
@@ -1687,6 +1772,51 @@ RET        #1 opcode RET
 Двухуровневая архитектура, с 8-ми битными инструкциями для скорости и 32-х битными для мощности.
 
 </details>
+
+
+<details>
+<summary>Поддержка прерываний (Interrupts): (unimplemented)</summary>
+
+Возможность процессора мгновенно бросить выполнение текущей программы, если нажата клавиша или сработал таймер.
+
+Для многозадачности (переключение программ по таймеру) и мгновенной реакции на ввод-вывод.
+
+</details>
+
+
+* Компонент stack с автоматическим счетчиком SP:
+![StackSP](/Computer-Science-Bookshelf/img/tc/StackSP.png)
+
+* Компонент ALU с DIV:
+![ALU_CP2](/Computer-Science-Bookshelf/img/tc/ALU_CP2_DIV.png)
+
+* Компонент DIV:
+![DIV](/Computer-Science-Bookshelf/img/tc/DIV.png)
+
+* Компонент [COND_CPU2](turingcomplete_cpu_architecture_2.html#conditionals)
+
+* Компонент Control Unit (CU) — Блок управления
+![Control Unit2](/Computer-Science-Bookshelf/img/tc/Control_Unit2.png)
+ 
+* Компонент Decoder 4 to 4 
+![DEC4_4](/Computer-Science-Bookshelf/img/tc/DEC4_4.png)
+
+* Компонент Decoder 4 to 10 
+![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
+
+* Компонент Stack адресов возврата
+![Stack](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
+
+* Компонент Bus Master
+![Bus_Master](/Computer-Science-Bookshelf/img/tc/Bus_Master.png)
+
+* Компонент MUX8Buf
+![MUX8Buf](/Computer-Science-Bookshelf/img/tc/MUX8Buf_upg.png)
+
+LEG CPU2:
+
+![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_CPU2.png)
+ 
 
 ---
 
