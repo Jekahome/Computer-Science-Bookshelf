@@ -12,7 +12,7 @@
 * [Functions](#functions-1)
     * [Текущая архитектура ISA процессора LEG](#Текущая-архитектура-isa-процессора-leg)
 * [Расширение opcode инструкций](#Расширение-opcode-инструкции)    
-* [Схема LEG](#Схема-leg)
+* [Схема LEG](#Схема-leg-cpu2)
 
 ---
 
@@ -1346,7 +1346,7 @@ Result addr: Destination
 ```
 </details>
 
-**LEG CPU2:**
+## Схема LEG CPU2
 
 ![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_LEG_CPU2.png)
 
@@ -1375,7 +1375,7 @@ Result addr: Destination
 
 ![DEC4_4](/Computer-Science-Bookshelf/img/tc/DEC4_4.png)
 
-Компонент Decoder 4 to 10: 
+Компонент Decoder 4 to 10 ([был ранее показан](#Расширение-opcode-инструкции)): 
 
 ![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
 
