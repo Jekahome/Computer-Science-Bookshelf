@@ -1357,7 +1357,7 @@ Result addr: Destination
 
 ![StackSP](/Computer-Science-Bookshelf/img/tc/StackSP.png)
 
-Компонент ALU с DIV:
+Компонент ALU_CPU2 с DIV:
 
 ![ALU_CP2](/Computer-Science-Bookshelf/img/tc/ALU_CP2_DIV.png)
 
@@ -1379,9 +1379,9 @@ Result addr: Destination
 
 ![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
 
-Компонент Stack адресов возврата:
+Компонент StackR адресов возврата:
 
-![Stack](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
+![StackR](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
 
 Компонент Bus Master:
 
