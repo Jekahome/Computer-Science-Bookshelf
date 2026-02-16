@@ -581,8 +581,13 @@ expect 0 8 # expect reg_0 8
 Схема не изменилась с уровня [RAM](#ram).
 
 ```bash
-const jump_while 4  
-const jump_pop 28
+# Когда ввод равен 0, 
+# pop значение из стека и вывести его 
+
+# Когда вход не равен 0, 
+# push это значение в стек
+const start_while 4  
+const start_pop 28
 
 # reg_4 - Stack Pointer (SP)
 # reg_1 - INPUT
@@ -590,42 +595,41 @@ const jump_pop 28
 
 # ------------------------------
 # Stack Pointer (SP) reg_4
-0b11000000 #1 opcode ADD 0 255
+0b11000000 #1 ALU ADD 0 255
 0b00000000 #2 arg1 source ImVal
 0b11111111 #3 arg2 source 255
 0b00000100 #4 destination reg_4
 
- 
 #-------------------------------
-# jump_while
+# start_while
  
 # take INPUT
-0b10000000 #1 opcode ADD 0 INPUT
+0b10000000 #1 ALU ADD 0 INPUT
 0b00000000 #2 arg1 source ImVal
 0b00000111 #3 arg2 source INPUT
 0b00000001 #4 destination reg_1
 
 # cond IF_EQUAL 0 == reg_1
-0b10100000 #1 opcode cond IF_EQUAL 
+0b10100000 #1 cond IF_EQUAL 
 0b00000000 #2 arg1 source ImVal
 0b00000001 #3 arg2 source reg_1
-jump_pop #4 destination jump
+start_pop #4 destination jump
 
 # start push--------------------
 # reg_0=reg_4
-0b10000000 #1 opcode ADD 0+reg_4 
+0b10000000 #1 ALU ADD 0+reg_4 
 0b00000000 #2 arg1 source ImVal
 0b00000100 #3 arg2 source reg_4
 0b00000000 #4 destination reg_0
 
 # SP-1 push
-0b01000001 #1 opcode SUB reg_4-1
+0b01000001 #1 ALU SUB reg_4-1
 0b00000100 #2 arg1 source reg_4
 0b00000001 #3 arg2 source ImVal
 0b00000100 #4 destination reg_4
 
 # push INPUT значение в стек
-0b10000000 #1 opcode ADD 0 reg_1
+0b10000000 #1 ADD 0 reg_1
 0b00000000 #2 arg1 source ImVal
 0b00000001 #3 arg2 source reg_1
 0b00001000 #4 destination RAM
@@ -634,25 +638,25 @@ jump_pop #4 destination jump
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-jump_while #4 destination
+start_while #4 destination
 
 
-# jump_pop------------------
+# start_pop------------------
 # pop значение из стека и вывести его 
 # SP+1 pop
-0b10000000 #1 opcode ADD 1+reg_4
+0b10000000 #1 ADD 1+reg_4
 0b00000001 #2 arg1 source ImVal
 0b00000100 #3 arg2 source reg_4
 0b00000100 #4 destination reg_4
 
 # reg_0=reg_4
-0b10000000 #1 opcode ADD 0+reg_4 
+0b10000000 #1 ADD 0+reg_4 
 0b00000000 #2 arg1 source ImVal
 0b00000100 #3 arg2 source reg_4
 0b00000000 #4 destination reg_0
 
 # stack output
-0b10000000 #1 opcode ADD 0+reg_4
+0b10000000 #1 ADD 0+reg_4
 0b00000000 #2 arg1 source ImVal
 0b00001000 #3 arg2 source RAM
 0b00000111 #4 destination OUTPUT
@@ -663,13 +667,65 @@ jump_while #4 destination
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
-jump_while #4 destination
+start_while #4 destination
 
 ```
 
 </details>
 
+Использование opcod PUSH/POP с автоматическим SP в отдельном регистре.
 
+<details>
+<summary>Assembly Editor:</summary>
+
+```bash
+# Когда ввод равен 0, 
+# pop значение из стека и вывести его 
+
+# Когда вход не равен 0, 
+# push это значение в стек
+
+# reg_1 - INPUT
+#-----------------------------
+label jump_while
+# MOV INPUT to REG_1
+0b00001100 #1 MOV  
+0b00000111 #2 INPUT
+0          #3 unused
+0b00000001 #4 REG_1
+ 
+# cond IF_EQUAL 0 == reg_1
+0b10100000 #1 cond IF_EQUAL 
+0          #2 arg1 source ImVal
+0b00000001 #3 arg2 source reg_1
+jump_pop   #4 destination jump
+
+# push INPUT значение в стек
+0b00010111 #1 PUSH 
+0b00000001 #2 arg1 source reg_1
+0          #3 arg2 unused
+0b00001000 #4 destination RAM
+
+# always jump
+0b11100000  #1 cond IF_EQUAL arg1 == arg2
+0b00000000  #2 arg1 source ImVal
+0b00000000  #3 arg2 source ImVal
+jump_while #4 destination
+
+label jump_pop
+# pop значение из стека и вывести его 
+0b00010101 #1 POP
+0          #2 arg1 Unused
+0          #3 arg2 Unused
+0b00000111 #4 destination OUTPUT
+
+# always jump
+0b11100000 #1 cond IF_EQUAL arg1 == arg2
+0          #2 arg1 source ImVal
+0          #3 arg2 source ImVal
+jump_while #4 destination
+```
+</details>
 
 ---
 
@@ -1230,11 +1286,10 @@ p.s. свободные два байта можно было бы исполь�
 
 ```bash
 Opcode: xx010101
-Arg 1: 0b00001000 зафиксирован источник RAM  
+Arg 1: Unused (зафиксирован источник RAM 0b00001000)  
 Arg 2: Unused
 Result addr: Destination
 ```
-
 
 Реализация (auto-increment/decrement) 
 ```bash
@@ -1246,52 +1301,100 @@ Result addr: Destination
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000001 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0          #3 arg2 Unused
 0b00000100 #4 destination stack RAM
 # -------------
  
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000010 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0          #3 arg2 Unused
 0b00000100 #4 destination stack RAM
 # -------------
  
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000011 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0          #3 arg2 Unused
 0b00000100 #4 destination stack RAM
 # -------------
 # POP
 0b00010101 #1 opcode POP
-0b00001000 #2 arg1 stack RAM
-0b00000000 #3 arg2 Unused
+0          #2 arg1 Unused
+0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
 
 # -------------
 # POP
 0b00010101 #1 opcode POP
-0b00001000 #2 arg1 stack RAM
-0b00000000 #3 arg2 Unused
+0          #2 arg1 Unused
+0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
  
 # POP
 0b00010101 #1 opcode POP
-0b00001000 #2 arg1 stack RAM
-0b00000000 #3 arg2 Unused
+0          #2 arg1 Unused
+0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
  
 # JMP  
 0b10001100 #1 opcode MOV source destination
 0b00000000 #2 arg1 source ImVal
-0b00000000 #3 arg2 Unused
+0          #3 arg2 Unused
 0b00000110 #4 destination PC
 
 ```
-
-
 </details>
+
+**LEG CPU2:**
+
+![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_LEG_CPU2.png)
+
+(p.s. команда `CC` не используется в игре)
+
+
+Компонент stack с автоматическим счетчиком SP:
+
+![StackSP](/Computer-Science-Bookshelf/img/tc/StackSP.png)
+
+Компонент ALU с DIV:
+
+![ALU_CP2](/Computer-Science-Bookshelf/img/tc/ALU_CP2_DIV.png)
+
+Компонент DIV:
+
+![DIV](/Computer-Science-Bookshelf/img/tc/DIV.png)
+
+Компонент [COND_CPU2](turingcomplete_cpu_architecture_2.html#conditionals)
+
+Компонент Control Unit (CU) — Блок управления:
+
+![Control Unit2](/Computer-Science-Bookshelf/img/tc/Control_Unit2.png)
+ 
+Компонент Decoder 4 to 4: 
+
+![DEC4_4](/Computer-Science-Bookshelf/img/tc/DEC4_4.png)
+
+Компонент Decoder 4 to 10: 
+
+![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
+
+Компонент Stack адресов возврата:
+
+![Stack](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
+
+Компонент Bus Master:
+
+![Bus_Master](/Computer-Science-Bookshelf/img/tc/Bus_Master.png)
+
+Компонент MUX8Buf:
+
+![MUX8Buf](/Computer-Science-Bookshelf/img/tc/MUX8Buf_upg.png)
+
+ 
+<br>
+
+**Все команды ниже не будут применяться в уровнях игры.**
 
 <br>
 
@@ -1570,11 +1673,6 @@ jump_start #2 arg1 source ImVal
 0b00000110 #4 destination PC
 ```
 
-
-
-
-
-
 Про Conditional Relative Jumps (**CRJ**):
 * CRJ условный относительный переход, т.е. мы по условию выполняем прыжок по результату сложения текущего адреса PC с значением из Result addr
 * Применяется когда мы хотим просто прыгнуть по условию внутри if или цикла (без возврата) но без сохранения адреса возврата в стеке.
@@ -1783,49 +1881,11 @@ jump_start #2 arg1 source ImVal
 
 </details>
 
-### Схема LEG
+### Схема LEG extend
 
-Компонент stack с автоматическим счетчиком SP:
-
-![StackSP](/Computer-Science-Bookshelf/img/tc/StackSP.png)
-
-Компонент ALU с DIV:
-
-![ALU_CP2](/Computer-Science-Bookshelf/img/tc/ALU_CP2_DIV.png)
-
-Компонент DIV:
-
-![DIV](/Computer-Science-Bookshelf/img/tc/DIV.png)
-
-Компонент [COND_CPU2](turingcomplete_cpu_architecture_2.html#conditionals)
-
-Компонент Control Unit (CU) — Блок управления:
-
-![Control Unit2](/Computer-Science-Bookshelf/img/tc/Control_Unit2.png)
+![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_LEG_CPU2_ex.png)
  
-Компонент Decoder 4 to 4: 
 
-![DEC4_4](/Computer-Science-Bookshelf/img/tc/DEC4_4.png)
-
-Компонент Decoder 4 to 10: 
-
-![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
-
-Компонент Stack адресов возврата:
-
-![Stack](/Computer-Science-Bookshelf/img/tc/Stack2v.png)
-
-Компонент Bus Master:
-
-![Bus_Master](/Computer-Science-Bookshelf/img/tc/Bus_Master.png)
-
-Компонент MUX8Buf:
-
-![MUX8Buf](/Computer-Science-Bookshelf/img/tc/MUX8Buf_upg.png)
-
-**LEG CPU2:**
-
-![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_CPU2.png)
  
 
 ---

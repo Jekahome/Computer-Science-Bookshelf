@@ -1008,8 +1008,8 @@ jump_set_byte #4 destination
 # jump_set_byte
 # current_byte = PACKED[byte_idx];
 0b00010101 #1 opcode POP
-0b00001000 #2 arg1 stack RAM
-0b00000000 #3 arg2 Unused
+0          #2 arg1 Unused
+0          #3 arg2 Unused
 0b00000010 #4 destination reg_2
 
 0b10001100 jmp_while 0 6    
@@ -1146,8 +1146,8 @@ jump_set_byte #4 destination
 # jump_set_byte
 # current_byte = PACKED[byte_idx];
 0b00010101 #1 opcode POP
-0b00001000 #2 arg1 stack RAM
-0b00000000 #3 arg2 Unused
+0          #2 arg1 Unused
+0          #3 arg2 Unused
 0b00000010 #4 destination reg_2
 
 0b10001100 jmp_while 0 6    
@@ -1979,9 +1979,11 @@ fn command(source: u8, dest: u8) {
     println!("OUT: 5 (ВКЛ магнит)");  // поднять диск
     println!("OUT: {} (Едем к цели)", dest); // к цели
     println!("OUT: 5 (ВЫКЛ магнит)");  // опустить диск
+    println!("---");
 }
 
 fn hanoi(disk_nr: i32, source: u8, dest: u8, spare: u8) {
+    println!("disk_nr={disk_nr}");
     if disk_nr == 0 {
         command(source, dest);
     } else {
@@ -2010,6 +2012,7 @@ fn main() {
 }
 ```
 </details>
+
 <br>
 <details>
 <summary>Assembly Editor:</summary>
@@ -2036,9 +2039,9 @@ const temp_var 0b00000000 # REG_0
 
 #-------------------------------------------------------
 label jump_hanoi
-# opcode Cond IF_EQUAL if disk_nr == 0 
+#Cond IF_EQUAL if disk_nr == 0 
 0b01100000 disk_nr 0 jump_command  
-
+ 
 # save local vars 
 0b00010111 disk_nr 0 0 #PUSH disk_nr to stack 
 0b00010111 source 0 0 #PUSH source to stack 
@@ -2056,10 +2059,10 @@ label jump_hanoi
 CALL 0 0 jump_hanoi
 
 # restor local vars
-0b00010101 0b00001000 0 spare #POP to spare
-0b00010101 0b00001000 0 destination #POP to destination
-0b00010101 0b00001000 0 source #POP to source
-0b00010101 0b00001000 0 disk_nr #POP to disk_nr
+0b00010101 0 0 spare #POP to spare
+0b00010101 0 0 destination #POP to destination
+0b00010101 0 0 source #POP to source
+0b00010101 0 0 disk_nr #POP to disk_nr
 
 # 2. Перемещаем сам диск
 CALL 0 0 jump_command
@@ -2081,10 +2084,10 @@ CALL 0 0 jump_command
 CALL 0 0 jump_hanoi
 
 # restor local vars
-0b00010101 0b00001000 0 spare #POP to spare
-0b00010101 0b00001000 0 destination #POP to destination
-0b00010101 0b00001000 0 source #POP to source
-0b00010101 0b00001000 0 disk_nr #POP to disk_nr
+0b00010101 0 0 spare #POP to spare
+0b00010101 0 0 destination #POP to destination
+0b00010101 0 0 source #POP to source
+0b00010101 0 0 disk_nr #POP to disk_nr
 
 RET 0 0 0 
 #-------------------------------------------------------
