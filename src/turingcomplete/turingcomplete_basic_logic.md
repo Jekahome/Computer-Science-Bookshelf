@@ -106,7 +106,7 @@ Body всегда к своему питанию (P-MOS к Vdd, N-MOS к GND)
 | 0 | 0 | 0 |
 | 1 | 0 | 1 |
 
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -169,7 +169,7 @@ fn main() {
 | 0 | 0 | 1 |
 | 1 | 1 | 1 |
 
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -237,7 +237,7 @@ fn main() {
 | 1 | 1 | 0 |
 
  
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -328,7 +328,7 @@ fn main() {
   * ![NAND](/Computer-Science-Bookshelf/img/tc/NAND.png)
 * NAND можно получить через NOR `!(A && B) ≡ (A NOR A) OR (B NOR B)`
 
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -412,7 +412,7 @@ fn main() {
 * преобразуем AND в NAND
   * `!(A || B) ≡ !(!A NAND !B)`     
  
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -476,7 +476,7 @@ fn main() {
 | 1  | 0 | 1 |
 
 
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -579,7 +579,7 @@ out 0 1 0 0
 
 ```
 
-```rust
+```rust,editable
 # const NAME_WIDTH: usize = 4;
 # fn print_truth_table(name: &str, gate: fn(u8, u8) -> u8) {
 #     println!("|{:^width$}| 0 | 1 |", name, width = NAME_WIDTH);
@@ -701,13 +701,6 @@ fn main() {
   </iframe>
 </div> 
  
-
-
-
-
-
- 
-
 ---
 
 <!-- Feedback -->

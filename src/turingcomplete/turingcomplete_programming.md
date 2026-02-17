@@ -8,8 +8,6 @@
 
 ---
 
-
-
 <details>
 <summary>Текущая архитектура ISA процессора:</summary>
 
@@ -90,7 +88,7 @@ V| bits
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 Address 0 # копируем входные данные в REG 1
 Instruction: 10110001 # 177
     MODE COPY
@@ -133,7 +131,6 @@ Instruction: 10011110 # 158
 > [!TIP]
 > Разблокирует `Robotron 9000+`
 
-
 Сколько будет: *$2 \pi \times 1$* ?
 
 > Задача:
@@ -154,7 +151,7 @@ Instruction: 10011110 # 158
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 # Получить входные данные r
 0b10110001 # copy input (r) to reg_1
 0b10001010 # copy reg_1 to reg_2
@@ -242,7 +239,7 @@ add # reg_1 + reg_2 => reg_3
 Используя маску `00000011` (3) для вытаскивания 2-х младших бит у любого числа, мы получаем его остаток от деления на 4.
 
 
-```rust
+```rust,editable
 fn main() {
     let nmod = 4;
     let n = 13;
@@ -255,7 +252,6 @@ fn main() {
     println!("{:08b} # {n} \n& \n{:08b} # 3 mask\n--------\n{:08b} # {}",n,mask, n & mask, n & mask);
 }
 ```
-
 
 Assembly Editor:
 ```bash
@@ -270,7 +266,6 @@ Assembly Editor:
 0b01000011 # calc reg_1 AND reg_2 to reg_3
 
 0b10011110 # copy reg_3 to output 
-
 ```
 
 ---
@@ -292,7 +287,7 @@ Assembly Editor:
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 # prepare -------------------------------------
 
 # ROM[0]
@@ -324,17 +319,15 @@ Assembly Editor:
 # ROM[8]
 0b11000110 # conditions 110 "REG3 ≥ 0" (rewriting to start while)
            # PC=reg_0
-
 ```
 </details>
 
 По наличию логики обратной связи, когда нам присылают 1 если мы превысили число пароля, следует что в пароле несколько чисел. И если мы превысили значение то нужно начать перебор с 0.
 
-
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 # prepare -------------------------------------
 
 # ROM[0]
@@ -376,7 +369,6 @@ Assembly Editor:
 
 # ROM[11]
 0b11000100 # conditions: 100 always 1. For rewrite PC=0
-
 ```
 </details>
 
@@ -425,7 +417,7 @@ Action for `Robot 9000+`:
 
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 shoot
 out
 
@@ -634,7 +626,7 @@ flowchart LR
 <details>
 <summary>Assembly Editor:</summary>
  
-```bash
+```
 # Создадим команды для ассемблера:
 const left 0b00000000           # reg_0=0
 const move 0b00000001           # reg_0=1
@@ -720,8 +712,7 @@ flowchart LR
 <details>
 <summary>Assembly Editor:</summary>
 
- 
-```bash
+```
 # Создадим команды для ассемблера:
 const left 0b00000000           # reg_0=0
 const move 0b00000001           # reg_0=1

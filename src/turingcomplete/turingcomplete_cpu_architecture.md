@@ -183,7 +183,6 @@ D2 D1 D0
 * [3 Bit Decoder](turingcomplete_arithmetic.html#3-bit-decoder)
 * [8 Bit Switch (SWC)](turingcomplete_memory#bit-switch-tri-state-buffer)
 
- 
 
 Проверка:
 ```
@@ -212,7 +211,6 @@ Instruction: 00000110
   </iframe>
 </div> 
 
-
 ---
 
 ## Instruction Decoder
@@ -226,7 +224,6 @@ Instruction: 00000110
 > Задача: Постройте "декодер", который будет определять в каком режиме наш компьютер находится, основываясь на 2-х битах которые вы до сих пор не использовали.
 
 Что бы отличать 4 инструкции OPCODE (Operation Code — код операции), они будут кодировать первыми (старшими) двумя битами:
-
 
 
 ```
@@ -328,7 +325,6 @@ OPCODE:
 
 В режиме CALC (ALU), Conditions и Immediate Values декодеры для Source/Destination не нужны
  
-
 ---
 
 ## Program
@@ -655,7 +651,6 @@ RAM в симуляторе не понимает, что в поле данны
 0: 0 1 2 3 4 5 6 7
 8: 8 9 16
 ```
-
 
 <details>
 <summary>Код для создания данных RAM</summary> 
@@ -1024,7 +1019,6 @@ number:address
 
 ## Conditions
 
-
 > Задача: 
 > На этом уровне на вход подаётся значение и 3 бита условия (8 возможных комбинации).
 > 
@@ -1099,7 +1093,6 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 * [Bit Switch (tri-state buffer)](turingcomplete_memory#bit-switch-tri-state-buffer)
 
 
-
 <div class="sim-wrapper" data-circuit-id="35">
   <button class="sim-fullscreen-btn" data-circuit-id="35">⛶</button>
   <iframe 
@@ -1159,7 +1152,6 @@ COND_OK = O0 | O1 | O2 | O3 | O4 | O5 | O6 | O7
 
 Необходимые компоненты:
 * [8 bit и 1 bit Multuplexers (MUX)](turingcomplete_memory.html#8-bit-switch-and-8-bit-multuplexers-mux-tri-state-buffer)
-
  
 ---
 

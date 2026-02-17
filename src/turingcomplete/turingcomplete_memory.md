@@ -280,7 +280,6 @@ Multuplexers (MUX / Мультиплексер)
   </iframe>
 </div> 
 
-
 Для байта — то же самое, но 8 раз, по одному биту.
 
 <div class="sim-wrapper" data-circuit-id="16">
@@ -293,7 +292,6 @@ Multuplexers (MUX / Мультиплексер)
       loading="lazy">
   </iframe>
 </div> 
-
  
 ![Input Selector](/Computer-Science-Bookshelf/img/tc/Input_Selector.png)
 
@@ -326,7 +324,6 @@ Multuplexers (MUX / Мультиплексер)
       loading="lazy">
   </iframe>
 </div> 
-
 
 ![The Bus (Шина)](/Computer-Science-Bookshelf/img/tc/The_Bus.png)
  
@@ -432,7 +429,6 @@ EO=1, D=0, Output=0
 DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
 ```
 
-
 <div class="sim-wrapper" data-circuit-id="18">
   <button class="sim-fullscreen-btn" data-circuit-id="18">⛶</button>
   <iframe 
@@ -443,8 +439,6 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
       loading="lazy">
   </iframe>
 </div> 
-
- 
 
 ![Saving Gracefully](/Computer-Science-Bookshelf/img/tc/Saving_Gracefully.png)
 
@@ -496,8 +490,6 @@ DelayIn = (Save AND Value) OR (NOT Save AND OldIn)
   |  0 |   1 |  1 |  0 | set                |
   |  1 |   0 |  0 |  1 | reset              |
   |  0 |   0 |  1 |  1 | ошибка (запрещено) |
-
-
 
 
 <div class="sim-wrapper" data-circuit-id="42">
@@ -738,8 +730,6 @@ Positive Edge Triggered D Flip Flop
 
 Если на входе D поставить дополнительный двухвходовый элемент И и инверсный выход триггера /Q соединить с одним из входов элемента И, а на второй вход подать сигнал EI, то получим T-триггер с дополнительным разрешением по входу
  
- 
-
 ---
 
 ## Saving Bytes
@@ -996,11 +986,6 @@ A B | addr
       loading="lazy">
   </iframe>
 </div> 
-
-
-
-
-
 
 
 ---

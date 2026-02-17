@@ -10,7 +10,8 @@ smart-punctuation = false
 no-section-label = false
 additional-js = ["js/mermaid.min.js", "js/mermaid-init.js", "js/general.js","js/formbutton-v1.min.js"]
 additional-css = ["css/circuitjs.css"]
- 
+copy-button = true  
+editable-highlight = true
 
 [output.html.print]
 enable = false    

@@ -13,6 +13,8 @@
     * [Текущая архитектура ISA процессора LEG](#Текущая-архитектура-isa-процессора-leg)
 * [Расширение opcode инструкций](#Расширение-opcode-инструкции)    
 * [Схема LEG](#Схема-leg-cpu2)
+* [Создание программы Ассемблер](#Создание-программы-Ассемблер)
+* [Готовый Ассемблер](#Готовый-Ассемблер)
 
 ---
 
@@ -109,7 +111,7 @@ Hexadecimal: FFFF
 384 mod 256 = 128
 ```
 
-```rust
+```rust,editable
 fn main() {
     let x: u8 = 0b1100_0000; // 192
 
@@ -204,7 +206,7 @@ fn main() {
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 const jump_save_to_ram 4
 const jump_output_ram 20
 const jump_continue_output 24
@@ -230,7 +232,6 @@ const iterations 32
 0b00000001 #2 arg1 source ImVal
 0b00000000 #3 arg2 source reg_0 
 0b00000000 #4 destination reg_0
-
 
 # если reg_0 >= 32 то начать выводить
 0b01100101 #1 cond reg_0 >= arg2
@@ -373,7 +374,7 @@ jump_continue_output
 
 Деление - это цикл вычитания знаменателя с числителя пока числитель больше знаменателя, в остатке числителя остается остаток, а количество итераций цикла это частное.
 
-```bash
+```
 Dividend = 7
 Divisor = 3
 Quotient = 0
@@ -383,7 +384,7 @@ while Dividend >= Divisor:
 Remainder = Dividend
 ```
 
- ```rust
+ ```rust,editable
  fn divide(mut a: u8, b: u8) -> (u8, u8) {
     let mut quotient: u8 = 0;
 
@@ -411,7 +412,7 @@ fn main() {
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 const jump_while 12  
 const jump_output 28
 # 1. Dividend input to reg_1
@@ -521,7 +522,7 @@ set_input 123
 
 Assembly Editor:
 
-```bash
+```
 set_input 45
 expect 7 45 # expect Output 45
 0b10000000 #1 opcode ADD 0 INPUT
@@ -580,7 +581,7 @@ expect 0 8 # expect reg_0 8
 
 Схема не изменилась с уровня [RAM](#ram).
 
-```bash
+```
 # Когда ввод равен 0, 
 # pop значение из стека и вывести его 
 
@@ -640,7 +641,6 @@ start_pop #4 destination jump
 0b00000000  #3 arg2 source ImVal
 start_while #4 destination
 
-
 # start_pop------------------
 # pop значение из стека и вывести его 
 # SP+1 pop
@@ -662,7 +662,6 @@ start_while #4 destination
 0b00000111 #4 destination OUTPUT
  
 # ------------------------
-  
 # always jump
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
@@ -678,7 +677,7 @@ start_while #4 destination
 <details>
 <summary>Assembly Editor:</summary>
 
-```bash
+```
 # Когда ввод равен 0, 
 # pop значение из стека и вывести его 
 
@@ -795,8 +794,6 @@ jump_while #4 destination
 >
 > Гибрид (аппаратный стек для адресов) нужен просто для того, чтобы вы не думали об адресах возврата вообще. Они на уровне железа сохраняются в отдельной памяти, и вам не нужно тратить такты на вычисление адреса в RAM при каждой команде CALL или RET. Весь ваш стек в RAM остается только для ваших непосредственных данных - аргументов функций, локальных переменных, массивов и расчетов...
 
-
-
 Поставим компонент Stack специально для инструкций CALL / RET. А для вычислений и деления использовать SP (Stack Pointer) и RAM.
 
 Нам нужно добавить в схему компонент Stack, но подключить его не к общей шине данных, а к шине адреса и управляющим сигналам CALL / RET
@@ -888,7 +885,7 @@ Argument 1/Argument 2/Result address 8bit:
 
 Проверка механизма CALL и RET. Реализуем функцию удвоения числа и вызовем ее два раза.
 
-```bash
+```
 # reg_4 - Stack Pointer (SP)
 # reg_0 - RAM Pointer
 # reg_1 - arg_1
@@ -962,7 +959,6 @@ RET         #1 opcode RET
 
 ---
 
-
 *Логика разбора Opcode напрашивается в отдельную коробочку Control Unit (CU) — Блок управления*
  * (чтобы код не сломал процессор) Убедиться, что RET и CALL не конфликтуют с COND. Например, что будет, если написать инструкцию, где включены RET и/или CALL в opcode для COND?
 
@@ -970,7 +966,6 @@ Control Unit (CU) — Блок управления:
 
 ![Control Unit (CU) — Блок управления](/Computer-Science-Bookshelf/img/tc/Control_Unit.png)
  
-
 Что есть:
 * режим COND 
     * данные берет от исчточников (Argument 1 и Argument 2)
@@ -983,8 +978,7 @@ Control Unit (CU) — Блок управления:
     * не использует источники (Argument 1 и Argument 2) и Result address
 * режим Immediate values
 * режим ALU
-    * всегда работа через него, что бы скопировать один исчочник в другой нужно выполнять обработку + ADD что занимает 104 тика задержки
-
+    * всегда работа через него, что бы скопировать один источник в другой, нужно выполнять обработку + ADD, что тратит тики задержки
 
 Обновленная версия (более понятная)
 
@@ -1047,14 +1041,11 @@ x    x|0101|x x
 1 0 0 0   |
 0 0 0 0   |
 ----------|-------|
-
 ```
-
 
 Для декодирования 4 бит на 10 вариантов, реализуем неполный декодер 4 на 10 `DEC4_10`
 
 ![DEC4_10](/Computer-Science-Bookshelf/img/tc/DEC4_10.png)
-
 
 #### 1. Передача данных
 
@@ -1065,7 +1056,7 @@ x    x|0101|x x
 * **LOAD**: память → регистр
 * **STORE**: регистр → память
 
-```bash
+```
 Команда MOV
 Нам нужна операция MOV, что бы мы могли записать данные, минуя ALU
 
@@ -1124,7 +1115,6 @@ const RET 0b00010000
 0b00000000 #2 arg1 source ImVal
 0b00000001 #3 arg2 Unused
 0b00000110 #4 destination PC
-
 ```
 
 </details>
@@ -1136,18 +1126,17 @@ const RET 0b00010000
 Без них нет циклов, условий (if, while, for, match), функций.
 
 <details>
-<summary>Команда Conditional Jump (CJMP)</summary>
+<summary>Команда Conditional Jump (CJ)</summary>
 
-**CJMP** - Условный переход реализован через команду COND с Result Address в PC:
+**CJ** - Условный переход реализован через команду COND с Result Address в PC:
 
-```bash
-# CJMP always 
+```
+# CJ always 
 0b11100000  #1 cond IF_EQUAL arg1 == arg2
 0b00000000  #2 arg1 source ImVal
 0b00000000  #3 arg2 source ImVal
 0           #4 destination
 ```
-
 </details>
 
 <br>
@@ -1157,14 +1146,13 @@ const RET 0b00010000
 
 **JMP** безусловный переход реализован через MOV с Result Address в PC:
 
-```bash
+```
 # JMP  
 0b10001100 #1 opcode MOV source destination
 0b00000000 #2 arg1 source ImVal
 0b00000000 #3 arg2 Unused
 0b00000110 #4 destination PC
 ```
- 
 </details>
 
 ---
@@ -1174,10 +1162,25 @@ const RET 0b00010000
 <details>
 <summary>CALL и RET</summary>
 
+Команда CALL:
+```
+Opcode: 0b00001000
+Arg 1: Unused
+Arg 2: Unused
+Result addr: Destination PC
+```
+ 
+Команда RET:
+```
+Opcode: 0b00010000
+Arg 1: Unused
+Arg 2: Unused
+Result addr: Unused (Destination PC)
+```
+
 Проверка механизма **CALL** и **RET**. Реализуем функцию удвоения числа и вызовем ее два раза.
 
-```bash 
-# reg_4 - Stack Pointer (SP)
+```
 # reg_0 - RAM Pointer
 # reg_1 - arg_1
 # reg_2 - result
@@ -1190,19 +1193,19 @@ const RET 0b00010000
 # first call fn ----------------------
 # set arg_1=5 
 0b11000000 #1 opcode ADD 5+0
-0b00000101 #2 arg1 source ImVal
-0b00000000 #3 arg2 source ImVal
+5          #2 arg1 source ImVal
+0          #3 arg2 source ImVal
 0b00000001 #4 destination reg_1
 
 # CALL fn double
 CALL        #1 opcode CALL
-0b00000000  #2 arg1 source unused
-0b00000000  #3 arg2 source unused
+0           #2 arg1 source unused
+0           #3 arg2 source unused
 jump_fn_double #4 destination PC
 
 # output result
 0b10000000 #1 opcode ADD 0+reg_2
-0b00000000 #2 arg1 source ImVal
+0          #2 arg1 source ImVal
 0b00000010 #3 arg2 source reg_2
 0b00000111 #4 destination OUTPUT
 # ------------------------------------
@@ -1210,19 +1213,19 @@ jump_fn_double #4 destination PC
 # second call fn----------------------
 # set arg_1=8 
 0b11000000 #1 opcode ADD 8+0
-0b00001000 #2 arg1 source ImVal
-0b00000000 #3 arg2 source ImVal
+0          #2 arg1 source ImVal
+0          #3 arg2 source ImVal
 0b00000001 #4 destination reg_1
 
 # CALL fn double
 CALL        #1 opcode CALL
-0b00000000  #2 arg1 source unused
-0b00000000  #3 arg2 source unused
+0           #2 arg1 source unused
+0           #3 arg2 source unused
 jump_fn_double #4 destination PC
 
 # output result
 0b10000000 #1 opcode ADD 0+reg_2
-0b00000000 #2 arg1 source ImVal
+0          #2 arg1 source ImVal
 0b00000010 #3 arg2 source reg_2
 0b00000111 #4 destination OUTPUT
 # -------------------------------------
@@ -1238,16 +1241,13 @@ jump_fn_double #4 destination PC
 0b00000010 #4 destination reg_2
 
 # RET
-RET         #1 opcode RET
-0b00000000  #2 arg1 source unused
-0b00000000  #3 arg2 source unused
-0b00000000  #4 destination unused
+RET  #1 opcode RET
+0    #2 arg1 source unused
+0    #3 arg2 source unused
+0    #4 destination unused
 # ------------------------------------
-
 ```
-
 </details>
-
 
 <br>
 
@@ -1268,14 +1268,13 @@ RET         #1 opcode RET
 Чтобы не потерять/затереть значение в регистре, в начале вызова функции делают PUSH (кладут значение в RAM «на хранение»), а в конце — POP (забирают обратно).    
 Это позволит делать функции с любым количеством аргументов, не боясь, что они перезапишут регистры основной программы.
 
-
 **Push**
 
-```bash
+```
 Opcode: xx010111
 Arg 1: Source  
 Arg 2: Unused
-Result addr: Unused (target RAM) 
+Result addr: Unused (destination RAM 0b00001000) 
 ```
 
 p.s. свободные два байта можно было бы использовать:
@@ -1284,47 +1283,48 @@ p.s. свободные два байта можно было бы исполь�
 
 **Pop**
 
-```bash
+```
 Opcode: xx010101
-Arg 1: Unused (зафиксирован источник RAM 0b00001000)  
+Arg 1: Unused (source RAM 0b00001000)  
 Arg 2: Unused
 Result addr: Destination
 ```
 
 Реализация (auto-increment/decrement) 
-```bash
-# test PUSH 
+```
+# test PUSH/POP
 
 # 2. PUSH
 # 1. POP
-# -------------
+#--------------------
+# expected behavior:
+# OUTPUT: 3, 2, 1, 3, 2, 1...
+#--------------------
+label jump_start
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000001 #2 arg1 source ImVal
 0          #3 arg2 Unused
-0b00000100 #4 destination stack RAM
-# -------------
+0          #4 destination Unused
  
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000010 #2 arg1 source ImVal
 0          #3 arg2 Unused
-0b00000100 #4 destination stack RAM
-# -------------
+0b00000100 #4 destination Unused
  
 # PUSH
 0b10010111 #1 opcode PUSH
 0b00000011 #2 arg1 source ImVal
 0          #3 arg2 Unused
-0b00000100 #4 destination stack RAM
-# -------------
+0 #4 destination Unused
+
 # POP
 0b00010101 #1 opcode POP
 0          #2 arg1 Unused
 0          #3 arg2 Unused
 0b00000111 #4 destination OUTPUT
 
-# -------------
 # POP
 0b00010101 #1 opcode POP
 0          #2 arg1 Unused
@@ -1339,19 +1339,102 @@ Result addr: Destination
  
 # JMP  
 0b10001100 #1 opcode MOV source destination
-0b00000000 #2 arg1 source ImVal
+jump_start #2 arg1 source ImVal
 0          #3 arg2 Unused
 0b00000110 #4 destination PC
-
 ```
 </details>
 
 ## Схема LEG CPU2
 
+<details>
+<summary>ISA для процессора LEG</summary>
+
+```
+[первый байт][второй байт    ][трейтий байт   ][четвертый байт       ]
+[что делать ][источник 1     ][источник 2     ][куда девать результат]
+[Opcode 8bit][Argument 1 8bit][Argument 2 8bit][Result address 8bit  ]
+```
+
+Opcode 8bit:
+
+```
+ALU:
+биты xx000111 режима ALU, результат его работы в общую шину:
+0: ALU xxxxxxx1 #1
+1: ALU xxxxxx1x #2
+2: ALU xxxxx1xx #4
+
+ALU DIV:
+opcode: xx010100
+arg_1 : Source 
+arg_2 : Source 
+result_addr: Destination
+
+CALL:
+бит режима CALL, данные из Result address (четвертый байт ISA инс.) в общую шину для PC:
+3: CALL 00001000 #8 идентификатор режима
+
+RET:
+бит режима RET, данные из Result address (четвертый байт ISA инс.) в общую шину для PC:
+4: RET 00010000 #16 идентификатор режима
+
+COND:
+биты xx1xx111 режима COND, данные из Result address (четвертый байт ISA инс.) в общую шину для PC. 
+0: COND xxxxxxx1 #1
+1: COND xxxxxx1x #2
+2: COND xxxxx1xx #4
+5: COND xx1xxxxx #32 идентификатор режима, если бит установлен
+
+Immediate values:
+биты 11xxxxxx режима Immediate values:
+6: x1xxxxxx #64 выбор в роли Immediate values Argument 2 (трейтий байт ISA инс.) идентификатор режима, если бит установлен
+7: 1xxxxxxx #128 выбор в роли Immediate values Argument 1 (второй байт ISA инс.) идентификатор режима, если бит установлен
+
+MOV:
+биты xx0011xx режима MOV
+opcode: xx0011xx
+arg_1: Source
+arg_2: Unused
+result_addr: Destination (для JMP Result addr = 6 PC)
+
+PUSH:
+opcode: xx010111
+arg_1 : Source  
+arg_2 : Unused
+result_addr: Unused (target RAM) 
+
+POP:
+opcode: xx010101
+arg_1 : Unused (зафиксирован источник RAM 0b00001000)  
+arg_2 : Unused
+result_addr: Destination
+```
+
+Argument 1/Argument 2/Result address 8bit:
+
+```
+биты xxxx1111 кодируют адрес исчтоника/пунтка назначения:
+0: #1 участвует в кодировании восьми адресов (Register 0-5, PC, Input/Output)
+1: #2 участвует в кодировании восьми адресов (Register 0-5, PC, Input/Output)
+2: #4 участвует в кодировании восьми адресов (Register 0-5, PC, Input/Output)
+4: #8 xxxx1xxx только для RAM
+
+Результат декодирования трех младших бит xxxxx111:
+0: Register 0
+1: Register 1
+2: Register 2
+3: Register 3
+4: Register 4
+5: Register 5
+6: Counter (PC)
+7: Input (для Argument 1 и Argument 2) или Output (для Result address)
+```
+</details>
+
 ![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_LEG_CPU2.png)
 
 (p.s. команда `CC` не используется в игре)
-
 
 Компонент stack с автоматическим счетчиком SP:
 
@@ -1391,10 +1474,9 @@ Result addr: Destination
 
 ![MUX8Buf](/Computer-Science-Bookshelf/img/tc/MUX8Buf_upg.png)
 
- 
 <br>
 
-**Все команды ниже не будут применяться в уровнях игры.**
+**Все команды ниже - не будут применяться в уровнях игры.**
 
 <br>
 
@@ -1410,7 +1492,6 @@ Result addr: Destination
 * Нужно в «железе» объединить логику записи в стек и логику проверки условия.
 
 Сейчас для этого нужно две инструкции (сначала COND для прыжка на вызов, а потом сам CALL с запоминанием адреса возврата).
-
 
 ```
 Режим CC
@@ -1450,7 +1531,7 @@ xx1010xx - для остальных условий COND
     0b00000000  #4 destination unused
 ```
 
-```bash
+```
 # Сценарий проверки режима CC
 # MOV opcode xx0011xx
 # CC opcode xx1010xx для остальных условий COND
@@ -1504,12 +1585,9 @@ RET        #1 RET
 0b00000000 #3 arg2 source 
 0b00000000 #4 destination
 ```
-
 </details>
 
-
 <br>
-
 
 <details>
 <summary>Режим Indirect Jump (ICC):</summary>
@@ -1520,12 +1598,11 @@ RET        #1 RET
 * Это нужно для реализации оператора switch (таблицы переходов)
 * "Возьми адрес для прыжка не из 4-го байта Result address (Immediate values), а из reg_N, на который этот байт указывает".
     * И эта возможность у нас уже реализованна в режиме ALU (или MOV), мы просто для Result address выбираем PC и результат операции ADD данных из reg_N + 0 перезапишет PC
- 
 
 Про Indirect Conditional CALL (ICC):
 * Реализуя поведение Indirect Jump вместе с Conditional и CALL, получим Indirect Conditional CALL (**ICC**), что позволит выполнять переход на указанный адрес из регистра/RAM по условию с сохранением адреса возврата.
 
-```bash
+```
 Opcode: xx1111xx и xx1100xx 
 Arg 1: Source  
 Arg 2: Source
@@ -1535,7 +1612,7 @@ xx1111xx - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
 xx1100xx - для остальных условий COND
 ```
 
-```bash
+```
 # Сценарий проверки режима ICC
 
 # MOV opcode xx0011xx
@@ -1604,7 +1681,6 @@ jump_start #2 arg1 source ImVal
 
 Плюс третий декодер источников специально для этого режима, и регистры заменились на прозрачные т.е. всегда LOAD, тогда может и декодеры для выбора источника не нужны?
 
-
 </details>
 
 <br>
@@ -1625,14 +1701,12 @@ p.s. команда RJ не использует старшие биты, что
 Про Indirect Relative Jumps (**IRJ**): 
 * IRJ относительный переход
 
-
-```bash
+```
 Opcode: xx010110 
 Arg 1: Source  
 Arg 2: Source
 Result addr: Unused (target ADD Source+Source=PC) 
 
- 
 ------------------------
 # test IRJ:
 #--------------------
@@ -1677,7 +1751,7 @@ jump_start #2 arg1 source ImVal
 * CRJ условный относительный переход, т.е. мы по условию выполняем прыжок по результату сложения текущего адреса PC с значением из Result addr
 * Применяется когда мы хотим просто прыгнуть по условию внутри if или цикла (без возврата) но без сохранения адреса возврата в стеке.
 
-```bash
+```
 Opcode: xx0110xx и xx0111xx 
 Arg 1: Source  
 Arg 2: Source
@@ -1686,7 +1760,6 @@ Result addr: ImVal
 xx0111xx CRJ - для условий COND: IF_GREATER_OR_EQUAL,IF_GREATER
 xx0110xx CRJ - для остальных условий COND
 
- 
 --------------------------
 # test CRJ:
 #--------------------
@@ -1741,11 +1814,10 @@ jump_second_step #2 arg1 source ImVal
 
 ```
 
-
 Про Indirect Conditional Relative CALL (**ICRC**):  
 * ICRC Косвенный условный относительный переход с сохранением адреса возврата (т.е нам нужно выполнять RET)
 
-```bash
+```
 Opcode: xx1101xx и xx1110xx 
 Arg 1: Source  
 Arg 2: Source
@@ -1821,7 +1893,6 @@ RET #1 RET
 jump_start #2 arg1 source ImVal
 0          #3 arg2 Unused
 0b00000110 #4 destination PC
-
 ```
   
 </details>
@@ -1829,7 +1900,7 @@ jump_start #2 arg1 source ImVal
 <br>
 
 <details>
-<summary>Команды ALU MUL,SIN,COS,: (unimplemented)</summary>
+<summary>Команды ALU MUL,SIN,COS: (unimplemented)</summary>
 
 Арифметичиеские операции - это основа вычислений, поэтому они должны быть максимально реализованы.
 
@@ -1871,7 +1942,7 @@ jump_start #2 arg1 source ImVal
 
 </details>
 
-
+<br>
 <details>
 <summary>Поддержка прерываний (Interrupts): (unimplemented)</summary>
 
@@ -1883,10 +1954,1107 @@ jump_start #2 arg1 source ImVal
 
 ### Схема LEG extend
 
+<details>
+<summary>Схема LEG extend</summary>
+
 ![Functions_CPU2](/Computer-Science-Bookshelf/img/tc/Functions_LEG_CPU2_ex.png)
  
+</details>
 
+---
+
+## Создание программы Ассемблер
+
+Нам нужна программа (скрипт или исполняемый файл) которая распарсит наши словесные команды в машинные байты на основе разработанной инструкции ISA.
+
+Этот процесс называется ассемблирование (англ. assembly), а программа, которая это делает - ассемблер:
+1. лексер (разбиение строк)
+2. парсер
+3. IR (Intermediate Representation) внутренний формат программы
+4. двухпроходный ассемблер
+5. кодогенератор
+
+**Двухпроходный ассемблер** (англ. two-pass assembly) нужен из-за одной фундаментальной проблемы: адреса меток неизвестны, пока не будет разобран весь код.
+
+Проход 1 - только поиск меток (symbol table construction)
+* Ассемблер проходит по коду и считает адреса инструкций, создавая таблицу:
+
+  ```
+  labels = {
+      "jump_start": 12,
+      "jump_while": 20
+  }
+  ```
+
+Проход 2 - кодирование (code generation/instruction encoding)
+* Теперь ассемблер снова идет по коду. Встречая в коде метку `JMP jump_start` смотрит таблицу и подставляет реальный адрес расположения инструкции `JMP 12`
+
+**Директивы ассемблера** - команды для самого ассемблера, управляют тем, как именно этот код и данные размещаются в памяти (адресом и выходным буфером):
+* .data - секция данных, говорит ассемблеру что началась секция данных
+* .text - секция кода, говорит ассемблеру что началась секция инструкций
+* .org 0x100 - установить адрес смещения, позволяет указать точный адрес, откуда начинается запись.
+* .byte 5 - позволяет добавить конкретные данные в память
+
+```
+.org 0
+.text
+start:
+    MOV 5, r1
+
+.data
+.org 20
+value:
+    .byte 42
+```
+
+* Директива `.org <addr>`
+  * Устанавливает **текущий адрес** записи на 0.
+  * Всё, что будет дальше, помещается в память начиная с адреса 0.
+  * Это полезно, если нужно разместить код или данные в конкретном месте памяти.
+
+* Директива `.text` (пока секции можно использовать для логики)
+  * Начальная секция адреса начинается с адреса 0 (если нет `.org`)
+  * Начало секции кода (инструкции).
+  * Константы Immediate Value, это просто директива ассемблеру подставить значение, физически место в исполняемом файле оно не занимет, так как это сам код, а не данные.
+
+
+* Директива `.data`
+  * Начало секции данных. По умолчанию `.data` идёт сразу после `.text`, а если есть `.org` - он имеет приоритет.
+  * Если `.data` с `.org` перекрывает код - `Error: data section overlaps with text section`
+  * Всё, что после этого (например, `.byte`) - не инструкции, а сырые данные в памяти.
+  * Ассемблер только размечает место для данных, а загрузчик операционной системы уже физически(виртуальная память процесса) выдает инструкции памяти выделить по этому адресу место.
+
+  Для реализации `const` разместим данные в секции `.data`.
+
+  ```
+  .org 0
+  .text
+  start:
+      MOV [my_value2], r1 # indirect addressing unimplimented
+      MOV my_value2, r1   # .data label
+      MOV 40, r1
+      MOV r2, r1
+
+  .data
+  my_value:
+      .byte 42  
+  my_value2:
+      .byte 43  
+  ```
+
+  ```
+  # label addresses:
+  # my_value: 016
+  # my_value2: 017
+  # start: 000
+  # ------------------------------
+
+  # bytes    |:addr|text instruction
+  0b10001100 #:000 |MOV 17, r1
+  0b00010001 #:001
+  0b00000000 #:002
+  0b00000001 #:003
+
+  0b10001100 #:004 |MOV 43, r1
+  0b00101011 #:005
+  0b00000000 #:006
+  0b00000001 #:007
+
+  0b10001100 #:008 |MOV 40, r1
+  0b00101000 #:009
+  0b00000000 #:010
+  0b00000001 #:011
+
+  0b00001100 #:012 |MOV r2, r1
+  0b00000010 #:013
+  0b00000000 #:014
+  0b00000001 #:015
+  ```
  
+* Директива `.byte` 42
+  * Записывает один байт со значением 42 по текущему адресу.
+  * После этого текущий адрес увеличится на 1.
+
+
+### Пример работы `.org`:
+
+  ```
+  .org 8
+  .text
+  start:
+      CJE 255, 255, start
+      CJE 255, 255, end
+  end:
+      MOV 255, io
+  ```
+
+  ```
+  # label addresses:
+  # start: 008
+  # end: 016
+  # ------------------------------
+
+  # bytes    |:addr|text instruction
+  0b00000000 #:000 |ADD r0, r0, r0
+  0b00000000 #:001
+  0b00000000 #:002
+  0b00000000 #:003
+
+  0b00000000 #:004 |ADD r0, r0, r0
+  0b00000000 #:005
+  0b00000000 #:006
+  0b00000000 #:007
+
+  0b11100000 #:008 |CJE 255, 255, :008
+  0b11111111 #:009
+  0b11111111 #:010
+  0b00001000 #:011
+
+  0b11100000 #:012 |CJE 255, 255, :016
+  0b11111111 #:013
+  0b11111111 #:014
+  0b00010000 #:015
+
+  0b10001100 #:016 |MOV 255, io
+  0b11111111 #:017
+  0b00000000 #:018
+  0b00000111 #:019
+  ```
+
+* Пример автоматического расчета адреса для данных:
+
+  (данные начнутся с адреса :016)
+
+  ```
+  .org 4
+  .text
+  start:
+      CJE 255, 255, start
+      CJE 255, 255, end
+  end:
+      MOV 255, io
+  .data
+  .byte 5  
+  ```
+
+  ```
+  # label addresses:
+  # start: 004
+  # end: 012
+  # ------------------------------
+
+  # bytes    |:addr|text instruction
+  0b00000000 #:000 |ADD r0, r0, r0
+  0b00000000 #:001
+  0b00000000 #:002
+  0b00000000 #:003
+
+  0b11100000 #:004 |CJE 255, 255, :004
+  0b11111111 #:005
+  0b11111111 #:006
+  0b00000100 #:007
+
+  0b11100000 #:008 |CJE 255, 255, :012
+  0b11111111 #:009
+  0b11111111 #:010
+  0b00001100 #:011
+
+  0b10001100 #:012 |MOV 255, io
+  0b11111111 #:013
+  0b00000000 #:014
+  0b00000111 #:015
+  ```
+
+* Можно и явно задать адрес данных, главное он должен начинаться после секции `.text`
+
+  ```
+  .org 4
+  .text
+  start:
+      CJE 255, 255, start
+      CJE 255, 255, end
+  end:
+      MOV 255, io
+  .data
+  .org 16
+  .byte 5 
+  ```
+
+* Перекрытие адресов секции станет причиной ошибки ассемблирования: `Error: data section overlaps with text section`
+
+  ```
+  .org 4
+  .text
+  start:
+      CJE 255, 255, start
+      CJE 255, 255, end
+  end:
+      MOV 255, io
+  .data
+  .org 14
+  .byte 5  
+  ```
+
+### Готовый Ассемблер
+
+
+
+<br>
+<details>
+<summary>Список поддерживаемых команд:</summary>
+
+```
+.org 0
+.text
+jump_start:
+    # comment
+    MOV 1, r3 # comment
+    MOV 2, ram
+    MOV 3, pc
+    MOV 4, io
+
+    MOV r1, r2
+    MOV ram, r2
+    MOV ram, ram
+    MOV ram, pc
+    MOV pc, ram
+    MOV io, ram
+    MOV io, pc
+    MOV io, io
+
+    PUSH r0
+    PUSH 255
+    PUSH ram
+    PUSH io
+    PUSH pc
+    POP r0
+    POP ram
+    POP io
+    POP pc
+
+    ADD 5, r2, r3
+    ADD r1, r2, r3
+
+    SUB 5, r2, r3
+    SUB r1, r2, r3
+
+    AND 5, r2, r3
+    AND r1, r2, r3
+
+    OR 5, r2, r3
+    OR r1, r2, r3
+
+    NOT 5, r3
+    NOT r1, r3
+
+    XOR 5, r2, r3
+    XOR r1, r2, r3
+
+    NAND 5, r2, r3
+    NAND r1, r2, r3 
+
+    NOR 5, r2, r3
+    NOR r1, r2, r3 
+
+    DIV 5, r2, r3
+    DIV r1, r2, r3 
+
+    CALL jump_here
+
+    CJE 5, 4, jump_start
+    CJNE 5, 4, jump_start
+    CJL 5, 4, jump_start
+    CJLE 5, 4, jump_start
+    CJG 5, 4, jump_start
+    CJGE 5, 4, jump_start
+
+    JMP jump_start
+
+    MOV [var_1], r1 # косвенная адресация не поддерживается LEG
+    MOV var_1, r1   # подстановка констант Immediate Value
+    MOV 40, r1          # Immediate Value
+    MOV r2, r1
+
+jump_here:
+    NOR 5, r2, r3
+    NOR r1, r2, r3  
+    RET
+.data
+var_1:
+    .byte 42  
+var_2:
+    .byte 43    
+```
+
+</details>
+
+Поле с кодом - редактируемое.
+
+```rust,editable,abraetable
+use legassembly::assembly;
+fn main(){
+
+  static input: &str = "
+.org 0
+.text
+jump_start:
+    MOV [var_1], r1 # косвенная адресация, не поддерживается LEG
+    MOV var_1, r1   # подстановка констант Immediate Value
+    MOV 40, r1      # Immediate Value
+    MOV r2, r1
+    JMP jump_start
+.data
+var_1:
+    .byte 42  
+";
+ 
+  let output_debug = true;
+  assembly(input, output_debug);
+
+}
+
+{{#include ../../src/legassembly.rs}}
+
+```
+
+
+<details>
+<summary>Assembly:</summary>
+
+```rust,editable
+use disassembly::decode;
+use std::collections::HashMap;
+  
+#[derive(Debug)]
+enum ParsedLine {
+    Label(String),
+    Instruction(Instruction),
+    Directive(Directive),
+    Empty,
+}
+
+#[derive(Debug)]
+enum Directive {
+    Data,
+    Text,
+    Org(u8),
+    Byte(u8),
+}
+
+#[derive(Debug)]
+enum Operand {
+    Source(u8),
+    Immediate(u8),
+    IndirectAddr(String),
+    MemLabel(String),
+}
+
+#[derive(Debug)]
+struct SourceOperand{
+    imm_flag: u8,
+    src: Operand
+}
+impl SourceOperand {
+    pub fn new(imm_flag: u8, src: Operand) -> Self{
+        Self{imm_flag, src}
+    }
+}
+
+#[derive(Debug)]
+enum Instruction {
+    Mov { src: SourceOperand, dst: u8 },
+    Push { src: SourceOperand},
+    Pop { dst: u8 },
+    Jmp { label: String },
+    Cj { a: SourceOperand, b: SourceOperand, label: String, inst: u8 },
+    Add { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Sub { a: SourceOperand, b: SourceOperand, dst: u8 },
+    And { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Or { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Not { a: SourceOperand, dst: u8 },
+    Xor { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Nand { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Nor { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Div { a: SourceOperand, b: SourceOperand, dst: u8 },
+    Call { label: String },
+    Ret,
+}
+
+#[derive(Debug)]
+struct EncodedInstruction {
+    opcode: u8,
+    arg1: u8,
+    arg2: u8,
+    result: u8,
+}
+
+enum AluOp {
+    Add,
+    Sub,
+    And,
+    Or,
+    Xor,
+    Nand,
+    Nor,
+    Div,
+}
+
+#[derive(Clone, Copy, PartialEq)]
+enum Section {
+    Text,
+    Data,
+}
+
+static INPUT_ASM_CODE: &str = "
+jump_start:
+    # comment
+    MOV 1, r3 # comment
+    MOV 2, ram
+    MOV 3, pc
+    MOV 4, io
+
+    MOV r1, r2
+    MOV ram, r2
+    MOV ram, ram
+    MOV ram, pc
+    MOV pc, ram
+    MOV io, ram
+    MOV io, pc
+    MOV io, io
+
+    PUSH r0
+    PUSH 255
+    PUSH ram
+    PUSH io
+    PUSH pc
+    POP r0
+    POP ram
+    POP io
+    POP pc
+
+    ADD 5, r2, r3
+    ADD r1, r2, r3
+
+    SUB 5, r2, r3
+    SUB r1, r2, r3
+
+    AND 5, r2, r3
+    AND r1, r2, r3
+
+    OR 5, r2, r3
+    OR r1, r2, r3
+
+    NOT 5, r3
+    NOT r1, r3
+
+    XOR 5, r2, r3
+    XOR r1, r2, r3
+
+    NAND 5, r2, r3
+    NAND r1, r2, r3 
+
+    NOR 5, r2, r3
+    NOR r1, r2, r3 
+
+    DIV 5, r2, r3
+    DIV r1, r2, r3 
+
+    CALL jump_here
+
+    CJE 5, 4, jump_start
+    CJNE 5, 4, jump_start
+    CJL 5, 4, jump_start
+    CJLE 5, 4, jump_start
+    CJG 5, 4, jump_start
+    CJGE 5, 4, jump_start
+
+    JMP jump_start
+
+jump_here:
+    NOR 5, r2, r3
+    NOR r1, r2, r3  
+    RET
+";
+
+fn main() {
+    const INSTRUCTION_BIT_DEPTH: u8 = 4;
+ 
+    let input = INPUT_ASM_CODE;
+    let lines: Vec<&str> = input.lines().collect();
+    let mut data_values: HashMap<String, u8> = HashMap::new();
+
+    // PASS 1: collect labels
+    let mut labels = HashMap::new();
+    let mut address: u8 = 0;
+    let mut last_label: Option<String> = None;
+
+    let mut section = Section::Text;
+    let mut text_end: u8 = 0;
+    let mut data_org: Option<u8> = None;
+
+    for line in &lines {
+        match parse_line(line) {
+            ParsedLine::Label(name) => {
+                labels.insert(name.clone(), address);
+                last_label = Some(name);
+            }
+            ParsedLine::Instruction(_) => {
+                address += INSTRUCTION_BIT_DEPTH;
+            }
+            ParsedLine::Directive(d) => {
+                match d {
+                    Directive::Org(addr) => {
+                        if section == Section::Data {
+                            data_org = Some(addr);
+
+                            if addr < text_end {
+                                panic!("Error: data section overlaps with text section");
+                            }
+                        }
+                        address = addr;
+                    }
+                    Directive::Byte(value) => {
+                         if section == Section::Data {
+                            if let Some(label) = &last_label {
+                                data_values.insert(label.clone(), value);
+                            } else {
+                                panic!(".byte without label in data section");
+                            }
+                        }
+                        address += 1;
+                    }
+                    Directive::Text => {
+                        section = Section::Text;
+                    }
+                    Directive::Data => {
+                        section = Section::Data;
+                        // фиксируем конец текста
+                        text_end = address;
+                        let data_start = match data_org {
+                            Some(addr) => addr,
+                            None => text_end,
+                        };
+                        if data_start < text_end {
+                            panic!("Error: data section overlaps with text section");
+                        }
+                        address = data_start;
+                    }
+                }
+            }
+            ParsedLine::Empty => {}
+        }
+    }
+
+    // Debug label addresses
+    println!("# label addresses:");
+    for (key, value) in &labels {
+        println!("# {}: {:03}", key, value); 
+    }
+    println!("# ------------------------------\n");
+    
+    
+    // PASS 2: encode instructions
+    let mut output: Vec<u8> = vec![0; 256];
+    let mut max_address: u8 = 0;
+    address = 0;
+
+    let mut section = Section::Text;
+    let mut text_end: u8 = 0;
+    let mut data_org: Option<u8> = None;
+ 
+    for line in &lines {
+        match parse_line(line) {
+            ParsedLine::Instruction(instr) => {
+                let encoded = encode_instruction(instr, &labels, &data_values);
+
+                output[address as usize] = encoded.opcode;
+                output[(address + 1) as usize] = encoded.arg1;
+                output[(address + 2) as usize] = encoded.arg2;
+                output[(address + 3) as usize] = encoded.result;
+
+                address += INSTRUCTION_BIT_DEPTH;
+                max_address = max_address.max(address);
+            }
+
+            ParsedLine::Directive(d) => {
+                match d {
+                    Directive::Org(addr) => {
+                        if section == Section::Data {
+                            data_org = Some(addr);
+                        }
+                        address = addr;
+                    }
+                    Directive::Byte(value) => {
+                        output[address as usize] = value;
+                        address += 1;
+                        max_address = max_address.max(address);
+                    }
+                    Directive::Text => {
+                        section = Section::Text;
+                    }
+                    Directive::Data => {
+                        section = Section::Data;
+                        text_end = address;
+                        let data_start = match data_org {
+                            Some(addr) => addr,
+                            None => text_end,
+                        };
+                        if data_start < text_end {
+                            panic!("Error: data section overlaps with text section");
+                        }
+                        address = data_start;
+                    }
+                }
+            }
+            ParsedLine::Label(_) | ParsedLine::Empty => {}
+        }
+    }
+
+    let used = max_address as usize;
+
+    // show assembly code
+    /*
+        for  (chunk_idx, inst) in output[..used].chunks(INSTRUCTION_BIT_DEPTH as usize).enumerate(){
+            if inst.len() < 4 {
+                break;
+            }
+            println!("0b{:08b}", inst[0]);
+            println!("0b{:08b}", inst[1]);
+            println!("0b{:08b}", inst[2]);
+            println!("0b{:08b}", inst[3]); 
+            println!();
+        }
+    */
+
+    // Debug
+    println!("# bytes    |:addr|text instruction");
+    for  (chunk_idx, inst) in output[..used].chunks(INSTRUCTION_BIT_DEPTH as usize).enumerate(){
+        if inst.len() < 4 {
+            break;
+        }
+        let base_addr = chunk_idx * INSTRUCTION_BIT_DEPTH as usize;
+
+        let text_inst = decode(inst[0], inst[1], inst[2], inst[3]);
+
+        println!("0b{:08b} #:{:03} |{}", inst[0],base_addr,text_inst);
+        println!("0b{:08b} #:{:03}", inst[1],base_addr+1);
+        println!("0b{:08b} #:{:03}", inst[2],base_addr+2);
+        println!("0b{:08b} #:{:03}", inst[3],base_addr+3); 
+        println!();
+    }
+   
+}
+
+fn strip_comment(line: &str) -> &str {
+    if let Some(pos) = line.find('#') {
+        &line[..pos]
+    } else {
+        line
+    }
+}
+
+fn parse_line(line: &str) -> ParsedLine {
+    let line = line.trim();
+    let code = strip_comment(line).trim();
+
+    if code.is_empty() {
+        return ParsedLine::Empty;
+    }
+
+    if code.ends_with(':') {
+        let label = code.trim_end_matches(':').to_string();
+        return ParsedLine::Label(label);
+    }
+
+    let tokens: Vec<&str> = code
+        .split([' ', ','])
+        .filter(|s| !s.is_empty())
+        .collect();
+
+    if tokens.is_empty() {
+        return ParsedLine::Empty;
+    }
+
+    match tokens[0] {
+        ".data" => ParsedLine::Directive(Directive::Data),
+        ".text" => ParsedLine::Directive(Directive::Text),
+        ".org" => {
+            let value = parse_number(tokens[1]);
+            ParsedLine::Directive(Directive::Org(value))
+        }
+        ".byte" => {
+            let value = parse_number(tokens[1]);
+            ParsedLine::Directive(Directive::Byte(value))
+        },
+
+        "MOV" => parse_mov(&tokens),
+        "PUSH" => parse_push(&tokens),
+        "POP" => parse_pop(&tokens),
+        "JMP" => {
+            let label = tokens[1].to_string();
+            ParsedLine::Instruction(Instruction::Jmp { label })
+        },
+        "CJE"|"CJNE"|"CJL"|"CJLE"|"CJG"|"CJGE" => parse_cj(&tokens),
+        "ADD" => parse_alu(&tokens, AluOp::Add),
+        "SUB" => parse_alu(&tokens, AluOp::Sub),
+        "AND" => parse_alu(&tokens, AluOp::And),
+        "OR" => parse_alu(&tokens, AluOp::Or),
+        "NOT" => parse_not(&tokens),
+        "XOR" => parse_alu(&tokens, AluOp::Xor),
+        "NAND" => parse_alu(&tokens, AluOp::Nand),
+        "NOR" => parse_alu(&tokens, AluOp::Nor),
+        "DIV" => parse_alu(&tokens, AluOp::Div),
+        "CALL" => {
+            let label = tokens[1].to_string();
+            ParsedLine::Instruction(Instruction::Call { label })
+        },
+        "RET" => ParsedLine::Instruction(Instruction::Ret),
+        _ => panic!("Unknown instruction: {}", tokens[0]),
+    }
+}
+ 
+// MOV: 
+// * src регистров/RAM/INPUT/PC/Immediate Value 
+// * dest регистр/RAM/OUTPUT/PC
+fn parse_mov(tokens: &[&str]) -> ParsedLine {
+    let src = parse_operand(tokens[1], 128);
+    let dst = parse_source( tokens[2]);
+    ParsedLine::Instruction(Instruction::Mov {
+        src,
+        dst
+    })
+}
+
+fn parse_push(tokens: &[&str]) -> ParsedLine {
+    let src = parse_operand(tokens[1], 128);
+    ParsedLine::Instruction(Instruction::Push {src})
+}
+
+fn parse_pop(tokens: &[&str]) -> ParsedLine {
+    let dst= {
+        match tokens[1] {
+            "r0" | "r1" | "r2" | "r3" | "r4" | "r5" |
+            "pc" | "io" | "ram" => {
+                parse_source(tokens[1])
+            }
+            _ => {
+                panic!("Unknown source: {}", tokens[1]);
+            }
+        }
+    };
+    ParsedLine::Instruction(Instruction::Pop {
+        dst, 
+    })
+}
+ 
+fn parse_cj(tokens: &[&str]) -> ParsedLine {
+    let a = parse_operand(tokens[1], 128);
+    let b = parse_operand(tokens[2], 64);
+    let label = tokens[3].to_string();
+    let inst = {
+        let inst = tokens[0];
+        match inst {
+            "CJE" => {0b00100000}, // 32 IF_EQUAL
+            "CJNE" => {0b00100001},// 33 IF_NOT_EQUAL
+            "CJL" => {0b00100010}, // 34 IF_LESS
+            "CJLE" => {0b00100011},// 35 IF_LESS_OR_EQUAL 
+            "CJG" => {0b00100100}, // 36 IF_GREATER
+            "CJGE" => {0b00100101},// 37 IF_GREATER_OR_EQUAL
+            _ => panic!("Unknown command:{inst}")
+        }
+    };
+    ParsedLine::Instruction(Instruction::Cj {a, b, label, inst })
+}
+
+fn parse_alu(tokens: &[&str], kind: AluOp) -> ParsedLine {
+    let a = parse_operand(tokens[1], 128);
+    let b = parse_operand(tokens[2], 64);
+    let dst = parse_source(tokens[3]);
+    match kind{
+        AluOp::Add => {ParsedLine::Instruction(Instruction::Add {a, b, dst })},
+        AluOp::Sub => {ParsedLine::Instruction(Instruction::Sub {a, b, dst })},
+        AluOp::And => {ParsedLine::Instruction(Instruction::And { a, b, dst })},
+        AluOp::Or => {ParsedLine::Instruction(Instruction::Or {a, b, dst })},
+        AluOp::Xor => {ParsedLine::Instruction(Instruction::Xor {a, b, dst })},
+        AluOp::Nand => {ParsedLine::Instruction(Instruction::Nand {a, b, dst })},
+        AluOp::Nor => {ParsedLine::Instruction(Instruction::Nor {a, b, dst })},
+        AluOp::Div => {ParsedLine::Instruction(Instruction::Div {a, b, dst })},
+    }
+}
+
+fn parse_not(tokens: &[&str]) -> ParsedLine {
+    let a = parse_operand(tokens[1], 128);
+
+    let dst = parse_source(tokens[2]);
+
+    ParsedLine::Instruction(Instruction::Not {a, dst })
+}
+
+fn parse_operand(s: &str, imm_flag: u8) -> SourceOperand {
+    // [label] — адрес
+    if s.starts_with('[') && s.ends_with(']') {
+        let label = &s[1..s.len() - 1];
+        return SourceOperand::new(imm_flag, Operand::IndirectAddr(label.to_string()));
+    }
+
+    // регистр
+    match s {
+        "r0" | "r1" | "r2" | "r3" | "r4" | "r5" |
+        "pc" | "io" | "ram" => {
+            return SourceOperand::new(0, Operand::Source(parse_source(s)));
+        }
+        _ => {}
+    }
+
+    // число
+    if let Ok(num) = s.parse::<u8>() {
+        return SourceOperand::new(imm_flag, Operand::Immediate(num));
+    }
+
+    // иначе это метка с константой
+    SourceOperand::new(imm_flag, Operand::MemLabel(s.to_string()))
+}
+
+fn parse_source(name: &str) -> u8 {
+    match name {
+        "r0" => 0,
+        "r1" => 1,
+        "r2" => 2,
+        "r3" => 3,
+        "r4" => 4,
+        "r5" => 5,
+        "pc" => 6,
+        "io" => 7,
+        "ram" => 8,
+        _ => panic!("Unknown register: {}", name),
+    }
+}
+
+fn parse_number(s: &str) -> u8 {
+    s.parse::<u8>().expect("Invalid number")
+}
+
+fn encode_src(src: SourceOperand, labels: &HashMap<String, u8>, data_values: &HashMap<String, u8>) -> u8 {
+    match src.src {
+        Operand::Source(s) => {s},
+        Operand::Immediate(v) => {v},
+        Operand::IndirectAddr(label) => {
+            *labels.get(&label).expect("Unknown label")  
+        } 
+        Operand::MemLabel(label) => {
+           // Если есть значение в data_values - берем его как immediate
+            if let Some(val) = data_values.get(&label) {
+                *val
+            } else {
+                // иначе используем адрес (если, например, jump)
+                *labels.get(&label).expect("Unknown label")
+            } 
+        }                 
+    }
+}
+
+fn encode_instruction(
+    instr: Instruction,
+    labels: &HashMap<String, u8>,
+    data_values: &HashMap<String, u8>
+) -> EncodedInstruction {
+    match instr {
+        Instruction::Mov { src, dst } => EncodedInstruction {
+            opcode: src.imm_flag|0b00001100,  
+            arg1: encode_src(src, labels, data_values),
+            arg2: 0,
+            result: dst,
+        },
+        Instruction::Push { src } => EncodedInstruction {
+            opcode: src.imm_flag|0b00010111,  
+            arg1: encode_src(src, labels, data_values),
+            arg2: 0,
+            result: 0b00001000,
+        },
+        Instruction::Pop { dst } => EncodedInstruction {
+            opcode: 0b00010101,  
+            arg1: 0,
+            arg2: 0,
+            result: dst,
+        },
+        Instruction::Add { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },
+        Instruction::Sub { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000001,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },   
+        Instruction::And { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000010,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Or { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000011,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Not { a,dst } => EncodedInstruction {
+            opcode: a.imm_flag|0b00000100,
+            arg1: encode_src(a, labels, data_values),
+            arg2: 0,
+            result: dst,
+        },  
+        Instruction::Xor { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000101,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Nand { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000110,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Nor { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00000111,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Div { a, b, dst } => EncodedInstruction {
+            opcode: a.imm_flag|b.imm_flag|0b00010100,
+            arg1: encode_src(a, labels, data_values),
+            arg2: encode_src(b, labels, data_values),
+            result: dst,
+        },  
+        Instruction::Call { label} => {
+            let addr = *labels
+                .get(&label)
+                .expect("Unknown label");
+
+            EncodedInstruction {
+                opcode: 0b00001000,
+                arg1: 0,
+                arg2: 0,
+                result: addr,
+            }
+        },
+        Instruction::Jmp { label } => {
+            let addr = *labels
+                .get(&label)
+                .expect("Unknown label");
+
+            EncodedInstruction {
+                opcode: 0b10001100,
+                arg1: addr,
+                arg2: 0,
+                result: 0b00000110,
+            }
+        },
+        Instruction::Cj { a, b, label, inst} => {
+            let addr = *labels
+                .get(&label)
+                .expect("Unknown label");
+
+            EncodedInstruction {
+                opcode:  a.imm_flag|b.imm_flag|inst|0b00100000,
+                arg1: encode_src(a, labels, data_values),
+                arg2: encode_src(b, labels, data_values),
+                result: addr,
+            }
+        },
+        Instruction::Ret => EncodedInstruction {
+            opcode: 0b00010000,
+            arg1: 0,
+            arg2: 0,
+            result: 0,
+        },
+    }
+}
+
+pub mod disassembly {
+
+    fn reg_name(id: u8) -> &'static str {
+        match id {
+            0 => "r0",
+            1 => "r1",
+            2 => "r2",
+            3 => "r3",
+            4 => "r4",
+            5 => "r5",
+            6 => "pc",
+            7 => "io",
+            8 => "ram",
+            _ => "unk",
+        }
+    }
+
+    fn decode_operand(flag: bool, value: u8) -> String {
+        if flag {
+            value.to_string()
+        } else {
+            reg_name(value).to_string()
+        }
+    }
+
+    pub fn decode(opcode: u8, arg1: u8, arg2: u8, result: u8) -> String {
+        let ai = opcode & 0b10000000 != 0;
+        let bi = opcode & 0b01000000 != 0;
+        let base = opcode & 0b00111111;
+
+        let a = decode_operand(ai, arg1);
+        let b = decode_operand(bi, arg2);
+        let dst = reg_name(result);
+
+        match base {
+            0b00000000 => format!("ADD {}, {}, {}", a, b, dst),
+            0b00000001 => format!("SUB {}, {}, {}", a, b, dst),
+            0b00000010 => format!("AND {}, {}, {}", a, b, dst),
+            0b00000011 => format!("OR {}, {}, {}", a, b, dst),
+            0b00000100 => format!("NOT {}, {}", a, dst),
+            0b00000101 => format!("XOR {}, {}, {}", a, b, dst),
+            0b00000110 => format!("NAND {}, {}, {}", a, b, dst),
+            0b00000111 => format!("NOR {}, {}, {}", a, b, dst),
+            0b00001100 => {
+                let src = decode_operand(ai, arg1);
+                let dst = reg_name(result);
+                format!("MOV {}, {}", src, dst)
+            },
+            0b00010111 => {
+                let src = decode_operand(ai, arg1);
+                format!("PUSH :{}", src)
+            },
+            0b00010101 => {
+                let dst = reg_name(result);
+                format!("POP {}", dst)
+            },
+            0b00010100 => format!("DIV {}, {}, {}", a, b, dst),
+            0b00001000 => {
+                format!("CALL :{:03}", result)
+            },
+            0b00010000 => "RET".to_string(),
+            0b00100000 => format!("CJE {}, {}, :{:03}", a, b, result),
+            0b00100001 => format!("CJNE {}, {}, :{:03}", a, b, result),
+            0b00100010 => format!("CJL {}, {}, :{:03}", a, b, result),
+            0b00100011 => format!("CJLE {}, {}, :{:03}", a, b, result),
+            0b00100100 => format!("CJG {}, {}, :{:03}", a, b, result),
+            0b00100101 => format!("CJGE {}, {}, :{:03}", a, b, result),
+            _ => format!(
+                "Unknown opcode={:08b} arg1={} arg2={} dst={:08}",
+                opcode, arg1, arg2, result
+            ),
+        }
+    }
+}
+```
+</details>
+
+
+
 
 ---
 
@@ -1956,9 +3124,26 @@ jump_start #2 arg1 source ImVal
   });
 </script>
  
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll('.abraetable.ace_editor').forEach(el => {
+    const editor = ace.edit(el);
+    const scroller = editor.container.querySelector('.ace_scroller');
+    scroller.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      scroller.scrollTop += e.deltaY;
+    });
+  });
+});
+</script>
+
 <style>
 table {
   margin: 0px !important;  
   border-collapse: collapse;
 }
+.abraetable.ace_editor {
+  height: 1000px !important;
+}
+ 
 </style> 
