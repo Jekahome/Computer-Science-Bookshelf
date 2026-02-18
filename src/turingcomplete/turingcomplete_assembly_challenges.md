@@ -2438,6 +2438,14 @@ table {
 .abraetable.ace_editor {
   height: 1000px !important;
 }
+.abraetable  {
+    border: 2px solid purple;  
+    border-radius: 8px;      
+    padding: 10px;          
+    background-color: #f5f5f5;  
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);  
+    border-color: #8a2be2; 
+}
 </style> 
 
 
