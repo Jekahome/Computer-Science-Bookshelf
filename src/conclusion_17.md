@@ -233,7 +233,7 @@ macro_rules! old_macro {
 
    Замена условной инструкции (`if, case, match, switch...`) полиморфиз­мом:
 
-   ```rust
+   ```rust,editable
    enum Payment {
       CreditCard { amount: f64 },
       Paypal { amount: f64 },
@@ -264,7 +264,7 @@ macro_rules! old_macro {
 
    Замена на полиморфизм:
 
-   ```rust
+   ```rust,editable
    trait Payment {
       fn process(&self);
    }
@@ -416,7 +416,7 @@ macro_rules! old_macro {
 
       Мы “добавим” метод к чужому типу (String), не изменяя его исходник.
 
-      ```rust
+      ```rust,editable
       // Расширяем стандартный тип String
       trait StringUtils {
          fn is_palindrome(&self) -> bool;
@@ -437,7 +437,7 @@ macro_rules! old_macro {
 
       Или расширим `Vec<i32>`:
 
-      ```rust
+      ```rust,editable
       trait VecExt {
          fn sum_squares(&self) -> i32;
       }
@@ -454,7 +454,7 @@ macro_rules! old_macro {
 
    * Пример для ситуации: чужой трейт fmt::Display + наш тип MyType:
 
-      ```rust
+      ```rust,editable
       use std::fmt;
       struct MyType;
       impl fmt::Display for MyType {
@@ -494,7 +494,7 @@ macro_rules! old_macro {
 
    `assert!` используется именно для неожиданного (unrecoverable) случая ошибки — когда программа не может и не должна продолжать работу. Нарушен инвариант или логика программы — программа в некорректном состоянии, когда нарушение инварианта делает дальнейшее выполнение бессмысленным - выбрасываем `panic!`
 
-   ```rust
+   ```rust,editable
    fn process(x: i32) {
       assert!(x >= 0, "x must be non-negative");
       // ...
@@ -513,7 +513,7 @@ macro_rules! old_macro {
    1. **Сложные инварианты, не описываемые типами.**
       Например, проверка, что два вектора одинаковой длины, перед вычислением:
 
-      ```rust
+      ```rust,editable
       fn dot(a: &[f64], b: &[f64]) -> f64 {
          debug_assert_eq!(a.len(), b.len());
          a.iter().zip(b).map(|(x, y)| x * y).sum()
@@ -529,7 +529,7 @@ macro_rules! old_macro {
    3. **Документация для будущего разработчика.**
       Иногда assert — это не “проверка”, а “комментарий, который проверяется во время выполнения”:
 
-      ```rust
+      ```rust,no_run
       debug_assert!(state.is_ready(), "should not call process() before ready");
       ```
 * **Заменить значение объектом (Replace Data Value with Object)** — из “плоских” данных делаем тип с поведением. Цель: заменить примитив (число, строку и т. п.) на объект, чтобы можно было добавить поведение или правила. Применяем идиому [Type safety (Newtype)].
@@ -557,7 +557,7 @@ macro_rules! old_macro {
    - для случая логической двунаправленности, если данные хранятся в коллекции или БД, то мы храним в обьектах их ID
    - для случая настоящих ссылок в памяти, используем слабый умный счетчик ссылок -`Weak`
 
-   ```rust
+   ```rust,editable
    use std::cell::RefCell;
    use std::rc::{Rc, Weak};
 
@@ -690,7 +690,7 @@ macro_rules! old_macro {
 
    После — “нулевой объект”, создаём тип, который реализует то же поведение, но делает “ничего”:
 
-   ```rust
+   ```rust,editable
    trait Customer {
       fn send_email(&self);
    }
@@ -713,7 +713,7 @@ macro_rules! old_macro {
 
    Если в коде существует неявное предположение — например, что переменная не пуста, индекс в пределах, или состояние уже проверено, — добавь утверждение (assertion), чтобы явно зафиксировать это ожидание. 
 
-   ```rust
+   ```rust,editable
    fn divide(a: i32, b: i32) -> i32 {
       assert!(b != 0, "Divider must not be zero");
       a / b
@@ -735,7 +735,7 @@ macro_rules! old_macro {
 
    Пример “до” — downcast снаружи:
 
-   ```rust
+   ```rust,editable
    use std::any::Any;
 
    trait Shape: Any {
@@ -764,7 +764,7 @@ macro_rules! old_macro {
 
    После (инкапсуляция приведения):
 
-   ```rust
+   ```rust,editable
    use std::any::Any;
 
    trait Shape: Any {
@@ -807,7 +807,7 @@ macro_rules! old_macro {
 
    `name` хранится в одном месте (Employee) и повторно не дублируется.
 
-   ```rust
+   ```rust,editable
    struct Employee {
       name: String,
    }
@@ -831,7 +831,7 @@ macro_rules! old_macro {
  
    Trait для общего метода:
 
-   ```rust
+   ```rust,editable
    trait HasName {
       fn print_name(&self);
    }
@@ -854,7 +854,7 @@ macro_rules! old_macro {
 
    Можно дополнительно вынести default-реализацию в trait:
 
-   ```rust
+   ```rust,editable
    trait HasName {
       fn name(&self) -> &str;
       fn print_name(&self) {
@@ -877,7 +877,7 @@ macro_rules! old_macro {
    В Rust нет наследования, но есть `traits + default-реализация`, что позволяет сделать почти то же самое.
    Через `trait` с `default-методом`.
 
-   ```rust
+   ```rust,editable
    trait Game {
       fn initialize(&self);
       fn start_play(&self);
@@ -908,7 +908,7 @@ macro_rules! old_macro {
 
    Здесь мы динамически формируем шаблон на основе функций, что похоже на “инжекцию поведения” в `runtime`.
 
-   ```rust
+   ```rust,editable
    struct Game {
       initialize: Box<dyn Fn()>,
       start_play: Box<dyn Fn()>,
@@ -953,7 +953,7 @@ macro_rules! old_macro {
 
    До рефакторинга (одна структура делает всё сразу):
 
-   ```rust
+   ```rust,editable
    enum Role {
       Engineer,
       Salesman,
@@ -990,7 +990,7 @@ macro_rules! old_macro {
 
    После рефакторинга (разделение логики через composition (делегирование)):
 
-   ```rust
+   ```rust,editable
    trait Role {
       fn report(&self);
    }
@@ -1055,7 +1055,7 @@ macro_rules! old_macro {
 
    До рефакторинга (процедурный стиль):
 
-   ```rust
+   ```rust,editable
    struct Account {
       balance: f64,
    }
@@ -1079,7 +1079,7 @@ macro_rules! old_macro {
 
    После рефакторинга (объектный подход):
 
-   ```rust
+   ```rust,editable
    struct Account {
       balance: f64,
    }
@@ -1117,7 +1117,7 @@ macro_rules! old_macro {
 
    До рефакторинга (всё смешано):
 
-   ```rust
+   ```rust,editable
    fn on_button_click() {
       // Логика предметной области прямо в UI
       let mut balance = 100.0;
@@ -1138,7 +1138,7 @@ macro_rules! old_macro {
 
    После рефакторинга (логика отделена):
 
-   ```rust
+   ```rust,editable
    // ---- Модуль предметной области (domain) ----
    struct Account {
       balance: f64,
@@ -1194,7 +1194,7 @@ macro_rules! old_macro {
    ```
 
    Файл domain/account.rs:
-   ```rust
+   ```rust,editable
    pub struct Account {
       pub balance: f64,
    }
@@ -1212,7 +1212,7 @@ macro_rules! old_macro {
    ```
 
    Файл ui/cli.rs:
-   ```rust
+   ```rust,editable
    use crate::domain::account::Account;
 
    pub fn run() {

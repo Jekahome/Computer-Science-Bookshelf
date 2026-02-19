@@ -19,7 +19,7 @@
 
 Это теория множеств: `B ⊇ A`
 
-```rust
+```rust,editable
 use std::collections::HashSet;
 fn main() -> std::io::Result<()> {
     let need = HashSet::from(["read", "write"]);
