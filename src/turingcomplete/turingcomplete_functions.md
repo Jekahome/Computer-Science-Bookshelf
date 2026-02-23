@@ -2295,7 +2295,7 @@ var_2:
 use legassembly::assembly;
 fn main(){
 
-  static input: &str = "
+  static INPUT: &str = "
 .org 0
 .text
 jump_start:
@@ -2310,7 +2310,7 @@ var_1:
 ";
  
   let output_debug = true;
-  assembly(input, output_debug);
+  assembly(INPUT, output_debug);
 
 }
 
@@ -2500,7 +2500,8 @@ fn main() {
                 last_label = Some(name);
             }
             ParsedLine::Instruction(_) => {
-                address += INSTRUCTION_BIT_DEPTH;
+                address = address.checked_add(INSTRUCTION_BIT_DEPTH)
+                .unwrap_or_else(|| panic!("Address overflow! \nThe maximum address value is 255. \nCurrent address:{} + depth:{} > 255",address,INSTRUCTION_BIT_DEPTH));
             }
             ParsedLine::Directive(d) => {
                 match d {
@@ -2522,7 +2523,8 @@ fn main() {
                                 panic!(".byte without label in data section");
                             }
                         }
-                        address += 1;
+                        address = address.checked_add(1)
+                       .unwrap_or_else(|| panic!("Address overflow! \nThe maximum address value is 255. \nCurrent address:{} + 1 > 255",address));
                     }
                     Directive::Text => {
                         section = Section::Text;
@@ -2761,7 +2763,7 @@ fn parse_cj(tokens: &[&str]) -> ParsedLine {
             "CJLE" => {0b00100011},// 35 IF_LESS_OR_EQUAL 
             "CJG" => {0b00100100}, // 36 IF_GREATER
             "CJGE" => {0b00100101},// 37 IF_GREATER_OR_EQUAL
-            _ => panic!("Unknown command:{inst}")
+            _ => panic!("Unknown command:{}",inst)
         }
     };
     ParsedLine::Instruction(Instruction::Cj {a, b, label, inst })
@@ -3063,7 +3065,7 @@ pub mod disassembly {
 > * **A.** Создать свой мини-язык высокого уровня и компилятор в LEG-ассемблер.
 > * **B.** Создать компилятор subset C/Rust/Python в LEG-ассемблер, если цель - изучение компиляторов.
 > * **C.** Понять реальные архитектуры:
->    * **RISC-V** - современная открытая архитектура (ESP32-C3/C6/H2, Arduino Portenta C33). [Spike](https://riscv.epcc.ed.ac.uk/documentation/how-to/install-spike/) - официальный симулятор RISC‑V, что бы покупать ESP32-C3 или FPGA.
+>    * **RISC-V (RISCV64GC)** - современная открытая архитектура (ESP32-C3/C6/H2, Arduino Portenta C33). [Spike](https://riscv.epcc.ed.ac.uk/documentation/how-to/install-spike/) - официальный симулятор RISC‑V, что бы не покупать ESP32-C3 или FPGA.
 >    * MIPS - классическая учебная RISC-архитектура
 >    * 6502 - ретро-архитектуры 8-битных процессоров
 >    * ARM - для мобильных и встраиваемых устройств

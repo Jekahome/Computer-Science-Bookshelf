@@ -616,6 +616,45 @@ fn main() {
     * логика иcпользования байта из stack? одна инструкция переместить байт (на 4 шага) в регистр и в цикле на 4 шага читаем последовательно по два бита и сдвигаем результат 
 
 <details>
+<summary>Что такое упаковка (The Data Approach):</summary>
+
+```rust,editable
+fn main() {
+    // Упакованный байт: 4 значения по 2 бита каждое
+    // Биты: [val3: 7-6] [val2: 5-4] [val1: 3-2] [val0: 1-0]
+    let packed: u8 = 0b11_10_01_00; // значения: 3, 2, 1, 0
+
+    println!("Упакованный байт: {:#010b} ({})\n", packed, packed);
+    
+    let bits_per_value = 2;
+    let mask: u8 = 0b11; // маска для 2 бит
+
+    // вариант 1 (двигаем значащие биты в младшие позиции через деление)
+    println!("Значение [{}]: {:#04b} = {}", 0, packed & mask,  packed & mask);
+    println!("Значение [{}]: {:#04b} = {}", 1, (packed/4) & mask,  (packed/4) & mask);
+    println!("Значение [{}]: {:#04b} = {}", 2, (packed/16) & mask,  (packed/16) & mask);
+    println!("Значение [{}]: {:#04b} = {}", 3, (packed/64) & mask,  (packed/64) & mask);
+    println!();
+    
+    // вариант 2 (двигаем значащие биты в младшие позиции через правый сдвиг)
+    println!("Значение [{}]: {:#04b} = {}", 0, packed & mask,  packed & mask);
+    println!("Значение [{}]: {:#04b} = {}", 1, (packed >> 2) & mask,  (packed >> 2) & mask);
+    println!("Значение [{}]: {:#04b} = {}", 2, (packed >> 4) & mask,  (packed >> 4) & mask);
+    println!("Значение [{}]: {:#04b} = {}", 3, (packed >> 6) & mask,  (packed >> 6) & mask);
+    println!();
+    
+    // вариант 3
+    for i in 0..4 {
+        let shift = i * bits_per_value;
+        let value = (packed >> shift) & mask;
+        println!("Значение [{}]: {:#04b} = {}", i, value, value);
+    }
+}
+```
+
+</details>
+<br>
+<details>
 <summary>Упаковка по 4 значения в байт (2 бита на значение):</summary>
  
 ```rust,editable
@@ -745,10 +784,6 @@ fn main() {
 <summary>Assembly Editor:</summary>
 
 ```bash
-const jump_fn 128
-const jump_fn_div 172
-const jump_div_output 192
-const jump_div_if 176
 const CALL 0b00001000
 const RET 0b00010000
 
@@ -804,10 +839,7 @@ CALL 0 0 jump_fn
 CALL 0 0 jump_fn
 
 # FUNCTION ----------------------
- 
-# ALU xx000001 SUB
-# ALU xx000010 AND
-
+label jump_fn
 # xxxxxx11---------------------
 0b01000010 # ALU reg_0 AND 3
 0b00000000 # reg_0
@@ -832,11 +864,12 @@ CALL 0 0 jump_fn_div
 RET 0 0 0         
  
 # FN DIV ---------------------------
-# jump_fn_div
+label jump_fn_div
 # args reg_2, reg_3
 # out reg_1 
 0b10001100 0 0 1 # reset reg_1
  
+label jump_div_if 
 # IF_LESS  RET 
 0b00100010   #1 opcode Cond IF_LESS
 0b00000010   #2 arg1 source reg_2
@@ -857,7 +890,7 @@ jump_div_output  #4 destination
 
 0b10001100 jump_div_if 0 6
 
-# jump_div_output
+label jump_div_output
 0b01000010 # ALU reg_1 AND 3
 0b00000001 # Quotient reg_1
 3
@@ -923,13 +956,7 @@ fn main() {
 ```bash
 const CALL 0b00001000
 const RET 0b00010000
-const jmp_while 64
-const jump_inc 88
-const jump_set_byte 104
-const jump_fn_div 112
-const jump_div_if 116
-const jump_div_result 132
-
+    
 # prepare steps 
 # 19,236,172,249,236,19,83,6,236,19,83,70,185,70,6,19
  
@@ -958,7 +985,7 @@ const jump_div_result 132
 # current_byte REG_2
 # shift_count  REG_3
 
-# jmp_while --------------------
+label jmp_while  
 # current_byte & 3
 0b01000010 # ALU reg_0 AND 3
 0b00000010 # reg_0
@@ -984,7 +1011,7 @@ jump_inc     #4 destination
 0b10001100 jmp_while 0 6 
 
 # ------------------------------
-# jump_inc
+label jump_inc
 # byte_idx += 1;
 0b01000000 #1 opcode ADD reg_1+1
 0b00000001 #2 arg1 source reg_1 
@@ -1002,7 +1029,7 @@ jump_set_byte #4 destination
  
 0b10001100 jmp_while 0 6 
 
-# jump_set_byte
+label jump_set_byte
 # current_byte = PACKED[byte_idx];
 0b00010101 #1 opcode POP
 0          #2 arg1 Unused
@@ -1014,12 +1041,12 @@ jump_set_byte #4 destination
 # -----------------------------
 
 # FN DIV ------------------------
-# jump_fn_div
+label jump_fn_div
 # args Dividend=reg_4, Divisor=4   
 # out reg_5 
 0b10001100 0 0 5 # reset reg_5
  
-# jump_div_if 
+label jump_div_if 
 # IF_LESS  if reg_4 < 4 
 0b01100010   #1 opcode Cond IF_LESS
 0b00000100   #2 arg1 source reg_4
@@ -1040,7 +1067,7 @@ jump_div_result  #4 destination
 
 0b10001100 jump_div_if 0 6
 
-# jump_div_result
+label jump_div_result
 # MOV to REG_2
 0b00001100 # MOV reg_5 to REG_2
 0b00000101 # Quotient reg_5

@@ -1,3 +1,5 @@
+# #[allow(unused_assignments)]
+# #[allow(unused_variables)]
 # mod legassembly{
 # 
 #    use self::disassembly::decode;
@@ -176,7 +178,8 @@
 #                    last_label = Some(name);
 #                }
 #                ParsedLine::Instruction(_) => {
-#                    address += INSTRUCTION_BIT_DEPTH;
+#                    address = address.checked_add(INSTRUCTION_BIT_DEPTH)
+#                   .unwrap_or_else(|| panic!("Address overflow! \nThe maximum address value is 255. \nCurrent address:{} + depth:{} > 255",address,INSTRUCTION_BIT_DEPTH));
 #                }
 #                ParsedLine::Directive(d) => {
 #                    match d {
@@ -198,7 +201,8 @@
 #                                    panic!(".byte without label in data section");
 #                                }
 #                            }
-#                            address += 1;
+#                            address = address.checked_add(1)
+#                           .unwrap_or_else(|| panic!("Address overflow! \nThe maximum address value is 255. \nCurrent address:{} + 1 > 255",address));
 #                        }
 #                        Directive::Text => {
 #                            section = Section::Text;
@@ -307,7 +311,7 @@
 #        // Debug
 #        if output_debug {
 #            println!("# bytes    |:addr|text instruction");
-#            for  (chunk_idx, inst) in output[..used].chunks(INSTRUCTION_BIT_DEPTH as usize).enumerate(){
+#            for (chunk_idx, inst) in output[..used].chunks(INSTRUCTION_BIT_DEPTH as usize).enumerate(){
 #                if inst.len() < 4 {
 #                    break;
 #                }
@@ -438,7 +442,7 @@
 #                "CJLE" => {0b00100011},// 35 IF_LESS_OR_EQUAL 
 #                "CJG" => {0b00100100}, // 36 IF_GREATER
 #                "CJGE" => {0b00100101},// 37 IF_GREATER_OR_EQUAL
-#                _ => panic!("Unknown command:{inst}")
+#                _ => panic!("Unknown command:{}",inst)
 #            }
 #        };
 #        ParsedLine::Instruction(Instruction::Cj {a, b, label, inst })
