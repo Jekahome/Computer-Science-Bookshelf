@@ -62,6 +62,7 @@
 6. [CPU Architecture 2](turingcomplete_cpu_architecture_2) 
 7. [Functions](turingcomplete_functions.md) 
 8. [Assembly Challenges](turingcomplete_assembly_challenges.md)
+9. [Sandbox](turingcomplete_sandbox.md)
 
 ---
 
