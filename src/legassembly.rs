@@ -232,7 +232,7 @@
 #            for (key, value) in &labels {
 #                println!("# {}: {:03}", key, value); 
 #            }
-#            println!("# ------------------------------\n");
+#            println!("# ------------------------------");
 #        }
 #        
 #        // PASS 2: encode instructions
@@ -310,6 +310,8 @@
 #
 #        // Debug
 #        if output_debug {
+#            println!("# Program size: {max_address} bytes");
+#            println!("# ------------------------------\n");
 #            println!("# bytes    |:addr|text instruction");
 #            for (chunk_idx, inst) in output[..used].chunks(INSTRUCTION_BIT_DEPTH as usize).enumerate(){
 #                if inst.len() < 4 {

@@ -2,7 +2,7 @@
 
 ## Игра "Half a worm"
 
-> Ради применения LEG процесора - разработаем игру.
+> Ради применения LEG процессора - разработаем игру.
 >
 > Червячок имеет внушительный размер - аж 4. Расти червячок не может, но и есть не просит, при этом имеет огромные просторы для странствий. 256 байт памяти программы с 4-байтными инструкциями не хватило для полноценной реализации логики игры. Весь интерес игры не в самой игре, а в ограничениях при ее создании. Теперь можно закрыть тему 8-битного процессора и ознакомливаться с более мощными архитектурами.
 
@@ -155,134 +155,135 @@ fn main() {
 
 
 
-struct NotebookGrid {
-    width: usize,
-    height: usize,
-    cells: Vec<Vec<bool>>,
-}
 
-impl NotebookGrid {
-    fn new(width: usize, height: usize) -> Self {
-        NotebookGrid {
-            width,
-            height,
-            cells: vec![vec![false; width]; height],
-        }
-    }
-    
-    fn fill_cell(&mut self, x: usize, y: usize) {
-        if x < self.width && y < self.height {
-            self.cells[y][x] = true;
-        }
-    }
-    
-    fn clear_cell(&mut self, x: usize, y: usize) {
-        if x < self.width && y < self.height {
-            self.cells[y][x] = false;
-        }
-    }
-    
-    fn fill_rect(&mut self, x1: usize, y1: usize, x2: usize, y2: usize) {
-        for y in y1..=y2 {
-            for x in x1..=x2 {
-                self.fill_cell(x, y);
-            }
-        }
-    }
-    
-    // Новый метод для отрисовки змейки
-    fn draw_snake(&mut self, snake: &[(usize, usize)]) {
-        // Очищаем поле
-        for y in 0..self.height {
-            for x in 0..self.width {
-                self.cells[y][x] = false;
-            }
-        }
-        
-        // Рисуем змейку
-        for &(x, y) in snake {
-            self.fill_cell(x, y);
-        }
-    }
-    
-    fn display(&self) {
-        // Верхний колонтитул с цифрами
-        print!(r"y\x");
-        for x in 0..self.width {
-            if x < 10 {
-                print!(" {} ", x);
-            } else {
-                print!("{} ", x);
-            }
-        }
-        println!();
-        
-        // Верхняя граница
-        print!("   ┌");
-        for x in 0..self.width {
-            print!("──");
-            if x < self.width - 1 {
-                print!("┬");
-            }
-        }
-        println!("┐");
-        
-        // Основное поле
-        for y in 0..self.height {
-            // Номер строки
-            if y < 10 {
-                print!(" {} │", y);
-            } else {
-                print!("{} │", y);
-            }
-            
-            // Клетки
-            for x in 0..self.width {
-                if self.cells[y][x] {
-                    print!("█");
-                    print!("█");
-                } else {
-                    print!("·");
-                    print!("·");
-                }
-                
-                if x < self.width - 1 {
-                    print!("│");
-                }
-            }
-            println!("│");
-            
-            // Горизонтальные линии между строками
-            if y < self.height - 1 {
-                print!("   ├");
-                for x in 0..self.width {
-                    print!("──");
-                    if x < self.width - 1 {
-                        print!("┼");
-                    }
-                }
-                println!("┤");
-            }
-        }
-        
-        // Нижняя граница
-        print!("   └");
-        for x in 0..self.width {
-            print!("──");
-            if x < self.width - 1 {
-                print!("┴");
-            }
-        }
-        println!("┘");
-    }
-}
+# struct NotebookGrid {
+#     width: usize,
+#     height: usize,
+#     cells: Vec<Vec<bool>>,
+# }
+#
+# impl NotebookGrid {
+#     fn new(width: usize, height: usize) -> Self {
+#         NotebookGrid {
+#             width,
+#             height,
+#             cells: vec![vec![false; width]; height],
+#         }
+#     }
+#     
+#     fn fill_cell(&mut self, x: usize, y: usize) {
+#         if x < self.width && y < self.height {
+#             self.cells[y][x] = true;
+#         }
+#     }
+#     
+#     fn clear_cell(&mut self, x: usize, y: usize) {
+#         if x < self.width && y < self.height {
+#             self.cells[y][x] = false;
+#         }
+#     }
+#     
+#     fn fill_rect(&mut self, x1: usize, y1: usize, x2: usize, y2: usize) {
+#         for y in y1..=y2 {
+#             for x in x1..=x2 {
+#                 self.fill_cell(x, y);
+#             }
+#         }
+#     }
+#     
+#     // Новый метод для отрисовки змейки
+#     fn draw_snake(&mut self, snake: &[(usize, usize)]) {
+#         // Очищаем поле
+#         for y in 0..self.height {
+#             for x in 0..self.width {
+#                 self.cells[y][x] = false;
+#             }
+#         }
+#         
+#         // Рисуем змейку
+#         for &(x, y) in snake {
+#             self.fill_cell(x, y);
+#         }
+#     }
+#     
+#     fn display(&self) {
+#         // Верхний колонтитул с цифрами
+#         print!(r"y\x");
+#         for x in 0..self.width {
+#             if x < 10 {
+#                 print!(" {} ", x);
+#             } else {
+#                 print!("{} ", x);
+#             }
+#         }
+#         println!();
+#         
+#         // Верхняя граница
+#         print!("   ┌");
+#         for x in 0..self.width {
+#             print!("──");
+#             if x < self.width - 1 {
+#                 print!("┬");
+#             }
+#         }
+#         println!("┐");
+#         
+#         // Основное поле
+#         for y in 0..self.height {
+#             // Номер строки
+#             if y < 10 {
+#                 print!(" {} │", y);
+#             } else {
+#                 print!("{} │", y);
+#             }
+#             
+#             // Клетки
+#             for x in 0..self.width {
+#                 if self.cells[y][x] {
+#                     print!("█");
+#                     print!("█");
+#                 } else {
+#                     print!("·");
+#                     print!("·");
+#                 }
+#                 
+#                 if x < self.width - 1 {
+#                     print!("│");
+#                 }
+#             }
+#             println!("│");
+#             
+#             // Горизонтальные линии между строками
+#             if y < self.height - 1 {
+#                 print!("   ├");
+#                 for x in 0..self.width {
+#                     print!("──");
+#                     if x < self.width - 1 {
+#                         print!("┼");
+#                     }
+#                 }
+#                 println!("┤");
+#             }
+#         }
+#         
+#         // Нижняя граница
+#         print!("   └");
+#         for x in 0..self.width {
+#             print!("──");
+#             if x < self.width - 1 {
+#                 print!("┴");
+#             }
+#         }
+#         println!("┘");
+#     }
+# }
 ```
 
 </details>
 
 <br>
   
-Для проверок переполнения оси X не хватило места в программе (247 байт), так же и для логики snake (увеличения тела, еды...)
+Для проверок переполнения оси X не хватило места в программе (248 байт), так же и для логики snake (увеличения тела, еды...)
 
  
 <br>
@@ -290,7 +291,7 @@ impl NotebookGrid {
 ```rust,editable,abraetable
 use legassembly::assembly;
 fn main(){
-
+  let output_debug = true;
   static INPUT: &str = "
 ## io output Draw ASCII 48 snake или 0-пусто
 ## r3 в роли приемника INPUT
@@ -415,7 +416,6 @@ body_pos:
     JMP read_input
 ";
  
-  let output_debug = true;
   assembly(INPUT, output_debug);
 }
 
