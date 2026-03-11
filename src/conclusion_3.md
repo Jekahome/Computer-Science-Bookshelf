@@ -10,6 +10,8 @@
 - [Глава 16. Сборка памяти](#Глава-16-Сборка-памяти)
 - [Глава 18. От счетов к микросхемам](#Глава-18-От-счетов-к-микросхемам)
 - [Глава 19. Два классических микропроцессора](#Глава-19-Два-классических-микропроцессора)
+- [Глава 21. Шины](#Глава-21-Шины)
+- [Глава 22. Операционная система](#Глава-22-Операционная-система)
 - [Глава 23. Фиксированная точка, плавающая точка](#Глава-23-Фиксированная-точка-плавающая-точка)
 - [Глава 24. Языки высокого и низкого уровня](#Глава-24-Языки-высокого-и-низкого-уровня)
 
@@ -347,6 +349,7 @@ _____
 
 [8-ми битный сумматор сложения (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKAA8QUCQ8AWPEL3w8EEXuEIhAAiCAGEEDsIFMDyIIBYQADoBnQPwggVhAp2wLwggPhBAgiAz2nQuTzEB2DChDFIYidPlK1644GEQQDwgvwGkQc2ZJa0kwQiRrYkFXQCYQQFEQQ08AIWCwBzw7CQg+KnEIkETkjQBBFjBicIxQ-nBiTLqHVg5MCBrbGpAsF0LZBRUNH38gjl4HDGIkCIFJgQLJfo8NHT0jUwqq8C77KkqJtE5wFgBzbcliDPPHQio7zerJBAb6h2eHZvNMB0JxkDtyL8kAs3ANPMNAg9rrxfq9BLDPq1CE8wNh-hgIKJJCCloMvH5IZVHv9sOEXthSUcWpwMFRsFl0Uh6djXLjwQSggB3GmNATfHiFSAsblgHZ8a54QXCiWFfmSyRC7n83Y8kCEPACRWq9UCUWSHVQaV6tUIYkGrX896q033JX2Ci3a42w0iroILhOx0W+0w8T83jYBzehwB5pdUMu6FwaGByPGwrGurBwS68Oa6Vyqj+9Ou8K8ApdY3J+OFrrJtB8+1Fr7qkAMWvYYjievA1nuPGrAwmMxIgQMNF2NH5NtgoYclgAWVVDDquGbSc40AQUONM91LzXVJrMQy5DsBVwsT67fZIxXXTwexel63rRwnAQe4wfMdOJPY7PROuFbhP8+docClJH5OdIxAyAC0kUCtWNfljWglgAElBFjMBIBQcReC2NCMKgKAlwoaVnTQoQHT2OAczI5B7WIkjI0IXDmAgqimPELUGIKOjInCOitSwi5w2w9C2OlfjkFwsS0PtLViMgH0hOkojHTIbEthUw0wEfKj1KtdSqHIe5kIjPBYTEky2PwpBl25Z0NVoR0+Eo51LjeZT83o3Cm3EZz3PYzz3O4xxfNErZ5UEULYT4iLMLUq4ZOUq4xJcyNbMKMypU08hUqea9BW6PChUyqixKtMT9IKpT8i2MSysqigXhKl4oqedzGqDELVM6ihgu5Di1VwwK+r88Q+udIa6qtMbcPi+zZooD0hSM2MEFarYVosmArIqLSxtNeqfj28rbSowKxMCmbundcLJAwK7mu6ZixNu9ruTOvanuY4bunFQLnxE3rcL+qigYu57gfFUHDjGjVDSWiZHq2WkNoI5c4c4CSthQabLMImzHQwuafwuy1HQQgHxFA50yf6inmMC6nJME4Dpo69GYuAxS8azeSOZelimeuQqdsdY0rSLfLDJQn52bVZGtq5ng5qTOrmFcvYepp8B3OIjW+rAAK9v1-7rtcM7jbNk3VZSkXEuwuKVa6jLhb2HLmgVCWNOdklXe9vCDOtulKTEoCA6lk2I3u+kZYj1mQ+DiHpT630TWxSLE4k2FnWTi6IyztOFaEObSXTNGo5Nsu7hR7assdJhtY3I2-YqgAZbrmyt0QHCYOLwBAAAzABDAAbdQ6GoC665lyfQ83MTN3uhhqq2efWenueti+ph9T2rePPbp5a6lBXN2dXeJ5vU+rcWsPF662+CqrgDHES2Nkr41DhLDt+M3tIGIxB0SsY-6xnMmBe0p1YznUAQdbEQDPo-zeB6XOC1oHzXmMtDW-powRkLpGCMZccHRnLD6WM-J34fAkqQzmqpG4RkbuQ2WYd6EINNqhBUqD750PYchJgdhgLCF4YWXyONrJ1lRA5KgvDrzHV4R6G8TAUChRkRkbCkgFFKMjOo8IaiVE6PYdyOujF3KCLzMbExWt26Bl1BrWRAh5Gog9Mwgx+tcL2PGAUYKrcpEOGXqiF4GRNS90HiPMeSAhbkDrjvOohjMICEII3f218FGygERkBMwjNq4zEWgKg9iUAgOUTMRWYjxHFK1N3SkhQKmhEKZUnRpSz7SgUbCRuyTTGaLSe07utYnElNrPYopvTmniDyS04KRUtF1miRkUycSEkVQmepTci9WpzPcokppXlikrI8WYxy2z9lDLCBYushybFbNacco5CY1FhUaQYsKVSwo3nKfs+RzyZF2W2clF5SFTmYwEVcjJVcJnMEpMs1iKY1TzMKcxAZzEhloWEPYiiJzyloUNsYpF1izGQtaRi9p5T1JVKWUfOsxK1HqV+c41F8iqXKIgrkyRUlMiSyYJAPaP52WYrloRHhvAUl9gFYSkRTTcHyOMjI4u2yQ7UrrCHKpsqpV1PleCslM4xnznSWY4VJz+w9JsdK+R0qhnJwlZqz2ES57ROTnUeJ6yKo8JQJygRzqRWZNEQwAm2zMyaJ-PYi8yjCw6MDR04NYiuj3PlQi4xbq0VNLja0n8Qz-WSOTYauFkjQLMImSHZZoE7UwstXWQKyyk5rPEBsgxfV5F6xse6OxkiG3xoMY+Lpzahl1ubG2ltUzVF9r0ZoySaizIyObRKjR5TbJNukbDOsPauU9voaKiZdzol-wrR7cpQN5FA07TDWtMMhk4C6QaY94pWknt7S2bRJad7qsClUwKcr6wHskc+mRKpd1XV+Twq9XKr3Lo9X8hgV7jmgcpGFSu8s6wqjBqBq6YNykGng79O6TTBowxvZdPm2GDR4cOk0ndVSwPqtI2og0UGMMw1Qwesj4p4PEfYauwofVQMMcOPaytjr50XmXj2qDorW2Ong1aJDTTm3waeuhgxZ0sPSdw3JoVWwoHVtcVUgT6rNNqPHVpj0om5EPsBldes6nmNaTw7hUzlbONFvCaq-UVnQIqi41uppzmTOgSowYn88H-XqrjXc-z+jo0jKqYF9Vxp8NRcI84ro0WdgybrL5kzxpxM+dIn53+6GnV7S+V6vLeVgMTLOlZ5OLm7NithFJ2E3n5W1ng0a9Vuq7lNZCxqsLI7Ch1f7JSfDIdVMObVFhkO6X6uzE85SMbM5oxSaATlqZ3WJXdaK1XHhBKeC+I5aEVbMH2WZdS3JCYSX2XCHg+pab6l8MXZO1drDV3YslLhVUjbPXXsvdpZF1F8HsUCna5Cn7dEqOgtKWxgHtmHVsuOeB6Hu2skMC+edq4039nwbCij1jWH0cnbCvh3Hj2dl-f+Tt9rsPbl1B66jkzbz1VbPO+5YHFmrtWbpxD7j9xQWKMc+3IgNmqCuardk6rqXedE-RUUwH-TIsoBW-UqX-3Rd3M6WLppYL9RYbVynDpoONelOmyECbXdNf65yTh7J832rrZl6EXx1uxcros-rPaYP3HdDZ25rxfiJi1m8YrO4QTh6j3Hqr13P3XdvasWb2xKvnF8KJ9Ht74eXtx7e1z4bfZdFa-RWn6Laf9eR5+3nk74j9KpcbMdy3YiU++JT3D5cnu4+BmZXH3B-vglB7CSwT3dvQJtMEEQvC7fQmGk99tzgGux+t8H4H4fQovHHLjQj6qA+qBD+D14-99oIPYhX-3Gf6-ePASwz2qfEA1+d68bq3vurT975CQfgrUFDiP-7-71f++L9V8LKi8xLKCp347xH2yUKFICNztz-zbw-yAO5QEh0THwgOn3v0-yXwuGMSuSO3-3P2gKvSqEkUAwwMgKQOgJ7SWSXQIIDyILn0WwuA3F1QQPf0oK72S0Nh-0TXILPygPKUC3kTYOEBgkSzdjN34O5zwnGlzDEVuWZXa11S5RkJZlbS6EXUUNIm3UpAAzUIJxa2Wxt2kO62Xl1QaEogYAE34y6D0iI0g2XhwK9FVzH1wLETsLLFV2rx0Tj1+1eQBT7AXwJ1REUNSUb0OAng7ixXthshCLeFWVDjqHWihRkkiJiKJjqh-ASL4KIncmSPcmlQumlRiKyLSIplrBiObQumbSKJQTCO8g9BiPNDqgNGqJhjiJGhhhiP2Qun2RaOVgqJ4GiPcncJVlRRiL6J82yy7mVFrHRXLyjy926HGOcJeA6HN29yMIyAt0WJmOWPySWIcN-lmJpRGO2K2PRQwIWMXmR12PJWRxM2SgWKJTOL7DBhuKI0QxMwePOIQy2OMPmLeLExMzE2+K+KFSATeP-hM3-mBKBL7DGOWMmPsUmI3jmJ8R0U2JuA6WRLyVfgVwxIOJRKOPtBRXtHhL2MRIuOJNuNZRJJxM2SuCsKukJNgx-TwNpPazBn4xeDpM+PJI5MpNbTZJHSxPKUlSmX5LFSxK9QJPa19TFNJOcL8Iz3SNSPEIhWMU6LEWVLlL9AVIlGZTkWUR1OyT5HkP1LZmAOZmNlglSSuESOcUtItI+BUNV0tNIhgM4HtPEJDi2BDi1Exh3m8JC0TFq3yHzmKX5G31VGEP2kYStHYj9GP0UIaKNB2EODqBVD4lsGYhnEKGpmNH2RARVNjCb2YKf11MFRNONOz1lCs2V2pmdK5Q229SOM5SdLrPjIMX-R3k31wwXSdIXRbOoP+HTLkLMTjQLJfytK-x0NOVyTpPjCuHrE4lw3sUkM23axaVnNhG-mrXEGSj7w3NLPA2V13J3Ibjt13NgidKaFdKmT5HPIEEMKHVvI9GdLvIbInKfPKIcL2jvKfJsLdJ93zLeP-L7FfkNR8TQLUhsWh2XmOS2XDLnjSnZPgsHXsPRQuFrmsOOn52xnMO5CoFILMKcJFBuiuhAKaiNBoK7gMNItkxAMfMor5mzJvBATlSYrpGaFRS1A-ldRYM1NzNsEAkCNElmCTLTONkzheARF7JvDNW5j5g9MpG9PYSAA)
 
+---
 
 ## Глава 13. А как насчет вычитания?
 (Дополнительный код)
@@ -469,6 +472,7 @@ fn main() {
 
 [8-ми битный сумматор сложения и вычитания (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=CQAgjCAMB0l3BWcMBMcUHYMGZIA4UA2ATmIxAUgoqoQFMBaMMAKAA8QUCQ8AWPEL3w8EEXuEIhAAiCAGEEDsIFMDyIIBYQADoBnQPwggVhAp2wLwggPhBAgiAz2nQuTzEB2DChDFIYidPlK1644GEQQDwgvwGkQc2ZJa0kwQiRrYkFXQCYQQFEQQ08AIWCwBzw7CQg+KnEIkETkjQBBFjBicIxQ-nBiTLqHVg5MCBrbGpAsF0LZBRUNH38gjl4HDGIkCIFJgQLJfo8NHT0jUwqq8C77KkqJtE5wTerJBAb6h3OHZvNMB0JxkDtyR6QFtwHPYcCT7cleI9LoIgbdWoQzmBsM8MBBRADXEtBl4-L9KqdnthwhdsFiji1OBgqNgsjCkCSEX13MifkEAO6ExoCe48QqQFgMsA7Pj-VmSdmcrp4Qos4X8jmM7qHFmEPACAWS2UCLmSJVQCUqkCRDFqhUs66ShCEKh6+wUY28o0mjVdBBcS0W00OQHiFm8bAOJ2CD2892em0AuC+n0KzWFTV1L11CPyiWiqhu2OC8K8ApdTVesPprpetDMs0Zu6ykAMYvYYjiUvvRHUzyrAwmMzggQMaF2aH5GtfIaooIAWUlDDquErkc40AQf01Q+VFxn+KLMQy5DsBVwsSp3ZRIynQr2FzwCeOrRwnAQK4wzItHyR317u8keeBT9uDJZuMfZpH6rfX8gackb9Qy6FlNSAlgAElvWaSAUHEXgtjAWDxBNCcKAlK1kCEc09jgJMcOQM1MOYf8fy1ODwCQ8RiKosjCAokjxG1SjSIVBDJDIAFEOQsj2OQCi+KQs0FWIyAzUEsT-QZTDOMELZZPZMBzwI2SDQU7ooHVKC-R4IE+LwIFUKQSdpItOVaDMyMMItYgMhU1M6IoitqJshyFXo8RnK1I1HDciV9MKfTDP8rYDPg+S7JEmy7L42ypIIsU5NCNkKmUzDEoNRKqHIa0lPITC+INPjss0qL8i2Pjius2gLkKi42K2BAHLq+LKoqxq-IZDzyKYnzuvcijusw-rqooC5hoosqCMwu1Y20n0mvCs43KgNDJzygjmINZiSutUyqGYvidtGjA7SS7ozoayQiSWi7Wq2Q6thuxzxEvXrrp5AbXp5TC3rI36zt+z6TsOYa5S06DulIvjnqM9D5puASthQSbVuM0a4IshNhCm-ULXArqKO-TCCZ655SOY0nBK6PiUZQkLHyRz94swt1keE0aI0QnNUvyi1NQNDMNOtBGtVuwy0fQ-aeCxwR8Joq5+c6smwAc4jle61X3vAZXBK41V6YZI7buYFn+ZixDIs5-XXEUtL+bOC42WF9UNpJvEDQ-TScv+-G8T4r2pp0yqQwZ54eRD+7AP9rYSUNsmXW8gFgsJ+CgQKlOCJ0jP44KoMSeLdlRbj86S7h9b7aoJg1bnLXvdKlgABkKAcpg7NEBw289cAQAAMwAQwAG3UOhqCm6vbon32q7qPj5yukt2skeew6nueti+ktCmYphxVTrezgtXfp5LOpMOP8fDwIruIZ0hgl8X-lJZMyU4sht+2J9JCBJ9D+4zNP6Ok-qfwmBHH0YUyIyh8jpY6RsfSHR9LDf+Vx7TZ3tCAigqCFrKzdEGYOQYMEl3wXtSUbofQsgwXTSGFDkE63gl-XW8D6HNBwQWAEX896Q3vuw5o4ooJMDsI+YQAj0wrRgOjBkAizJVyhAeEhAj7RXyYCgUK8iMiIWXuo0IaiVHhE0bog+ZFq4MVblCUR8cREpkrFCe0dcFQKIEEomxyplbGPEE48YBQ-LNwERcLYvjmjoJ7gPYeo8kB23INXHy843Fyy1HXH2Rct4oBFMIjI4YxFrQlMooMTiUDgLUTMGWW8oTaKMcwPEhQ254ivvYipeiSl4gvtkjIQI67KIyRY9JViSnFjsS0opTiin9Mka09xMiiBePphtZR-i6jKL0gIQgCSG4zNkjErydRlkOUSdkrySivIjJLHwRxVcTl0KMWEC5DBzlHPvg5dpVy7mJSqYlZpkiXnL0SrU7J5ylHfPkeZYp987I-P4Vcp8NzEKZPRjM+pp8WyMTids16DdRm0SGaRO5SFhBOLwhcupkAfLtJxS4rptESVEp6fY2SVT1kpUkbS5eskfmjPxQcvc5T-xUDxWaMFW8qWcDSYKuxz9IKn1SS2XgnTSpZMkUIHlM8ClGKxKcksXtWXqsqcvDV8ivZVK9u80+bTW7Supdks11zVUEuydapR1q7mJyUYnfpMy57zMTlslZIsSwoB8pCv11KxWSMxsC+MRinxOM5XU9Mmjo0tNjVvLoRrWxYtboGm1IbiXpuEHcyNVcnx3O-PatN0zlKtiafM78XqdmrPLTveZ3Ua2ovkd1JRmtXGzWBV2u554ekMB7a4jtlY+2ZtPho8dmjOFDgnTOsp9iu3OtUUY9KVdMo+oHSBYRo7RXiPQjMt58zAFLO9UYv6Si-p3LVO28GdycD9rVHenk7T71jqrA099hj7HMSqcxTVpZwbtp8v+3YwLTqZA3a+yFr7d1ZP4a+q5DAEPOz3S-JDhxwMlkw5h794NMOfpw9k5iaoCOXSI31cGn7YFYZ5G85D076MlmvQypjeGzoAccSxpDPJ8PnpSge7eFFuOvUOCil2STN2hH8aOrKwaSwA07gaQjkiu34ZhmR+VD1KPqfinOrU2mHo+W-RRN5MmuNmeXou8z9p8NWend1fDbb+P1r6kJhzonT0RK1aqIT35QNid2ZIvz7Hi1cafPhyNYXgNVMi9O0Ly8M1ZQTaqSjmpqNMC6CRzUynfXCHw9ljTvrsIRYAWR-hiWlGJZQ1kt1D0hOJ3855i1QI1NAiS0F4s+G7VcctW87r06nVVN61xr2JHRtGdtXiMbeIcutk6yFmbhWhxBjU4gsrErQjOsKLJ1D4qmCCsQ0haLT9dtsuK+xoSEwlukruovHYS3ZIkdkrNx7lHHsTfRaRN5R3krTp+3yAVuKuM3fy+y4HtF8sYuc5E+F3U26kUa7WjdVzEMo+qxI45V98Nv1m+c-DiVcfb0owTpbiUSNk4+4vByby0fTtp8cuo7WGezHY38rjXlsfU+h3dnzlYOceaR67ctWiyYLJEwdJrozJm3bFwDupRTIfFiZx037vTON-el99lJqv5dTdS6UpO5SDdZYN7NkILPO7wrN2gbKF38lXf9Pw7pPB-HO52zV4XvBXPWM8VKCXgv2Q+NkRMYsASZYmmCUPEeY8Wm+-y775XziZdJ8T4IgHDi5ex5M1UsxOuWkGKywXynsyUuIoMWbj0FvklPWu1iW3lvywO4hpYl3mi0-u-RkHtPHoZFp4VaVPuUewnqiD9r8m1ix-94jyE6P4Sm4Cv9alwVU-I+hJjz4iF0Srkr4gDP4fgesN4hZEh-2BDV+z5H-JkClHR0r6oHv9fG3x9P7v4Ptfc+fEZp7766BZ-79D8fwYFAgNyAILBtwHwfznyzU2wLWJXxWAmujOkKByzS1RhGmTEMRuRkQG0lSfyoQXS3RbFHVDXsSg2ESg2L16y2ykxwJoKfwaHwkk1byvw4h5kkQQ38VfSqDUUFW4IX3CHgJaXb1dzTxu3sQhWEU3z+zT0hVz2eEOHHlNhbmsStmklMXbmanlmvAEEWjiREk0OUKFS0Oxh0IcifH0NdGEF0OtSmmtWsMLgwgcjsLVnQVGi7V0K7QsMwVMKYnBimjVF0N1EcN8J8J4CsmlnOV0POS8MiIeUEOlhu10LEOyRZBKxD0YOD2T0b26AcNGWyI6GSUQVyMKKb2USKIyPtxyMRUkiqK5VK0txqIKMJQAVDxx2KJBVKLaMYK6KwzOiaOyWw3Y2w3aOGKIIuH6JU3GPYyU3aJmKlXKKMSAXYyAXaJWJbFSPaMyKcWyI3iEL8X0V-g12VTKIcF2Kl0OIFTNDOMuIgxuMcD+xqP8TfmuI6OBWeOnXeN6NOIYzOgvTOheMw2k32JXTkXk2BIXWBKHAuPsR0mdWhItQuNAO+IjT5QLSuOkMIK3jMJxgDARSxNHAyNNURWxPwk1DyTVTqUUQmWZEmnzxpInxFFpIwNkLsnMIGRuDSVZOwnlxuGwn239W5NxK9ljjxAVGRi33FM4QjDa3yEzivmPygw5gwO2monqglFBBv2v1JJ2EODqFAzYlsFIiHEKFJjJOHCZDIh9G-yAJ8m-0pNwJV04CZOSUZIZMAlYhaUFVkK9MFLZQFJkS9L8IGKP2iUVN02IL5OIKDPlRNKNMtXwJSNtMOBtKEQyOEK+R5WuLDDslLAKFUOOWwILOYO-TzM7iBD-kkXLJzOdwrJdLoMdNrMdJuwbPzM1FDXnBIItWZD5LqAYMWIED7P5I4lcL9PrP+z7MJR8kHPHMdCFNDytPaIXJbF-lcRXMrCuS8nENCn8Q3OVi5inXOjqRtmPj4KPPuKri4NnIZAOlRgUglCoHWVHTvM5EQN4UcDVJfPfM7ktVIF0x-PtGNI4g-N5CBXAU1TAuJBghxIZC-nxRTOQGgvkLCNsAcDtP8lmF1MNPjnTguA1PwividQTCVPuMxA4kfGL1DXhWWz2ANwPyhOaBAJ0gyD-zfwvzosFhAMFnAOnwAKgNPiDCopolFOySEuXlA3hVIMOCoqBQkt+SvioqohouErOyUv0QEtovz3UqaVKVUsvyQyQJAMw2Yoj1314r0rfioosu4vP333n32wLBAMu3AGsv-3fz0oyC-kcsqOMogLMrosyIUuyJ8p4rcvZAAGV8TdKmBKA8zRTNIH8EwWAABzLeGKyiZMpSSpZitFSKyibSuvPK8UAAJVSqxSUktwQCysuk0mwnCVlUnA4GitJBCCQGiohEomLGok7nMCauVFkVSvNieHggEFUAAAdUprFRDHLRD4CjhYUmo6zCrFqxC5r90FqhylqNqVqrg1r1zLYmknlZru4K5KwYNDLKkjrNITqWDNqd1Lr5rRxwxGLwx7rdqf9wgQCM1trqA0Ndy9qBDEKT8yKLyLrAanzk07rAafy5xLVkiQ1sJ4VowNKMC35ez8y0bnQ+rhKgA)
 
+---
 
 ## Глава 14. Обратная связь и триггеры
 
@@ -589,6 +593,8 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
   </iframe>
 </div>
 
+---
+
 ## Глава 16. Сборка памяти
 
 Мы хотим выбирать одну из восьми однобитных защелок (latch), используя переключатели.
@@ -693,6 +699,7 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
 
 Что произойдет, если вы отключите его от источника питания? Все электромагниты потеряют свои магнитные свойства, и с громким щелчком все контакты реле вернутся в свое исходное положение. А содержимое этой памяти? Оно исчезнет навсегда! Вот почему память с произвольным доступом также называется энергозависимой. Для хранения содержимого ей требуется постоянное энергоснабжение. На смену реле пришли такие электронные устройства, как вакуумные лампы и транзисторы.
 
+---
 
 ## Глава 18. От счетов к микросхемам
 
@@ -772,6 +779,8 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
 
 Быстродействие — одна из самых важных причин, по которой мы вообще используем компьютеры. Максимальная тактовая частота оказывает очевидное влияние на общую скорость работы процессора, поскольку определяет быстроту выполнения каждой команды. Ширина шины данных процессора также влияет на его быстродействие. Несмотря на то что 4-разрядный процессор способен складывать 32-разрядные числа, при решении этой задачи он сильно уступает 32-разрядному. Тем не менее вы можете не сразу осознать, какое влияние на быстродействие оказывает максимальный объем адресуемой памяти процессора. По мере усложнения процессоров многие распространенные задачи, ранее выполнявшиеся программным обеспечением, включались в функционал самого процессора.
 
+---
+
 ## Глава 19. Два классических микропроцессора
 
 Начало было скромным: первый микропроцессор Intel 4004 содержал около 2300 транзисторов. Сегодня количество транзисторов в микропроцессорах, предназначенных для домашних компьютеров, приблизилось к отметке в десять миллионов.
@@ -783,6 +792,100 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
 
 Чипы 8080 и 6800 — ​это интегральные микросхемы с 40 выводами. Чаще всего длина их корпуса составляет пять сантиметров, ширина — ​около 1,5 сантиметра, а высота — ​около трех миллиметров. Разумеется, мы говорим только о корпусе. Размер кремниевой пластины внутри намного меньше: в ранних версиях 8-разрядных микропроцессоров это квадрат со стороной около шести миллиметров. Корпус защищает кремниевый чип и обеспечивает доступ ко всем его входам и выходам.
 
+---
+
+## Глава 21. Шины
+
+Как разные части компьютера физически и логически соединяются между собой.
+
+[Шина (bus)](turingcomplete/turingcomplete_memory.html#the-bus) — это набор проводников, по которым передаются сигналы.
+
+Общая магистраль, к которой подключены:
+* процессор
+* память
+* устройства ввода-вывода
+
+Но возникает проблема: если два устройства одновременно начнут передавать данные — будет конфликт.
+
+Ключевая идея главы — трёхсостояние: Тристабильные выходы (high-impedance)
+* 0
+* 1
+* Z (высокое сопротивление, отключено)
+
+Когда устройство в состоянии Z:
+* оно физически подключено,
+* но логически «молчит»,
+* не мешает другим.
+
+Это фундамент для:
+* общей шины данных,
+* выбора активного источника сигнала.
+
+<div class="sim-wrapper" data-circuit-id="46">
+  <button class="sim-fullscreen-btn" data-circuit-id="46">⛶</button>
+  <iframe 
+      id="46"
+      data-circuit-id="46"
+      class="sim-iframe"
+      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/46_tri_state_buffer.txt"
+      loading="lazy">
+  </iframe>
+</div> 
+
+---
+
+## Глава 22. Операционная система
+
+Проблема "голого железа"
+
+К этому моменту у нас уже есть:
+* процессор
+* память
+* шины
+* ввод/вывод
+
+Но остаётся вопрос:
+* Как пользователь запустит программу?
+* Кто загрузит её в память?
+* Кто будет управлять устройствами?
+
+Если писать код прямо в машинных инструкциях и вручную управлять вводом-выводом — это крайне неудобно.
+
+**Что такое операционная система**
+
+Операционная система (ОС) — это посредник между железом и программами, которая:
+* загружается первой,
+* управляет ресурсами компьютера,
+* запускает другие программы,
+* организует ввод и вывод.
+
+ОС создаёт удобные абстракции поверх сложного железа.
+ 
+
+Если любой процесс т.е. программа будет напрямую использовать общую для всех периферию (сразу пишет в ее порт) то будет «каша» так как процессов сотни. OS регулирует очередь доступа к оборудованию. Процессы передают свои пожелания работы которые они хотят выполнить на оборудовании через системные вызовы т.е. **API** OS. А OS в свою очередь, содержит **драйверы** конкретных устройств. Драйверы знают, как управлять оборудованием под которые они написаны, и они уже напрямую пишут в порт устройства нужные команды. 
+
+
+В Linux нет единого бренда «LinuxAPI», как у Windows систем WinAPI. Вместо этого используется комбинация стандартов и библиотек:
+
+| Функция | Windows (WinAPI) | Linux (Аналог) |
+|---------|------------------|----------------|
+| Базовый стандарт | Win32 API / NT API | POSIX (Portable Operating System Interface) |
+| Библиотека-прослойка | kernel32.dll, user32.dll | glibc (GNU C Library) или musl |
+| Системные вызовы | OpenFile, CreateFile, ReadFile, WriteFile | open, write, read (syscall) |
+| Графический интерфейс | GDI, User32, WinRT | X11 или Wayland + GTK / Qt |
+| Реестр (настройки) | Windows Registry | Конфиг-файлы (обычно в /etc или `~/.config`) |
+
+Простыми словами:
+*   Если в Windows вы пишете MessageBox(...), то в Linux вы скорее всего используете функцию из библиотеки GTK или Qt, которая уже сама общается с сервером отображения (X11/Wayland).
+*   Если в Windows вы открываете файл через CreateFile, то в Linux это делается через open (стандарт POSIX).
+
+Еще OS: 
+* распределяет виртуальное адресное пространство через MMU
+* выступает в роли обработчика прерываний которые она саме же и планирует для переключения процессов
+
+Можно предоставить программе в распоряжение весь компьютер напрямую, но тогда придется отключить операционную систему.
+
+---
 
 ## Глава 23. Фиксированная точка, плавающая точка
 

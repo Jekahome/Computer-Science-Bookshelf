@@ -8,8 +8,16 @@ title = "Computer Science Bookshelf"
 [output.html]
 smart-punctuation = false
 no-section-label = false
-additional-js = ["js/mermaid.min.js", "js/mermaid-init.js", "js/general.js","js/formbutton-v1.min.js"]
-additional-css = ["css/circuitjs.css"]
+additional-js = [
+    "js/mermaid.min.js", 
+    "js/mermaid-init.js", 
+    "js/general.js",
+    "js/formbutton-v1.min.js"
+]
+additional-css = [
+    "css/circuitjs.css",
+    "theme/css/theme.css",
+]
 copy-button = true  
 editable-highlight = true
 
@@ -26,6 +34,7 @@ build-dir = "book"
 create-missing = true
 
 [preprocessor.katex]
+no-css = false
 macros = {}
 command = "bin/mdbook-katex"
 enabled = true
@@ -41,7 +50,6 @@ min-rule-thickness = -1.0
 max-size = "Infinity"
 max-expand = 1000
 # Extra options.
-no-css = false
 include-src = false
 block-delimiter = { left = "$$", right = "$$" }
 inline-delimiter = { left = "$", right = "$" }

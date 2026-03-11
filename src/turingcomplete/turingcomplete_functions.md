@@ -3065,7 +3065,7 @@ pub mod disassembly {
 > [!IMPORTANT]
 > Следующий логический шаг для создания практичного инструмента под LEG архитектуру:
 > * **A.** Создать свой мини-язык высокого уровня и компилятор в LEG-ассемблер.
-> * **B.** Создать компилятор subset C/Rust/Python в LEG-ассемблер, если цель - изучение компиляторов.
+> * **B.** Написать компилятор subset C/Rust/Python в LEG-ассемблер и эмулятор/виртуальную машину для CPU LEG.
 > * **C.** Понять реальные архитектуры:
 >    * **RISC-V (RISCV64GC)** - современная открытая архитектура (ESP32-C3/C6/H2, Arduino Portenta C33). [Spike](https://riscv.epcc.ed.ac.uk/documentation/how-to/install-spike/) - официальный симулятор RISC‑V, что бы не покупать ESP32-C3 или FPGA. ([создание арх. RV32I на языке VHDL](https://youtube.com/playlist?list=PLeVWfsKqC7rN0b9k1TaQej1kG4wkKPtTJ&si=UNh1rDBjltmsTekf))
 >    * MIPS - классическая учебная RISC-архитектура

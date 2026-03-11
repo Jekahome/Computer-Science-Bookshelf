@@ -50,6 +50,12 @@
    * Симулятор электрических цепей [Logisim-Evolution](https://github.com/logisim-evolution/logisim-evolution) (устарел) 
 3. Другие [бесплатные симуляторы](https://crimmscoolclass.github.io/software.html) 
 
+
+### Research on similar knowledge
+
+* [From Nand to Tetris](https://www.nand2tetris.org/)
+  * [Игра NAND вдохновлена этим курсом](https://nandgame.com/)
+
 ---
 
 ## Turing Complete levels
