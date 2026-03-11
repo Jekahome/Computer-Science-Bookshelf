@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'FiraCode';
-    src: url('/sicp/fonts/FiraCode-Regular.woff2') format('webfont.woff2') , /* Super Modern Browsers */
-    url('/sicp/fonts/FiraCode-Regular.woff') format('woff'), /* Pretty Modern Browsers */
-    url('/sicp/fonts/FiraCode-Regular.ttf')  format('truetype') /* Safari, Android, iOS */;
+    src: url('/Computer-Science-Bookshelf/sicp/fonts/FiraCode-Regular.woff2') format('webfont.woff2') , /* Super Modern Browsers */
+    url('/Computer-Science-Bookshelf/sicp/fonts/FiraCode-Regular.woff') format('woff'), /* Pretty Modern Browsers */
+    url('/Computer-Science-Bookshelf/sicp/fonts/FiraCode-Regular.ttf')  format('truetype') /* Safari, Android, iOS */;
 }
  
 /* BASICS */
