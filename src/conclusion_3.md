@@ -341,7 +341,7 @@ _____
       id="3"
       data-circuit-id="3"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/8_bit_fulladder_relay.txt"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/8_bit_fulladder_relay.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -613,7 +613,7 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
       id="16"
       data-circuit-id="16"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/Select_8_to_1.txt"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/Select_8_to_1.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -650,7 +650,7 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
       id="162"
       data-circuit-id="162"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/decoder_3_to_8.txt"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/decoder_3_to_8.txt"
       loading="lazy">
   </iframe>
 </div> 
@@ -827,7 +827,7 @@ D-trigger не блокирует выход, т.е. данные DATA на ег
       id="46"
       data-circuit-id="46"
       class="sim-iframe"
-      src="./../circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/46_tri_state_buffer.txt"
+      src="./circuitjs/circuit-frame.html?running=0&editable=1&usResistors=0&whiteBackground=true&startCircuit=/turingcomplete/46_tri_state_buffer.txt"
       loading="lazy">
   </iframe>
 </div> 
