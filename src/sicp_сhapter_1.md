@@ -3125,7 +3125,7 @@ where
 }
 
 fn main() {
-    let target = 2.0;
+    let target = 9.0;
     
     // Собираем "корешковую машину"
     let my_sqrt = iterative_improve(
@@ -3133,7 +3133,7 @@ fn main() {
         move |guess| (guess + target / guess) / 2.0
     );
     
-    println!("Корень из 2: {}", my_sqrt(1.0));
+    println!("Корень из {target}: {}", my_sqrt(2.0));
 }
 ```
 
@@ -3154,9 +3154,9 @@ fn main() {
   ((iterative-improve
     (lambda (guess) (< (abs (- (square guess) x)) 0.001)) ; Проверка
     (lambda (guess) (average guess (/ x guess))))         ; Улучшение
-   1.0)) ; Начальное приближение
+   2.0)) ; Начальное приближение
 
-(sqrt 2)
+(sqrt 9)
 ```    
 
 
