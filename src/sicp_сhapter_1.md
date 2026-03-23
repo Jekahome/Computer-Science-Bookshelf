@@ -2842,22 +2842,23 @@ fn main() {
 Пример: Функция do-range. Она просто берет числа от a до b и применяет к ним какое-то действие action
 
 
-```scheme
+```lisp
+#lang racket
+
 (define (do-range a b action)
   (if (> a b)
       (display " [Конец]")
       (begin
-        (display (action a)) ; Применяем ТВОЁ действие к числу
+        (display (action a)) ; Применяем наше действие к числу
         (display " ")
         (do-range (+ a 1) b action))))
 
 ;; А теперь запускаем с разными "картриджами":
-
 (define (double x) (* x 2))
 (define (square x) (* x x))
 
-(do-range 1 5 double) ; Выведет: 2 4 6 8 10
-(do-range 1 5 square) ; Выведет: 1 4 9 16 25
+(do-range 1 5 double) ; 2 4 6 8 10
+(do-range 1 5 square) ; 1 4 9 16 25
 ```
 
 ### 1.3.2. Построение процедур с помощью lambda
