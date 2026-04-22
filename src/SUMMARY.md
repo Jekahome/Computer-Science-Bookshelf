@@ -18,6 +18,7 @@
     - [Мартин Фаулер. Рефакторинг. Улучшение проекта существующего кода 2019](conclusion_17.md)
     - [Брайан Керниган, Роб Пайк. Практика программирования 2004](conclusion_5.md)
     - [Дискретная математика](discrete_mathematics/conclusion_4.md)
+        - [Математические модели](discrete_mathematics/математические_модели.md)
         - [Множества и отношения](discrete_mathematics/множества_и_отношения.md)
         - [Алгебраические структуры](discrete_mathematics/алгебраические_структуры.md)
         - [Комбинаторика](discrete_mathematics/комбинаторика.md) 
@@ -28,6 +29,10 @@
         - [Глава 2. Построение абстракций с помощью данных](sicp_сhapter_2.md)
         - [Глава 3. Модульность, обьекты и состояния](sicp_сhapter_3.md)
     - [Владстон Феррейра Фило. Теоретический минимум по Computer Science Unleashed and Distilled (краткий справочник)]()
+        - [Computer Science Unleashed (Безопасность) -> доб. в реп. Security Web]()
+        - [Computer Science Unleashed (Сети) -> доб. в Отдельный раздел]()
+        - [Computer Science Distilled (Комбинаторика, Вероятность) -> доб. в Computer-Science-Bookshelf (Дискретная математика)]()
+        - [Computer Science Distilled (Стратегия) -> доб. в реп. Algorithms]()
 
 - [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022]()
@@ -52,11 +57,17 @@
     - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
     - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
     - [В. В. Григорьев-Голубев. Теория вероятностей и математическая статистика. Руководство по решению](conclusion_25.md)
+    - [rep. Data-Structures](https://github.com/Jekahome/Data-Structures)
+    - [rep. Algorithms](https://github.com/Jekahome/Algorithms)
+
+- [Безопасность]()
+    - [rep. Security-Web](https://github.com/Jekahome/Security-Web)    
 
 - [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)
     - [Роберт Мартин. Чистая архитектура 2021](conclusion_31.md)
     - [Роберт Мартин. Чистый код создание, анализ и рефакторинг 2019](conclusion_33.md)
     - [Гради Буч - Объектно-ориентированный анализ и проектирование с примерами приложений на С++](conclusion_26.md)
+    - [rep. Patterns](https://github.com/Jekahome/Patterns)
 
 - [Backend, распределённые системы, большие данные](chapter_backend_distributed_systems_big_data.md)
     - [Клеппман Мартин. Высоконагруженные приложения 2024](conclusion_27.md)
