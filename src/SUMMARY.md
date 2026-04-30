@@ -2,7 +2,7 @@
 
 [Introduction](README.md)
  
-- [Основы]()
+- [Основы архитектуры компьютера, культура кода, ...]()
     - [Чарльз Петцольд. КОД тайный язык информатики](conclusion_3.md)
     - [Turing Complete](turingcomplete/turing_complete.md)
         - [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
@@ -33,11 +33,9 @@
     - [Владстон Феррейра Фило. Теоретический минимум по Computer Science Unleashed and Distilled (краткий справочник)]()
         - [Computer Science Unleashed (Безопасность) -> доб. в реп. Security Web]()
         - [Computer Science Unleashed (Сети) -> доб. в Отдельный раздел]()
-        - [Computer Science Distilled (Комбинаторика, Вероятность) -> доб. в Computer-Science-Bookshelf (Дискретная математика)]()
-        - [Computer Science Distilled (Стратегия) -> доб. в реп. Algorithms]()
 
 - [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
-    - [Джастис М. - Как на самом деле работают компьютеры 2022]()
+    - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
     - [Ulrich Drepper. What Every Programmer Should Know About Memory]()
     - [Паттерсон Д., Хеннесси Дж. - Архитектура компьютеров и проектирование компьютерных систем. 4-е изд. 2012](conclusion_10.md)
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
