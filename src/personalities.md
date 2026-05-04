@@ -9,7 +9,7 @@
 
 Формат сжатия изображений Better Portable Graphics (BPG), основанный на подмножестве алгоритмов из видеокодека HEVC. Новый формат предлагался в качестве замены JPEG. Его преимущество перед всеми другими форматами (JPEG, JPEG 2000, JPEX XR, WebP) [можно наблюдать в визуальной демонстрации](https://xooyoozoo.github.io/yolo-octo-bugfixes/#cologne-cathedral*2:1&jpg=s&bpg=s).
 
-
+[О программе, перевернувшей всю медиа-индустрию (и зачем она вам нужна) // История FFmpeg](https://www.youtube.com/watch?v=Ww8MzcBJUd4&t=2334s)
 
 ## John D. Carmack II
 
