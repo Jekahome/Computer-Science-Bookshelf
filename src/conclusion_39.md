@@ -628,7 +628,7 @@ T ─┘      │
 
 ![Конечный автомат, светофор](img/harris/fsm_traffic_light_2.gif)
 
-[Схема FSM (светофор) для Digital (circuit simulator)](img/harris/FSM.dig)
+[Схема FSM (светофор) для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/FSM.dig)
  
 
 #### Конечный автомат, перекрёсток
@@ -685,24 +685,66 @@ T ─┘      │
 
 
 
-## Языки описания аппаратуры
+## Языки описания аппаратуры (HDL)
 
 [создание арх. RV32I на языке VHDL](https://youtube.com/playlist?list=PLeVWfsKqC7rN0b9k1TaQej1kG4wkKPtTJ&si=UNh1rDBjltmsTekf)
  
 
 В 1990-е годы разработчики обнаружили, что их производительность труда резко возрастала, если они работали на более высокомvуровне абстракции, определяя только логическую функцию и предоставляя создание оптимизированных логических схем системе автоматического проектирования (САПР). Два основных языка описания аппаратуры (Hardware Description Language, HDL) – SystemVerilog и VHDL.
 
-Две основные цели HDL – моделирование и синтез цифровых схем.
+Две основные цели HDL – моделирование и синтез цифровых схем. 
+* Моделирование – мощный способ протестировать систему на компьютере, перед тем как она превратится в аппаратуру. Среда моделирования позволяет проверить те значения сигналов в системе, которые могут быть недоступны для измерения на реальной электрической схеме.
+* Логический синтез превращает код на HDL в цифровые логические схемы.
 
-VHDL более мощный чем SystemVerilog. Файл языка VHDL (VHSIC (Very High Speed Integrated Circuits) Hardware Description Language) имеет расширение `.vhd`.
+Начинайте с эскиза блочной диаграммы системы, определяя, какие ее части являются комбинационной логикой, а какие – последовательностными схемами или конечными автоматами и т. д. Затем ведите разработку для каждой части на HDL, используя правильные конст­рукции для нужного типа аппаратуры.
 
 
+**VHDL** (имеет расширение `.vhd`) (VHSIC (Very High Speed Integrated Circuits) Hardware Description Language) более мощный чем SystemVerilog (имеет расширение `.sv`). 
+
+Но если мы говорим именно про экосистему Yosys и открытые инструменты (Open-Source), то Verilog представлен несопоставимо лучше, чем VHDL.
+
+Для Yosys язык Verilog является «родным» (native). Yosys изначально создавался Клэр Вольф именно как Verilog HDL Synthesis Tool.
+
+Внутри Yosys встроен мощный парсер Verilog (стандарт Verilog-2005). Ему не нужны никакие внешние костыли или сторонние утилиты. Вы просто пишете read_verilog file.v, и Yosys мгновенно и без потерь переводит код во внутреннее представление.
+Поскольку парсер родной, Yosys идеально сохраняет все оригинальные имена модулей, сигналов и экземпляров. Соответственно, графические вьюверы (включая TerosHDL) гораздо чище и адекватнее отображают схемы, собранные из Verilog.
+
+А вот VHDL, Yosys сам по себе «не понимает». Чтобы прочитать VHDL-код, ему жизненно необходим внешний плагин-переводчик (в Вашем случае — это симулятор GHDL). GHDL сначала компилирует VHDL в своё промежуточное дерево, а затем плагин пытается перевести это дерево на язык, понятный для Yosys. Из-за этого строгого и сложного перевода VHDL-идентификаторы искажаются (mangling), шины бьются на отдельные биты, а типы данных обрастают суффиксами. Флаг `--rename` как раз и был создан, чтобы хоть как-то чистить этот мусор после GHDL.
+
+Когда Yosys успешно разбирает код (неважно, написан он на Verilog или на VHDL), он переводит его на свой внутренний язык - RTLIL (RTL Intermediate Language), он использует обозначения по типу `$mux` — абстрактный мультиплексор или `$and` / `$or` — базовые логические вентили, `$add` — сумматор.
 
 <details>
-<summary> TerosHDL - расширение для Vscode </summary>
+<summary> TerosHDL - расширение HDL для Vscode </summary>
 
-[Предварительные требования](https://terostechnology.github.io/terosHDLdoc/docs/installation_checklist/installation)
+[Предварительные требования (terostechnology.github.io)](https://terostechnology.github.io/terosHDLdoc/docs/installation_checklist/installation)
 
+
+```bash
+# Создать HDL environment
+python3 -m venv ~/.venvs/hdl
+
+# Активировать:
+source ~/.venvs/hdl/bin/activate
+
+# Установить:
+pip install cocotb vsg vunit_hdl edalize
+
+# Проверка:
+python -c "import cocotb, vsg, vunit, edalize; print('ok')"
+
+# В настройках TerosHDL поменять PATH python:
+/home/jeka/.venvs/hdl/bin/python
+
+
+# Verify Setup
+⊙ Checking Python dependencies. Current configured installation path: "/home/$USER/.venvs/hdl/bin/python"
+  🎉 vunit found.
+  🎉 edalize found.
+  🎉 cocotb (optional) found.
+  🎉 vsg (optional) found.
+```
+
+
+Альтернативный вариант для yowasp-yosys и vunit-hdl:
 ```bash
 # Установка pipx, если еще не установлен
 sudo apt install pipx
@@ -712,13 +754,14 @@ pipx ensurepath
 pipx install yowasp-yosys
 pipx install vunit-hdl
 pipx install edalize
-pipx install cocotb
 ```
 
 
 > Установите ваши любимые инструменты: Quartus Pro, ModelSim, Yosys, GHDL, Vivado... Для инструментов с открытым исходным кодом мы рекомендуем загрузить OSS CAD Suite ( https://github.com/YosysHQ/oss-cad-suite-build/releases ). OSS CAD Suite — это бинарный дистрибутив программного обеспечения для ряда программ с открытым исходным кодом, используемых в проектировании цифровой логики. Вы найдете инструменты для RTL-синтеза, формальной верификации оборудования, размещения и трассировки, программирования FPGA и тестирования с поддержкой языков описания аппаратуры, таких как Verilog, Migen и Amaranth.
 
 ```bash
+https://github.com/YosysHQ/oss-cad-suite-build/releases
+
 download oss-cad-suite-linux-x64-20260520.tgz
 
 mkdir -p ~/.local/share/oss-cad-suite
@@ -748,29 +791,2018 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 ```
 
+**GHDL** — ваш главный компилятор и симулятор для VHDL. Именно он сейчас просчитывает файл test.vhd.
 
+**Yosys** — синтезатор. Он превращает текстовый код VHDL/Verilog в логические вентили (из него вы получаете схемы в Schematic Viewer).
 
-Проверить настройки:
+**VUnit** — библиотека для автоматизации тестирования, которую мы только что установили через pip. Она помогает запускать сотни тестов одной кнопкой.
 
-откройте палитру команд `Ctrl + Shift + P` и введите `verifySetup`
+### Проверить настройки:
+
+откройте палитру команд vscode `Ctrl + Shift + P` и введите `verifySetup`
 
 Нам нужно вручную указать расширению, где лежат бинарные файлы из архива OSS CAD Suite.
 
 Похоже, расширение TerosHDL полностью игнорирует параметр "terosHDL.pythonPath" в файле конфигурации и упрямо продолжает использовать системный путь (в логе четко написано: Using "/usr/bin/python"). Это известная проблема некоторых версий данного расширения, когда оно берет интерпретатор из системного окружения PATH, а не из внутренних настроек.
 
-Раз оно использует системный /usr/bin/python, давайте обманем его и установим эти несчастные зависимости (vunit и edalize) прямо туда, обойдя блокировку операционной системы, о которой шла речь в самом первом сообщении.
+Раз оно использует системный /usr/bin/python, давайте установим зависимости (vunit и edalize) прямо туда, обойдя блокировку операционной системы.
 
-Поскольку этот Python изолирован (PEP 668), мы применим флаг --break-system-packages. Для двух обычных библиотек автоматизации тестирования это абсолютно безопасно и ничего в вашей системе Linux не сломает.
+Поскольку этот Python изолирован (PEP 668), мы применим флаг --break-system-packages. 
 
 Выполните в терминале следующую команду:
 
 `sudo pip install vunit-hdl edalize --break-system-packages`
 
-> Хотя в настройках расширения есть кнопка: `Open Global Settings Menu`. В котором можно выбрать путь в python3 и папке `$HOME/.local/share/oss-cad-suite/bin`.
+### Для визулизации `Schematic Viewer` 
 
-Для визулизации `Schematic Viewer` 
-* Select the backend: GHDL + Yosys (VHDL+Verilog/SV)
+Выберите в настройках расширения `Select the backend: GHDL + Yosys (VHDL+Verilog/SV)`
 
-Для тестирования:
-* TerosHDL: Generate Testbench
+### Для тестирования Waveform (временная диаграмма) — это ваш главный инструмент отладки.
+
+Поскольку вы не можете подключить физические приборы к коду в компьютере, Waveform показывает, как ведут себя электрические сигналы внутри вашей схемы во времени.
+ 
+TestBench содержит код, который подает воздействия на входы модуля и проверяет правильность значений его выходов, а также выводит несоответствия между ожидаемыми и действительными значениями.
+
+* создать проект и добавить в него файлы `.vhd`
+* создаст основу для теста `TerosHDL: Generate Testbench`, то что скопировалось в буффер обмена вставить в новый файл и выбрать его главным toplevel
+
+
+```
+---> Build directory: $HOME.teroshdl/build
+---> Make installation folder path: System path
+Entering directory '$HOME.teroshdl/build'
+Leaving directory '$HOME.teroshdl/build'
+Entering directory '$HOME.teroshdl/build'
+Leaving directory '$HOME.teroshdl/build'
+```
+
+Запуск симуляции и просмотр графиков временных диаграмм (Waveform Viewer)
+
+```bash
+# 1. Запускаем симуляцию нашего тестбенча и сохраняем сигналы в файл waveforms.vcd
+~/.teroshdl/build/sillyfunction_tb --vcd=waveforms.vcd
+
+# 2. Открываем графики во встроенном в ваш OSS CAD Suite просмотрщике GTKWave
+~/.local/share/oss-cad-suite/bin/gtkwave waveforms.vcd &
+ 
+```
+
+Когда откроется графическое окно программы **GTKWave**:
+
+1. В верхнем левом углу в окне **SST** нажмите на название вашего тестбенча `sillyfunction_tb`.
+2. Чуть ниже, в появившейся структуре, нажмите на экземпляр вашего модуля: `sillyfunction_inst`.
+3. В соседнем окне (ниже, под заголовком **Signals**) появятся все порты вашей функции: `a`, `b`, `c`, `y`.
+4. Выделите их все (зажмите `Shift` или `Ctrl`) и нажмите кнопку **Append** в самом низу этого блока.
+
 </details>
+
+
+#### Подключение файла VHDL в симуляторе Digital для тестирования компонента:
+* В глобальных настройках Digital прописать путь к GHDL (компилятор, симулятор VHDL)
+* Добавить пустой компонент VHDL External File на панель
+* В настройках компонента прописать:
+    * label должен совпадать с именем entity компонента
+    * прописать inputs, outputs параметры
+    * выбрать пусть к файлу с кодом VHDL `.vhd`
+    * выбрать компилятор GHDL
+
+![Подключение VHD файла в Digital](img/harris/Include_VHDL_file.png)
+
+---
+
+Одна из главных ошибок начинающих заключается в том, что они думают о коде на HDL как о компьютерной программе где идет интрепретация кода сверху вниз, а не как об **описании** цифровой аппаратуры. Если вы не представляете, хотя бы примерно, во что должен синтезироваться ваш код на HDL, то, скорее всего, результат вам не понравится. Ваша цифровая схема может получиться гораздо больше, чем нужно, или может оказаться, что ваш код моделируется правильно, но не может быть реализован в аппаратуре. Вместо этого вы должны думать над вашей разработкой в терминах блоков комбинационной логики, регистров и конечных автоматов.
+
+Код на VHDL состоит из трех частей: 
+* объявления используемых библиотек и внешних объектов (library, use), 
+* объявления интерфейса объекта (entity). В объявлении интерфейса указывается имя модуля и перечисляются его входы и выходы.
+* и внутренней структуры (architecture) интерфейса объекта. Блок architecture определяет, что модуль делает.
+
+
+`STD_LOGIC` - тип цифрового сигнала, принимают значения '0', '1', 'z', 'x' и 'u'. Определен в библио­теке `IEEE.STD_LOGIC_1164`
+ 
+`STD_LOGIC_VECTOR` - тип шины:
+ * `STD_LOGIC_VECTOR(3 downto 0)` - 4-бит­ная шина, с порядком little-endian, биты от старшего к младшему: a(3), a(2), a(1) и a(0).
+ * `STD_LOGIC_VECTOR(0 to 3)` - 4-бит­ная шина, с порядком big‐endian, биты от младшего к старшему: a(0), a(1), a(2) и a(3)
+
+
+### Комбинационная логика. Битовые операторы
+
+Пример 4-х битный инвертор.
+
+Файл inv.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity inv is
+  port (
+    a : in std_logic_vector(3 downto 0);
+    y : out std_logic_vector(3 downto 0));
+end;
+
+architecture synth of inv is
+begin
+  y <= not a;
+end;
+```
+
+Тестирование кода vhdl из файла inv.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/inv.png)
+
+[Схема inv для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/inv.dig)
+
+
+[Альтернативный вариант реализации инвертора](#И-снова-комбинационная-логика) с помощью оператора `process`. Хотя оператор `process` применяется для последовательностных схем (память) его можно использовать и для комбинационной логики, если список чувствительности описан так, чтобы отвечать на любое изменение входных сигналов, и тело оператора определяет значение выходного сигнала при любой комбинации значений входов.
+
+ 
+---
+
+Пример gates. 
+
+NOT, XOR и OR – это примеры операторов в языке VHDL
+
+Файл gates.vhd:
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+entity gates is
+  port (
+    a, b : in std_logic_vector(3 downto 0);
+    y1, y2, y3, y4,
+    y5 : out std_logic_vector(3 downto 0));
+end;
+
+architecture synth of gates is
+begin
+  -- пять разных двухвходовых ЛЭ
+  -- работают на 4-битных шинах
+  y1 <= a and b;
+  y2 <= a or b;
+  y3 <= a xor b;
+  y4 <= a nand b;
+  y5 <= a nor b;
+end;
+```
+
+TerosHDL: Schematic Viewer
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_gates.png)
+
+Тестирование кода vhdl из файла gates.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Schematic_Viewer_gates_test.png)
+
+[Схема gates для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/gates.dig)
+
+---
+
+### Комбинационная логика. Операторы сокращения
+
+Операторы сокращения соответствуют многовходовым элементам, работающим на одной шине.
+
+Многовходовый XOR — это классический генератор нечетности (parity checker). Если на входах схемы нечетное число единиц (например, одна, три или пять), на выходе всегда будет строго '1' (ИСТИНА). Если единиц четное количество (или все нули) — на выходе будет '0'.
+  
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity and8 is
+  port (
+    a : in std_logic_vector(7 downto 0);
+    y : out std_logic);
+end;
+architecture synth of and8 is
+begin
+  y <= and a;
+  /* 
+   "and a" записать гораздо проще, чем:
+    y <= a(7) and a(6) and a(5) and a(4) and a(3) and a(2) and a(1) and a(0);
+  */
+end;
+```
+
+---
+
+### Комбинационная логика. Условное присваивание
+
+Пример: двухвходовый мультиплексор `MUX`, использующий условное присваивание сигнала для выбора одного из двух 4-битных входов.
+
+Файл mux2.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity mux2 is
+  port (
+        d0, d1 : in std_logic_vector(3 downto 0);
+        s : in std_logic;
+        y : out std_logic_vector(3 downto 0)
+    );
+end;
+
+architecture synth of mux2 is
+begin
+  y <= d1 when s else d0;
+  -- если s имеет значение 1 то на выход направить сигнал с d1, иначе y с d0
+end;
+```
+
+Тестирование кода vhdl из файла mux2.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_mux2.png)
+ 
+VHDL также поддерживает операторы выборочного присваивания сигнала для обеспечения более краткой записи, когда выбирается одна из нескольких возможностей. Это аналогично использованию операции `switch/case` вместо нескольких операций `if/else` в некоторых языках программирования.
+
+Файл mux4.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+entity mux4 is
+  port (
+    d0, d1, d2, d3 : in std_logic_vector(3 downto 0);
+    s : in std_logic_vector(1 downto 0);
+    y : out std_logic_vector(3 downto 0)
+  );
+end;
+
+architecture synth1 of mux4 is
+begin
+  y <= d0 when s = "00" else
+       d1 when s = "01" else
+       d2 when s = "10" else
+       d3;
+end;
+```
+
+Четырех­входовый мультиплексор может быть переписан с использованием выборочного присваивания сигнала следующим образом:
+```vhdl
+architecture synth1 of mux4 is
+begin
+  with s select y <=
+    d0 when "00",
+    d1 when "01",
+    d2 when "10",
+    d3 when others;
+end;
+```
+
+TerosHDL: Schematic Viewer
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_mux4.png)
+
+Тестирование кода vhdl из файла mux4.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_mux4.png)
+ 
+[Схема MUX4 для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/mux4.dig)
+
+---
+
+### Комбинационная логика. Внутренние переменные
+
+Операции присваивания в HDL (`assign` в языке SystemVerilog и `<=` в VHDL) выполняются параллельно. Это отличается от традиционных языков программирования, таких как `C` или `Java`, в которых операторы выполняются в том порядке, в котором они записаны. В HDL порядок записи не имеет значения. 
+
+Пример: Полный сумматор.
+
+Файл fulladder.vhd:
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+entity fulladder is
+  port (
+    a, b, cin : in std_logic;
+    s, cout   : out std_logic
+  );
+end;
+
+architecture synth of fulladder is
+  signal p, g : std_logic; -- внутренние переменные
+begin
+  p    <= a xor b;
+  g    <= a and b;
+  s    <= p xor cin;
+  cout <= g or (p and cin); -- скобки для приоритета операции
+end;
+```
+
+TerosHDL: Schematic Viewer
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_fulladder.png)
+
+Тестирование кода vhdl из файла fulladder.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_fulladder.png)
+
+[Схема fulladder для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/fulladder.dig)
+
+ 
+[Альтернативный вариант реализации fulladder](#И-снова-комбинационная-логика) с помощью оператора `process`.
+
+  
+### Комбинационная логика. Числа
+
+В отличие от SystemVerilog, язык VHDL – со строгой типизацией, что защищает пользователя от некоторых ошибок, но временами он неуклюж. Несмотря на то что тип `STD_LOGIC` принципиально важен, он не встроен в язык VHDL, а является частью библиотеки `IEEE.STD_LOGIC_1164`. Из-за этого в каждом файле должны быть операторы подключения биб­лиотеки.
+
+Кроме того, в `IEEE.STD_LOGIC_1164` отсутствуют базовые операции типа сложения, сравнения, сдвигов и преобразования в целые из данных типа `STD_LOGIC_VECTOR`. Их, в конце концов, добавили в стандарте `VHDL 2008` в библиотеку `IEEE.NUMERIC_STD_UNSIGNED`.
+
+В VHDL также есть тип `BOOLEAN` с двумя значениями: true и false. Значения типа `BOOLEAN` возвращаются операциями сравнения (например, сравнения на равенство, `s = '0'`) и используются в условных операторах, как when и if. В стандарте `VHDL 2008` тип `BOOLEAN true` эквивалентно `STD_LOGIC '1'`, а `BOOLEAN false` эквивалентно `STD_LOGIC '0'`. Хотя мы не объявляем никаких сигналов типа `BOOLEAN`, они автоматически являются результатом сравнения из сравнений и используются в условных операторах.
+
+В VHDL есть тип `INTEGER` для представления целых чисел со знаком. Сигналы типа `INTEGER` могут принимать значения от $–(2^{31} – 1)\ до\ 2^{31} – 1$. В качестве индексов массивов нужно использовать целые числа, которые имеют тип `INTEGER`. Для индексации нельзя использовать сигнал типа `STD_LO­GIC` или `STD_LOGIC_VECTOR`, поэтому нужно преобразовать его в `INTE­GER`, как показано ниже в примере восьмивходового мультиплексора, выбирающего один бит из вектора с помощью трехбитного индекса. Функция `TO_INTEGER`, определенная в библиотеке `IEEE.NUMERIC_STD_UNSIGNED`, преобразует из `STD_LOGIC_VECTOR` в неотрицательные значения `INTEGER`.
+
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD_UNSIGNED.all;
+
+entity mux8 is
+  port(
+    d: inSTD_LOGIC_VECTOR(7 downto 0);
+    s: inSTD_LOGIC_VECTOR(2 downto 0);
+    y: out STD_LOGIC);
+end;
+architecture synth of mux8 is
+begin
+  y <= d(TO_INTEGER(s));
+end;
+```
+
+VHDL также **строг** в отношении портов типа `out:` их можно использовать исключительно в качестве выходов. Для решения этой проблемы в VHDL есть отдельный тип порта `: buffer`. Сигнал, подключенный к такому порту, ведет себя как выход, но также может быть использован внутри модуля.
+
+---
+
+В VHDL числа STD_LOGIC записываются в бинарном коде и заключаются в одинарные кавычки: '0' и '1' указывают на логические уровни 0 и 1.
+
+Формат объявления констант типа `STD_LOGIC_VECTOR` следующий: 
+* `NB"value"`
+    * N – размер в битах. Если размер не указан, то предполагается, что число имеет размер, соответствующий количеству битов значения.
+    * В – буква, указывающая на основание. Если основание опущено, то по умолчанию оно равно `B` т.е. 2.
+        * B - для основание 2
+        * 0 - для основание 8
+        * D – для основания 10
+        * X – для основания 100
+    * value – значение
+
+others = '0' и others = '1' – конструкции VHDL с заполнением всех битов нулями или единицами соответственно.    
+
+Например:
+* 3B"101" - это двоичная запись 101
+* B"101" - это двоичная запись 101
+* "101" - это двоичная запись 101
+* 3D"6" - это 6 в десятичной форме
+* X"AB" - это запись с основание 16
+
+---
+
+Пример показывает, как обозначаются сигналы, представляющие **числа со знаком**.
+
+В VHDL для выполнения арифметичес­ких операций и операций сравнения над `STD_LOG­IC_VECTOR` используется библиотека `NUMER­IC_STD_UNSIGNED`. При этом векторы считаются беззнаковыми.
+
+```vhdl
+-- 4.33(a): беззнаковый умножитель
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD_UNSIGNED.all;
+
+entity multiplier is
+  port(
+    a, b: in STD_LOGIC_VECTOR(3 downto 0);
+    y:    out STD_LOGIC_VECTOR(7 downto 0));
+end;
+
+architecture synth of multiplier is
+begin
+  y <= a * b;
+end;
+```
+
+В VHDL также определены типы данных `UN­SIGNED` и `SIGNED` (в библиотеке `IEEE.NU­MERIC_STD`)
+
+---
+
+### Комбинационная логика. Z-состояние и X-состояние
+
+Сигналы типа STD_LOGIC в VHDL могут принимать значения '0', '1', 'z', 'x' и 'u'.
+
+В HDL **z-состояние** используется для описания высокоимпедансного состояния. Использование z-состояния, в частности, полезно для описания буфера с тремя состояниями, состояние выхода которого является высокоимпедансным (отключенным), когда на вход разрешения подан 0.
+
+Пример: Тристабильный буфер
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity tristate is
+  port (
+    a  : in std_logic_vector(3 downto 0);
+    en : in std_logic;
+    y  : out std_logic_vector(3 downto 0)
+  );
+end;
+
+architecture synth of tristate is
+begin
+  y <= a when en else
+    "ZZZZ"; -- состояние Z для 4-х разрядной шины 
+end;
+```
+
+Также в HDL используют `х` для описания неопределенного логичес­кого уровня. Если на шину одновременно попадает 0 и 1 с двух активных тристабильных буферов (или других элементов), то в результате получаем **`х`, что указывает на конфликт**. В начале моделирования состояния узлов, таких как выходы триггеров, инициализируются неизвестным состоянием (`х` в SystemVerilog и `u` – в VHDL). Это помогает отслеживать ошибки, которые появляются, если вы забыли установить триггер в начальное состояние, перед тем как использовать его выход.
+
+**Неинициализированные состояния** входов приводят к неинициализированным состояниям сигналов на выходах, обозначаемым в VHDL как 'u'
+
+> [!WARNING]
+> `х` или `u` могут быть случайно интерпретированы схемой как 0 или 1, что приведет к непредсказуемому поведению программы!!!
+
+`х`- или `u-состояния` при моделировании практически всегда означают ошибки или плохой стиль программирования. В синтезированной цепи это соответствует плавающему входу элемента, неинициализированному состоянию или конфликту.
+
+---
+
+### Комбинационная логика. Манипуляция с битами
+
+Часто программистам приходится работать с фрагментом шины или сцеп­лять (объединять) сигналы для формирования шин. Эти операции называются манипуляциями с битами.
+
+Пример: Выход `y` задается 9-битной переменной $c_2 c_1 d_0 d_0 d_0 c_0 101$ с использованием манипуляций с битами.
+
+Чтобы собрать 9-битный сигнал y из кусочков других сигналов, используется оператор агрегирования (запись через запятую в круглых скобках) либо оператор конкатенации (амперсанд `&`).
+
+Файл bit_manipulation.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity bit_manipulation is
+  port (
+    c : in std_logic_vector(2 downto 0); -- 3-битный вход
+    d : in std_logic_vector(3 downto 0); -- 4-битный вход
+    y : out std_logic_vector(8 downto 0) -- 9-битный выход
+  );
+end;
+
+architecture synth of bit_manipulation is
+begin
+  -- Собираем 9-битный выход из кусочков входов
+  y <= c(2 downto 1) & d(0) & d(0) & d(0) & c(0) & "101";
+  -- c(2) становится самым старшим битом — y(8)
+  -- c(1) становится битом — y(7)
+  -- d(0) дублируется три раза подряд и занимает места — y(6), y(5), y(4)
+  -- c(0) встает на место — y(3)
+  -- Строка "101" (или три жестко заданных бита '1', '0', '1') 
+  ---  намертво припаивается к младшим битам — y(2), y(1), y(0)
+end;
+```
+
+TerosHDL: Schematic Viewer
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_bit_manipulation.png)
+
+Тестирование кода vhdl из файла bit_manipulation.vhd в симуляторе Digital:
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_bit_manipulation.png)
+
+[Схема fulladder для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/bit_manipulation.dig)
+
+
+Другой пример демонстрирует возможности оператора агрегирования в VHDL. 
+Предположим, что `z` – это 8-битный сигнал типа `STD_LOGIC_VECTOR`, тогда при выполнении операции агрегирования:
+
+`z <= ("10", 4 => '1', 2 downto 1 =>'1', others =>'0')`
+
+`z` получит значение `10010110`:
+* "10" переходит в старшую пару битов: `10xxxxxx`
+* 1 также помещается в 4-й бит:  `xxx1xxxx`
+* и биты 2 и 1:  `xxxxx11x`
+* Все остальные биты равны 0:  `xxxxxxx0`
+
+---
+
+### Комбинационная логика. Задержки
+
+В процессе моделирования, задержки помогают предсказать, насколько быстро будет работать схема (если вы укажете адекватные задержки). Также при отладке они помогают понять причину и следствие (устанавливать источник плохого результата сложно, если в процессе моделирования все сигналы меняются одновременно). 
+
+Эти задержки игнорируются в процессе синтеза; задержка элемента, сгенерированного синтезатором, зависит от значений $t_{pd}$ и $t_{cd}$, а не от чисел в HDL-коде.
+
+В VHDL заявление `after` используется для обозначения задержек. Единицы в этом случае определяются в наносекундах.
+
+Файл delays_ex1.vhd:
+
+Предполагается, что: 
+* `инвертор` имеет задержку 1 нс
+* трехвходовый элемент `И` имеет задержку 2 нс
+* трехвходовый элемент `ИЛИ` – задержку 4 нс
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity delays_ex1 is
+  port (
+    a, b, c : in std_logic;
+    y : out std_logic);
+end;
+
+architecture synth of delays_ex1 is
+  signal ab, bb, cb, n1, n2, n3 : std_logic;
+begin
+  ab <= not a after 1 ns;
+  bb <= not b after 1 ns;
+  cb <= not c after 1 ns;
+  n1 <= ab and bb and cb after 2 ns;
+  n2 <= a and bb and cb after 2 ns;
+  n3 <= a and bb and c after 2 ns;
+  y  <= n1 or n2 or n3 after 4 ns;
+end;
+```
+
+TerosHDL: Schematic Viewer
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_delays_ex1.png)
+
+Симулятор Digital при работе с VHDL-кодом полностью игнорирует задержки времени (строки с after 1 ns). Он воспринимает эту схему как идеальную комбинационную логику, где выходы меняются мгновенно, без каких-либо наносекундных задержек, поэтому используем Waveform Viewer.
+
+Добавим файлы delays_ex1 и delays_ex1_tb.vhd в проект и запустим TESTBENCHES:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity delays_ex1_tb is
+-- У тестбенча нет внешних портов
+end;
+
+architecture sim of delays_ex1_tb is
+  -- Сигналы для подключения к нашей схеме
+  signal ts_a, ts_b, ts_c : std_logic := '1'; -- начнем с 1 1 1
+  signal ts_y             : std_logic;
+begin
+
+  -- Подключаем проверяемую схему (UUT)
+  UUT: entity work.delays_ex1 
+    port map (
+      a => ts_a, b => ts_b, c => ts_c, y => ts_y
+    );
+
+  -- Процесс, который крутит стрелки часов в симуляторе
+  process
+  begin
+    wait for 20 ns; -- Ждем стабилизации схемы в начале
+    
+    ts_a <= '0'; ts_b <= '0'; ts_c <= '0'; -- Подаем 0 0 0
+    wait for 20 ns; -- Ждем, на диаграмме y станет '1' только через 7 нс
+    
+    ts_a <= '1'; ts_b <= '0'; ts_c <= '0'; -- Подаем 1 0 0
+    wait for 20 ns; -- Наблюдаем за переходными процессами
+    
+    wait; -- Останавливаем симуляцию
+  end process;
+
+end;
+```
+
+
+Далее запуск симуляции и просмотр графиков временных диаграмм (Waveform Viewer)
+
+```bash
+# 1. Запускаем симуляцию нашего тестбенча и сохраняем сигналы в файл waveforms.vcd
+~/.teroshdl/build/delays_ex1_tb --vcd=waveforms.vcd
+
+# 2. Открываем графики во встроенном в ваш OSS CAD Suite просмотрщике GTKWave
+~/.local/share/oss-cad-suite/bin/gtkwave waveforms.vcd &
+ 
+```
+
+![Waveform Viewer](img/harris/Waveform_Viewer_delays_ex1_tb.png)
+
+Если установить входы a=0, b=0, c=0 то наблюдаем на выходе значение y=1 с задержкой в 7 ns.
+
+
+Если построить эту же самую схему из стандартных графических компонентов самого симулятора Digital и проставить задержки, то тесты успешно пройдут, но задержек не будет. После установки входов a=0, b=0, c=0 наблюдаем на выходе значение y=1 без задержки 🤥🤬. 
+
+Тестирование кода vhdl из файла delays_ex1.vhd в симуляторе Digital
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_delays_ex1.png)
+
+---
+
+### Структурное моделирование
+
+> [!INFO]
+> Тип архитектуры:
+> * **rtl** или **synth** - для простой логики (счётчики, шифраторы, mux)
+> * **struct** - для главного блока (соединяет другие файлы в общую схему)
+> * **beh** или **sim** - для файла симуляции (тестбенч, подающий сигналы для проверки)
+
+Описывает модуль с точки зрения того, как он составлен из более простых модулей.
+
+
+Файл component_mux4.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity component_mux4 is
+  port (
+    d0, d1, d2, d3 : in std_logic_vector(3 downto 0);
+    s : in std_logic_vector(1 downto 0);
+    y : out std_logic_vector(3 downto 0)
+    );
+end;
+architecture struct of component_mux4 is
+  component mux2
+    port (
+      d0, d1 : in std_logic_vector(3 downto 0);
+      s  : in std_logic;
+      y  : out std_logic_vector(3 downto 0)
+      );
+  end component;
+  signal low, high : std_logic_vector(3 downto 0);
+begin
+  lowmux : mux2 port map(d0, d1, s(0), low);
+  highmux : mux2 port map(d2, d3, s(0), high);
+  finalmux : mux2 port  map(low, high, s(1), y);
+end;
+
+```
+
+Проблема включения вложенных компонентов в генерацию схемы. Если сборка ghdl не видит внешний компонент то подставляет пустышку. Например в схеме component_mux4 используется три штуки компонента mux2 который описан в файле mux2.vhd, но ghdl не добавит его в сборку:
+
+
+Лог выходных данных сборки:
+```bash
+2026-05-27 12:10:17.676 [info] Executing: /bin/sh  /bin/sh -c  yosys -m ghdl -p "ghdl --std=08 -fsynopsys  --work=work "/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd"  --work=work -e component_mux4; hierarchy -top component_mux4; proc; write_json /home/jeka/.teroshdl_F5YCG; stat"
+2026-05-27 12:10:17.693 [info] 
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.65+51 (git sha1 5c6de0446, clang++ 18.1.8 -fPIC -O3)
+
+-- Running command `ghdl --std=08 -fsynopsys  --work=work /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd  --work=work -e component_mux4; hierarchy -top component_mux4; proc; write_json /home/jeka/.teroshdl_F5YCG; stat' --
+
+1. Executing GHDL.
+
+2026-05-27 12:10:17.707 [info] /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:23:3:warning: instance "lowmux" of component "mux2" is not bound [-Wbinding]
+  lowmux:  mux2 port map(d0, d1, s(0), low);
+  ^
+/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:12:14:warning: (in default configuration of component_mux4(struct))
+/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:24:3:warning: instance "highmux" of component "mux2" is not bound [-Wbinding]
+  highmux:  mux2 port map(d2, d3, s(0), high);
+  ^
+/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:12:14:warning: (in default configuration of component_mux4(struct))
+/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:25:3:warning: instance "finalmux" of component "mux2" is not bound [-Wbinding]
+  finalmux:  mux2 port  map(low, high, s(1), y);
+  ^
+/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd:12:14:warning: (in default configuration of component_mux4(struct))
+
+...
+
+=== component_mux4 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       11 wires
+       42 wire bits
+        8 public wires
+       30 public wire bits
+        6 ports
+       22 port bits
+        3 cells
+        3   mux2
+```        
+ 
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux4_no_correct.png)
+
+**Но, если добавить путь к внешним компонентам в настройках TerosHDL**:
+ 
+
+`TerosHDL Settings => Schematic viewer => Arguments passed to GHDL`: (жестко прописать путь к внешнему компоненту)
+
+```bash
+--std=08 -fsynopsys --work=work  /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/mux2.vhd
+```
+
+Или общий подход, включения всех файлов. Жестко прописать главный файл входа, например component_mux4, а все оастальные добавить в сборку.
+
+```bash
+`echo $(find $(dirname "/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd") -maxdepth 1 -name "*.vhd")`
+```
+
+В итоге ghdl будет использовать такую команду сборки:
+```bash
+ghdl --std=08 -fsynopsys /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/mux2.vhd --work=work /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd  --work=work -e component_mux4; hierarchy -top component_mux4; proc; write_json /home/jeka/.teroshdl_t3xe9; stat
+```
+
+
+Так выглядит лог сборки с учетом внешних компонентов: 
+
+```bash
+2026-05-27 12:12:11.067 [info] Executing: /bin/sh  /bin/sh -c  yosys -m ghdl -p "ghdl --std=08 -fsynopsys `echo $(find $(dirname "/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd") -maxdepth 1 -name "*.vhd")` --work=work "/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd"  --work=work -e component_mux4; hierarchy -top component_mux4; proc; write_json /home/jeka/.teroshdl_2z6rN; stat"
+2026-05-27 12:12:11.083 [info] 
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.65+51 (git sha1 5c6de0446, clang++ 18.1.8 -fPIC -O3)
+
+-- Running command `ghdl --std=08 -fsynopsys /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/mux2.vhd --work=work /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd --work=work -e component_mux4; hierarchy -top component_mux4; proc; write_json /home/jeka/.teroshdl_2z6rN; stat' --
+
+...
+
+2026-05-27 12:12:11.100 [info] 
+=== component_mux4 ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       14 wires
+       54 wire bits
+       11 public wires
+       42 public wire bits
+        6 ports
+       22 port bits
+        3 submodules
+        3   mux2_Bsynth
+
+=== mux2_Bsynth ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        5 wires
+       17 wire bits
+        4 public wires
+       13 public wire bits
+        4 ports
+       13 port bits
+        1 cells
+        1   $mux
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+        3 component_mux4
+        1 mux2_Bsynth
+
+        +----------Count including submodules.
+        | 
+       29 wires
+      105 wire bits
+       23 public wires
+       81 public wire bits
+       18 ports
+       61 port bits
+        - memories
+        - memory bits
+        - processes
+        3 cells
+        3   $mux
+        3 submodules
+        3   mux2_Bsynth
+
+```
+
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux4_correct.png)
+
+
+**Вариант для Verilog**
+
+Файл mux2.sv:
+```verilog
+module mux2(
+        input logic [3:0] d0, d1,
+        input logic s,
+        output logic [3:0] y
+    );
+    
+    assign y = s ? d1 : d0;
+
+endmodule
+```
+
+Файл component_mux4.sv:
+```verilog
+module component_mux4(
+      input logic [3:0] d0, d1, d2, d3,
+      input logic [1:0] s, 
+      output logic [3:0] y
+    );
+
+  logic [3:0] low, high;
+
+  mux2 lowmux(d0, d1, s[0], low);
+  mux2 highmux(d2, d3, s[0], high);
+  mux2 finalmux(low, high, s[1], y);
+
+endmodule
+```
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux4_verilog_correct.png)
+
+> p.s. отличие только в именах внешних компонентов, в VHDL варианте mux2 проименованы как mux2_Bsynth
+
+---
+
+**Доп. команды:**
+
+
+**Если добавить аргумент `flatten` к Yosys**
+
+`TerosHDL Settings => Schematic viewer => Arguments passed to Yosys: flatten`
+
+`flatten` — Сглаживание (развертывание) схемы
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux4_flatten.png)
+
+
+**Если добавить аргумент `techmap` к Yosys**
+
+`TerosHDL Settings => Schematic viewer => Arguments passed to Yosys: techmap`
+
+`techmap` — заменяет абстрактные RTL-блоки (например, знаки сложения или те же мультиплексоры) на конкретные логические вентили (И, ИЛИ, НЕ), если загружена библиотека конкретной технологии.
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux4_techmap.png)
+
+
+```bash
+/home/$USER/.local/share/oss-cad-suite/bin/yosys -m ghdl
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.65+51 (git sha1 5c6de0446, clang++ 18.1.8 -fPIC -O3)
+
+yosys> help
+
+  check — Проверка на очевидные ошибки
+  Сканирует Вашу схему на предмет явных аппаратных проблем: оборванные провода (wires с портами, но без соединений), конфликты драйверов (когда два выхода закорочены между собой) или обратные связи без триггеров (комбинаторные петли).
+
+  memory — Трансляция массивов памяти
+  Находит в коде объявления массивов данных (ОЗУ/ПЗУ) и превращает их в физические структуры. В зависимости от настроек, он может либо разбить память на отдельные независимые триггеры (memory_map), либо подготовить её для генерации встроенных блоков блочной памяти FPGA (memory_bram).
+
+  opt — Запуск цикла оптимизаций
+  Универсальная команда, которая чистит схему. Она запускает цепочку подкоманд: удаляет мертвые ветки логики, константные провода (которые навсегда привязаны к '0' или '1') и объединяет дублирующие элементы.
+
+yosys> help ghdl
+
+  -C — разрешает использовать символы UTF-8 (например, кириллицу) в комментариях кода, чтобы компилятор не ругался на незнакомые знаки.
+
+  -fpsl — заставляет компилятор искать и обрабатывать PSL-верификационные свойства (Property Specification Language), если они записаны внутри комментариев.
+
+  --rename-verbose — делает то же самое, что и --rename, но подробно выводит в лог терминала каждую измененную строчку
+
+  --rename-map <file> — очищает имена и дополнительно записывает в отдельный JSON-файл «карту соответствия» (какое техническое имя во что было переименовано), чтобы сторонние программы могли сопоставить схему с исходным кодом.
+```
+
+**Настройки для главного компонента входа `component_mux4`:**
+
+Schematic viewer/Arguments passed to Yosys:
+```bash
+hierarchy -libdir /home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/; proc; opt; check;
+```
+
+Schematic viewer/Arguments passed to GHDL:
+```bash
+-C -fpsl --latches --rename-verbose --rename-map ./yosys.renames.map.json `echo $(find $(dirname "/home/jeka/Projects/Rust/Computer-Science-Bookshelf/src/test_vhd/component_mux4.vhd") -maxdepth 1 -name "*.vhd")`
+```
+
+### Структурное моделирование. Двухвходовый мультиплексор из пары буферов с тремя состояниями
+
+(Но строить логические схемы из таких буферов не рекомендуется)
+
+
+Файл component_mux2_tristate.vhd
+
+```vhdl
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+
+entity component_mux2_tristate is
+    port(
+        d0, d1: in STD_LOGIC_VECTOR(3 downto 0);
+        s: in STD_LOGIC;
+        y: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end;
+
+architecture struct of component_mux2_tristate is
+component tristate
+    port(a: in STD_LOGIC_VECTOR(3 downto 0);
+        en: in STD_LOGIC;
+        y: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end component;
+
+signal sbar: STD_LOGIC;
+begin
+    sbar <= not s;
+    t0: tristate port map(d0, sbar, y);
+    t1: tristate port map(d1, s, y);
+end;
+```
+
+В языке VHDL такие выражения, как `not s`, не разрешены в карте портов экземпляра. Таким образом, `sbar` должен быть определен как отдельный сигнал.
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_mux2_tristate.png)
+
+### AMD Xilinx Vivado
+
+Бесплатная версия AMD Xilinx Vivado, где встроенный RTL Viewer справляется с VHDL безупречно.
+
+Vivado — это тяжелая профессиональная САПР, и симуляция (запуск тестов и построение временных диаграмм / Waveforms) — это одна из ее сильнейших сторон. В нее встроен мощный симулятор Vivado Simulator (XSim).
+
+[AMD Vivado™ Design Suite](https://www.amd.com/en/products/software/adaptive-socs-and-fpgas/vivado.html)
+
+[Downloads Vivado™ 2025.2](https://www.xilinx.com/support/download/index.html/content/xilinx/en/downloadNav/vivado-design-tools.html) (AMD Unified Installer for FPGAs & Adaptive SoCs 2025.2.1: Linux Self Extracting Web Installer)
+
+<details>
+<summary> Install</summary>
+
+```
+chmod +x Xilinx_Unified_2025.2.1_*.bin
+./Xilinx_Unified_2025.2.1_*.bin
+  
+```
+
+```
+Select Produtc to Install:
+➡️ Vivado
+
+➡️ Vivado ML Standard Edition
+
+В разделе Design Tools:
+- Снимите галочку с Vitis Model Composer (A toolbox for Simulink) — это интеграция с коммерческим пакетом MATLAB, без него она абсолютно бесполезна и весит лишние гигабайты.
+- Снимите галочку с DocNav — это просто встроенный навигатор по PDF-документациям AMD.
+- Галочки на Vivado и Vitis HLS внутри поддерева оставьте как есть (их нельзя отключить).
+
+В разделе Devices:
+- Поставьте одну единственную галочку на семейство 7 Series
+
+В разделе Installation Options:
+- Снимите галочку с Acquire or Manage a License Key. Поскольку Вы устанавливаете бесплатную версию Standard, никакие лицензионные ключи Вам менеджеру передавать не потребуется, эта утилита не нужна.
+
+End User License Agreement for Vivado(EULA) 
+  поставьте обе галочки:
+  ➡️ I Agree в верхнем блоке (End User License Agreement for Vivado).
+  ➡️ I Agree в нижнем блоке (Third Party Software End User License Agreement for Vivado).
+```
+
+Additional library installation required:
+```
+./vivado                                                     
+
+Error: application-specific initialization failed: couldn't load file "libxv_commontasks.so": libncurses.so.5: cannot open shared object file: No such file or directory
+
+# download libncurses5 libtinfo5
+wget http://mirrors.kernel.org/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
+wget http://mirrors.kernel.org/ubuntu/pool/universe/n/ncurses/libncurses5_6.3-2ubuntu0.1_amd64.deb
+sudo dpkg -i libtinfo5_6.3-2ubuntu0.1_amd64.deb
+sudo dpkg -i libncurses5_6.3-2ubuntu0.1_amd64.deb
+./vivado
+```
+ 
+</details>
+
+<br>
+<details>
+<summary> Create Project</summary>
+
+Получение схемы из VHDL-кода. В Vivado этот процесс называется **Elaboration** (анализ и симуляция логики без привязки к конкретным физическим транзисторам чипа).
+
+Вот пошаговый алгоритм, как открыть файлы и построить схему:
+
+### Шаг 1. Создание проекта
+
+1. На стартовом экране Vivado нажмите **Create Project**.
+2. В появившемся окне нажмите **Next**, укажите любое имя проекта (например, `project_mux4`) и путь к нему. Нажмите **Next**.
+3. На этапе **Project Type** выберите **RTL Project** и обязательно поставьте галочку **Do not specify sources at this time** (это позволит добавить файлы вручную чуть позже и сэкономит время). Нажмите **Next**.
+4. На этапе выбора чипа (Default Part) ничего не меняйте, там уже будет стоять какой-то стандартный чип из семейства 7-Series. Просто нажмите **Next**, а затем **Finish**.
+
+---
+
+### Шаг 2. Добавление Ваших VHDL-файлов
+
+1. В левой панели (**Flow Navigator**) найдите раздел **Project Manager** и нажмите **Add Sources** (или нажмите комбинацию клавиш `Alt + A`).
+2. Выберите пункт **Add or create design sources** и нажмите **Next**.
+3. Нажмите кнопку **Add Files** и выберите Ваши VHDL-файлы (и главный модуль `component_mux4`, и внешний `mux2`).
+4. Нажмите **Finish**. В панели *Sources* (по центру сверху) появится Ваша правильная древовидная структура проекта. Vivado сам поймёт, какой модуль главный.
+
+---
+
+### Шаг 3. Генерация и просмотр схемы (Самый главный шаг)
+
+1. Снова посмотрите на левую панель **Flow Navigator**.
+2. Найдите там раздел **RTL Analysis** (он находится чуть ниже Project Manager).
+3. Кликните по стрелочке рядом с ним, чтобы развернуть подпункты, и нажмите на **Open Elaborated Design**.
+4. В появившемся маленьком окне просто нажмите **OK**.
+
+Vivado запустит синтезатор, полностью проанализирует Ваш VHDL-код, автоматически свяжет внешние зависимости и откроет графическое окно.
+
+### Назначьте нужный модуль главным
+* В панели Sources (обычно находится по центру сверху) найдите вкладку `Design Sources`.
+* Вы увидите список Ваших файлов. Найдите тот файл (модуль), схему которого Вы хотите посмотреть прямо сейчас (например, component_mux4).
+* Нажмите на него правой кнопкой мыши и выберите пункт `Set as Top`.
+* Дождитесь смены главного файла и обновите вкладку `RTL ANALYSIS/Open Elaborated Design/Schematic` (Reload Design)
+
+### Что Вы увидите на экране:
+
+Перед Вами откроется чистая, профессиональная интерактивная схема.
+
+* Все Ваши модули `lowmux`, `highmux` и `finalmux` будут подписаны **ровно так, как Вы их назвали в коде**, без какого-либо технического мусора.
+* Вы сможете нажать на значок **`+`** на любом из блоков (например, на `lowmux`), и схема динамически развернётся, показав, из каких именно вентилей или внутренних мультиплексоров состоит этот конкретный компонент.
+ 
+### Настройка версии VHDL
+
+Чтобы изменить стандарт VHDL-93 на VHDL-2008 для всех VHDL-файлов проекта через `Tcl-консоль`, выполните корректную команду:
+
+`set_property file_type {VHDL 2008} [get_files -filter {FILE_TYPE == "VHDL"}]`
+ 
+Чтобы новые файлы анализировались по стандарту VHDL-2008, введите команды в `Tcl-консоль`
+
+```
+set_property target_language VHDL [current_project]
+set_property file_type {VHDL 2008} [get_files *.vhd]
+reset_simulation -simset sim_1 -mode behavioral
+launch_simulation
+```
+
+
+</details>
+ 
+AMD Xilinx Vivado: Schematic Viewer (component_mux4.vhd)
+ 
+![AMD Xilinx Vivado: Schematic Viewer](img/harris/Vivado_Schematic_Viewer_component_mux4.png)
+
+<video controls width="100%" muted playsinline preload="metadata" 
+       onloadeddata="this.playbackRate = 0.5;">
+    <source src="/Computer-Science-Bookshelf/img/harris/Vivado_Schematic_Viewer_component_mux4.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+</video>
+
+<br>
+<details>
+<summary> Waveform Testbench </summary>
+
+Когда Вы запускаете симуляцию в Vivado (launch_simulation), утилита xelab транслирует Ваш VHDL-код в код на языке C, а затем компилирует его в исполняемый бинарный файл симуляции с помощью системного компилятора gcc и компоновщика ld.
+
+Для сборки любого исполняемого файла в Linux требуются базовые файлы инициализации среды выполнения C (так называемые C Run-Time файлы: crt1.o, crti.o и crtn.o). Они отвечают за подготовку программы к работе перед тем, как управление перейдет к коду симулятора.
+
+Проблема в изменившейся структуре путей к системным библиотекам GCC (так называемый «usrmerge» и новые пути многоархитектурной сборки), из-за чего Vivado 2025.2.1 не может корректно передать утилите ld пути к файлам crt1.o и crti.o.
+
+Для дистрибутивов на базе Ubuntu 24.04 самым надежным решением является создание символических ссылок в стандартных директориях, где их ожидает увидеть встроенный в Vivado тулчейн сборки.
+```
+sudo ln -s /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/crt1.o
+sudo ln -s /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/crti.o
+sudo ln -s /usr/lib/x86_64-linux-gnu/crtn.o /usr/lib/crtn.o
+```
+---
+
+Чтобы запустить тесты и увидеть графики сигналов, Вам нужен файл тестбенча (**Testbench**) — специальный VHDL-код, который сам ничего не синтезирует, а просто генерирует тактовый сигнал, сброс и подает данные на входы Вашего модуля.
+
+Вот как это делается в программе:
+
+### Установить главный файл 
+* в окне Sources/Design Sources установить `Set as Top` для файла который содержит тестируемый компонент
+* в окне Sources/Simulation Sources установить `Set as Top` для самого файла testbench
+
+### Добавьте файл теста в проект
+
+1. В левой панели **Flow Navigator** нажмите **Add Sources**.
+2. Выберите пункт **Add or create simulation sources** (это критически важно, тесты должны лежать в своей папке) и нажмите *Next*.
+3. Нажмите *Add Files* и выберите Ваш файл тестбенча (или создайте новый через *Create File*). Нажмите *Finish*.
+
+### Запуск симуляции
+
+1. В панели **Sources** перейдите на вкладку **Simulation**.
+2. Найдите Ваш добавленный тестбенч, нажмите на него правой кнопкой мыши и выберите **Set as Top** (теперь уже для симуляции, чтобы Vivado знал, какой тест запускать).
+3. В левой панели **Flow Navigator** найдите раздел **Simulation** и нажмите **Run Simulation** -> **Run Behavioral Simulation**.
+
+### Что произойдет дальше:
+
+Vivado откроет совершенно новое рабочее пространство для симуляции:
+
+* По центру откроется вкладка **Waveform**, где слева будут перечислены порты и внутренние сигналы, а справа — временная шкала с графиками (зеленые линии, показывающие `'0'`, `'1'` или шины данных).
+* По умолчанию симуляция запускается на короткий промежуток (обычно $1\text{ мкс}$).
+* Вы можете управлять временем симуляции с помощью кнопок на верхней панели: **Run All** (крутить бесконечно), **Run For...** (прокрутить еще на $10\text{ мкс}$) или **Restart** (сбросить на время $0\text{ нс}$).
+ 
+Если вы добавите в процесс (`process`) тестбенча проверку условий с помощью оператора `assert` и вывод сообщений через `report`. Обратить внимание на вкладку `Tcl Console` (или вкладку `Log` в нижней части экрана). Если логика нарушена, симуляция мгновенно прервется, и Vivado подсветит красным строку с ошибкой.
+
+```vhdl
+-- Пример процесса в delays_ex1_tb.vhd
+stim_proc: process
+begin
+    -- Шаг 1: Подаем входные сигналы (например, И - логика)
+    inputs <= "00";
+    wait for 10 ns;
+    -- Проверяем, что на выходе логический '0'
+    assert (output = '0') 
+        report "Ошибка! Для входов 00 выход должен быть 0" 
+        severity failure;
+
+    -- Шаг 2: Подаем другие сигналы
+    inputs <= "11";
+    wait for 10 ns;
+    -- Проверяем, что на выходе логическая '1'
+    assert (output = '1') 
+        report "Ошибка! Для входов 11 выход должен быть 1" 
+        severity failure;
+
+    -- Если все проверки прошли успешно:
+    report "Тестирование успешно завершено! Логика работает верно." 
+        severity note;
+    wait; -- Останавливаем симуляцию
+end process;
+```
+
+</details>
+
+График временных диаграмм AMD Xilinx Vivado: Waveform Viewer для схемы [из файла delays_ex1.vhd](#Задержки):
+
+Если установить входы a=0, b=0, c=0 то наблюдаем на выходе значение y=1 с задержкой в 7 ns.
+
+![AMD Xilinx Vivado: Waveform Viewer](img/harris/Vivado_Waveform_Viewer_delays_ex1_tb.png)
+
+---
+
+### Последовательностная логика. Регистры.
+
+Подавляющее большинство современных коммерческих систем построе­ но на регистрах, использующих срабатывающие по переднему фронту тактового импульса D-триггеры.
+
+
+Сигналы, значения которым присвоены в операторах always языка SystemVerilog и операторах **process** языка VHDL, сохраняют свое состояние, пока не случится событие из списка чувствительности оператора, приводящее к изменению их состояния. Например, у триггера в списке чувствительности есть только сигнал `clk`, и потому триггер хранит старое значение `q` до следующего переднего фронта `clk`, даже если входной сигнал `d` изменился раньше.
+
+> оператор одновременного присваивания VHDL (`<=`) перевычисляются каждый раз, когда изменяется какая-либо из переменных в правой части, поэтому эти операторы могут описать только комбинационную логику, а не последовательную
+
+Для моделирования последовательной логики в операторах always/process следует пользоваться исключительно неблокирующими присваиваниями. В операторе `process` , операция `:=` означает блокирующее присваивание, `а <=` означает неблокирую­щее (одновременное) присваивание.
+
+
+
+Оператор **process** языка VHDL имеет вид:
+```vhdl
+process(sensitivity list) begin
+  statement;
+end process;
+```
+ 
+Другой вариант идиомы VHDL для записи триггера 
+* `rising_edge(clk)` является синонимом `clk'event and clk = '1'`:
+
+```vhdl
+process(clk) begin
+  if clk'event and clk = '1' then
+    q <= d;
+  end if;
+end process;
+```
+
+Оператор выполняется, когда изменяется ка­кая-либо из переменных из списка чувствительности. В этом примере оператор `if` проверяет, было ли изменение передним фронтом тактового сигнала (такта) `clk`. Если да, то `q <= d` (читается «q принимает значение d»). Таким образом, триггер копирует `d` в `q` по переднему фронту сигнала `clk`, а в остальное время значение `q` остается неизменным.
+
+**Регистр без сброса**
+
+Файл component_flop.vhd:
+```vhdl
+library IEEE; use IEEE.STD_LOGIC_1164.all;
+
+entity component_flop is
+    port(clk: in STD_LOGIC;
+        d: in STD_LOGIC_VECTOR(3 downto 0);
+        q: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end;
+
+architecture synth of component_flop is
+begin
+    process(clk) begin
+        if rising_edge(clk) then
+            q <= d;
+        end if;
+    end process;
+end;
+```
+
+**Регистр с асинхронным сбросом `reset`**
+
+Файл component_flop_async_reset.vhd:
+
+```vhdl
+library IEEE; use IEEE.STD_LOGIC_1164.all;
+
+entity component_flop_async_reset is
+    port(
+        clk, reset: in STD_LOGIC;
+        d: in STD_LOGIC_VECTOR(3 downto 0);
+        q: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end;
+
+architecture asynchronous of component_flop_async_reset is
+begin
+    process(clk, reset) begin
+        if reset = '1' then
+            q <= "0000";
+        elsif rising_edge(clk) then
+            q <= d;
+        end if;
+    end process;
+end;
+```
+
+**Регистр с синхронным сбросом `reset`**
+
+Файл component_flop_sync_reset.vhd:
+
+```vhdl
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+
+entity component_flop_sync_reset is
+    port(
+        clk, reset: in STD_LOGIC;
+        d: in STD_LOGIC_VECTOR(3 downto 0);
+        q: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end;
+
+architecture synchronous of component_flop_sync_reset is
+begin
+    process(clk) begin
+        if rising_edge(clk) then
+            if reset = '1' then q <= "0000";
+                else q <= d;
+            end if;
+        end if;
+    end process;
+end;
+```
+
+**Регистр с сигналом разрешения `en` и асинхронным сбросом `reset`**
+
+Сохраняет предыдущее значение, если оба сигнала `en` и `reset` имеют значение FALSE
+
+Файл component_flop_en_async_reset.vhd:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity component_flop_en_async_reset is
+  port (
+    clk   : in    std_logic;
+    reset : in    std_logic;
+    en    : in    std_logic;
+    d     : in    std_logic_vector(3 downto 0);
+    q     : out   std_logic_vector(3 downto 0)
+  );
+end entity component_flop_en_async_reset;
+
+architecture asynchronous of component_flop_en_async_reset is
+
+-- асинхронный сброс
+begin
+  process (clk, reset) is
+  begin
+    if (reset = '1') then
+      q <= "0000";
+    elsif rising_edge(clk) then
+      if (en = '1') then
+        q <= d;
+      end if;
+    end if;
+  end process;
+end architecture asynchronous;
+```
+
+**Группы регистров. Синхронизатор**
+
+Один оператор always/process можно использовать для описания нескольких элементов аппаратуры.
+
+По переднему фронту `clk`, `d` копируется в `n1`, и в то же время `n1` копируется в `q`.
+
+Переменная `n1` должна быть объявлена как `sig­nal`, так как она используется внутри модуля в качестве сигнала для соединения логических элементов.
+
+Файл component_sync.vhd:
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity component_sync is
+  port (
+    clk : in    std_logic;
+    d   : in    std_logic;
+    q   : out   std_logic
+  );
+end entity component_sync;
+
+architecture good of component_sync is
+
+  signal n1 : std_logic;
+begin
+  process (clk) is
+  begin
+    if rising_edge(clk) then
+      n1 <= d;
+      q  <= n1;
+    end if;
+  end process;
+end architecture good;
+```
+
+**Защелки**
+
+D-защелка открыта при высоком уровне тактового сигнала, т. е. пропускает сигнал данных с входа на выход.
+
+Не все программы-синтезаторы хорошо справляются с защелками. Если вы не уверены, что ваш синтезатор их поддерживает, или нет особых причин использовать именно защелки, пользуйтесь вместо них триг­герами, работающими по фронту сигнала.
+  
+В списке чувствительности есть и `clk`, и `d`, так что process вычисляется каждый раз, когда `clk` или `d` изменяется. При высоком уровне `clk` переменная `q` принимает значение `d`.
+
+> Добавить аргумент `--latches` в
+> `TerosHDL Settings/Schematic viewer/Arguments passed to GHDL`
+
+Файл component_latch.vhd:
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity component_latch is
+  port (
+    clk : in    std_logic;
+    d   : in    std_logic_vector(3 downto 0);
+    q   : out   std_logic_vector(3 downto 0)
+  );
+end entity component_latch;
+
+architecture synth of component_latch is
+
+begin
+  process (clk, d) is
+  begin
+    if (clk = '1') then
+      q <= d;
+    end if;
+  end process;
+end architecture synth;
+```
+
+
+### И снова комбинационная логика
+
+Операторы always языка SystemVerilog и операторы **process** языка VHDL используются для описания последовательностных схем, потому что они сохраняют состояние переменных, если не было указано их изменить. Но эти операторы можно использовать и для поведенческого описания комбинационной логики, если список чувствительности описан так, чтобы отвечать на любое изменение входных сигналов, и тело оператора определяет значение выходного сигнала при любой комбинации значений входов.
+
+Код на HDL в примере использует операторы always/process для описания группы из четырех инверторов
+
+Оператор `process(all)` исполняет все выражения внутри process, как только изменяется любой из сигналов оператора process. Это эквивалентно `process(a)`, но существенно лучше, так как позволяет избежать ошибок при переименовании или добавлении новых сигналов. Операторы `begin` и `end process` обязательны в VHDL, даже если process содержит только одно присваивание.
+
+Файл component_inv_proc.vhd:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity component_inv_proc is
+  port (
+    a : in    std_logic_vector(3 downto 0);
+    y : out   std_logic_vector(3 downto 0)
+  );
+end entity component_inv_proc;
+
+architecture proc of component_inv_proc is
+
+begin
+  process (all) is
+  begin
+    y <= not a;
+  end process;
+end architecture proc;
+```
+
+
+В обоих языках можно использовать блокирующие и неблокирующие присваивания в операторах always/process. Внутри одного оператора блокирующие присваивания выполняются в том порядке, в котором они написаны, в точности как в обычном языке программирования, а обновление значений переменных в левой части неблокирующих присваиваний выполняется «одновременно», после того как вычислены значения всех правых частей неблокирующих присваиваний.
+
+В операторе `process` , операция `:=` означает блокирующее присваивание, `а <=` означает неблокирую­щее (одновременное) присваивание. Символ `<=` может использоваться и за пределами операторов `process`, где тоже исполняется одновременно.
+
+Неблокирующие присваивания применяются к выходам и к сигналам. Блокирующие присваивания применяются к переменным, объявленным в операторах `process`.
+
+
+> Используйте `process(clk)` и неблокирующие присваивания для моделирования синхронной последовательностной логики.
+>
+>```vhdl
+> process(clk) begin
+> if rising_edge(clk) then
+>   n1 <= d; -- неблокирующее
+>   q <= n1; -- неблокирующее
+> end if;
+> end process;
+> ```
+
+
+> Используйте одновременные присваивания вне операторов process для моделирования простой комбинационной логики.
+>
+>```vhdl
+>y <= d0 when s = '0' else d1;
+>```
+
+> Используйте `process(all)` для моделирования более сложной комбинационной логики, если оператор process удобнее. Пользуйтесь блокирующими присваива­ ниями для локальных переменных.
+>
+>```vhdl
+> process(all)
+> variable p, g: STD_LOGIC;
+> begin
+>   p := a xor b; -- блокирующее
+>   g := a and b; -- блокирующее
+>   s <= p xor cin;
+>   cout <= g or (p and cin);
+> end process;
+>```
+
+> Не присваивайте значение одной и той же переменной в разных операторах `process` или одновременных присваиваниях.
+
+
+
+Файл component_fulladder_proc.vhd:
+
+Так как `p` и `g` упоминаются в левой части операторов блокирующего присваивания (`:=`) в операторе `process`, то они должны быть объявлены как `variable`, а не как `signal`. Объявление переменных пишется перед `be­gin` того процесса, в котором эти переменные исполь­зуются.
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity component_fulladder_proc is
+  port (
+    a    : in    std_logic;
+    b    : in    std_logic;
+    cin  : in    std_logic;
+    s    : out   std_logic;
+    cout : out   std_logic
+  );
+end entity component_fulladder_proc;
+
+architecture synth of component_fulladder_proc is
+
+begin
+  process (all) is
+    variable p, g : std_logic;
+  begin
+    p    := a xor b; -- блокирующее
+    g    := a and b; -- блокирующее
+    s    <= p xor cin;
+    cout <= g or (p and cin);
+  end process;
+end architecture synth;
+```
+
+> Для моделирования более сложной комбинационной логики удобно пользоваться операторами `case` и `if`, которые допускаются только внутри операторов `always/process`.
+
+### Комбинационная логика. Операторы case
+
+Оператор `case` выполняет различные действия в зависимости от значения своих входных данных. Он подразумевает комбинационную логику, если все возможные сочетания входных данных определены; в противном случае получится последовательностная логика, и выход сохранит свое предыдущее значение в неопределенных случаях.
+
+Если бы условие `default` или `others` не было упомянуто в операторе `case`, то дешифратор сохранял бы предыдущее значение выхода, когда вход находится в диапазоне 10–15. Для аппаратуры такое поведение было бы странно.
+
+Пример дешифратора семисегментного индикатора
+ 
+Файл component_seven_seg_decoder.vhd:
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity component_seven_seg_decoder is
+  port (
+    data     : in    std_logic_vector(3 downto 0);
+    segments : out   std_logic_vector(6 downto 0)
+  );
+end entity component_seven_seg_decoder;
+
+architecture synth of component_seven_seg_decoder is
+
+begin
+  process (all) is
+  begin
+    case data is
+      -- abcdefg
+      when X"0" =>
+        segments <= "1111110";
+      when X"1" =>
+        segments <= "0110000";
+      when X"2" =>
+        segments <= "1101101";
+      when X"3" =>
+        segments <= "1111001";
+      when X"4" =>
+        segments <= "0110011";
+      when X"5" =>
+        segments <= "1011011";
+      when X"6" =>
+        segments <= "1011111";
+      when X"7" =>
+        segments <= "1110000";
+      when X"8" =>
+        segments <= "1111111";
+      when X"9" =>
+        segments <= "1110011";
+      when others =>
+        segments <= "0000000";
+    end case;
+  end process;
+end architecture synth;
+```
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_seven_seg_decoder.png)
+
+Пример дешифратора 3:8
+
+Файл component_decoder3_8.vhd:
+
+Строго говоря, условие `others` в данном случае не нужно для синтеза, поскольку перечислены все возможные сочетания входов, но оно полезно для моделирования на случай, если какой-либо из входов равен `x`, `z` или `u`.
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity component_decoder3_8 is
+  port (
+    a : in    std_logic_vector(2 downto 0);
+    y : out   std_logic_vector(7 downto 0)
+  );
+end entity component_decoder3_8;
+
+architecture synth of component_decoder3_8 is
+
+begin
+  process (all) is
+  begin
+    case a is
+      when "000" =>  y <= "00000001";
+      when "001" =>  y <= "00000010";
+      when "010" =>  y <= "00000100";
+      when "011" =>  y <= "00001000";
+      when "100" =>  y <= "00010000";
+      when "101" =>  y <= "00100000";
+      when "110" =>  y <= "01000000";
+      when "111" =>  y <= "10000000";
+      when others => y <= "XXXXXXXX";
+    end case;
+  end process;
+end architecture synth;
+```
+
+### Комбинационная логика. Условный оператор (if/else)
+
+Если все возможные сочетания входов учтены условиями, то оператор описывает комбинационную логику, иначе – последовательностную (например, защелка)
+
+
+Пример схема приоритетов, N-входовая схема приоритетов устанавливает в значение TRUE тот из выходов, который соответствует наиболее приоритетному входу, равному TRUE.
+
+Файл component_priorityckt.vhd:
+ 
+```vhdl
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+
+entity component_priorityckt is
+port(
+    a: in STD_LOGIC_VECTOR(3 downto 0);
+    y: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end;
+
+architecture synth of component_priorityckt is
+begin
+    process(all) begin
+        if a(3) = '1' then  y <= "1000";
+        elsif a(2) = '1' then  y <= "0100";
+        elsif a(1) = '1' then  y <= "0010";
+        elsif a(0) = '1' then  y <= "0001";
+        else  y <= "0000";
+        end if;
+    end process;
+end;
+```
+
+### Комбинационная логика. Незначащие биты
+
+Пример описания приоритетной схемы с незначащими битами.
+
+Файл component_priority_casez.vhd
+
+В VHDL-2008 используется "case?" для работы с символами '-'
+
+```vhdl
+library IEEE; 
+use IEEE.STD_LOGIC_1164.all;
+
+entity component_priority_casez is
+    port(
+        a: in STD_LOGIC_VECTOR(3 downto 0);
+        y: out STD_LOGIC_VECTOR(3 downto 0)
+    );
+end entity component_priority_casez; 
+
+architecture dontcare of component_priority_casez is
+begin
+    process(all) begin
+        case? a is
+            when "1---" => y <= "1000";
+            when "01--" => y <= "0100";
+            when "001-" => y <= "0010";
+            when "0001" => y <= "0001";
+            when others => y <= "0000";
+        end case?; 
+    end process;
+end architecture dontcare;
+```
+
+### Конечные автоматы
+
+Конечный автомат (КА) состоит из регистра состояния и двух блоков комбинационной логики для вычисления следующего состояния и выхода по заданному текущему состоянию и информации на входе.
+
+Для инициализации КА используется асинхронный сброс. Регистр состоя­ния использует стандартную идиому для триггеров. Логика формирования следующего состояния и выхода является комбинационной.
+
+Файл divideby3FSM.vhd:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity divideby3fsm is
+  port (
+    clk   : in    std_logic;
+    reset : in    std_logic;
+    y     : out   std_logic
+  );
+end entity divideby3fsm;
+
+architecture synth of divideby3fsm is
+  type statetype is (s0, s1, s2);
+  signal state, nextstate : statetype;
+
+begin
+  -- регистр состояния
+  process (clk, reset) is
+  begin
+    if (reset) then
+      state <= s0;
+    elsif rising_edge(clk) then
+      state <= nextstate;
+    end if;
+  end process;
+
+  -- логика следующего состояния
+  nextstate <= s1 when state = s0 else
+               s2 when state = s1 else
+               s0;
+  -- выходная логика
+  y <= '1' when state = s0 else
+       '0';
+end architecture synth;
+```
+
+В этом примере определяется новый тип перечисляемых данных `statetype` с тремя возможными значениями: `S0, S1 и S2`. `state` и `nextstate` – сигналы типа `statetype`. Благодаря использованию перечисления, а не явно задаваемых кодов состояний, VHDL позволяет синтезатору выбрать оптимальный код для состояний.
+
+Выход `y` равен 1, когда `state` равно `S0`. Операция сравнения на неравенство записывается как `/=`. Чтобы получить на выходе 1, когда состояние отлично от `S0`, замените сравнение на state `/= S0`.
+
+Если по какой-либо причине мы захотим, чтобы выход был равен 1 в состояниях `S0` и `S1`, выходная логика изменится следующим образом:
+
+```vhdl
+-- выходная логика
+y <= '1' when (state = S0 or state = S1) else '0';
+```
+
+ 
+Следующие два примера описывают КА распознавателя битового
+шаблона улитки. В коде показано, как использовать
+операторы case и if для обработки следующего состояния и выходной
+логики, зависящей и от входа, и от текущего состояния.
+
+Пример автомат Мура для распознавания битового шаблона
+
+Файл patternMoore.vhdl:
+
+```vhdl
+library ieee;
+
+use ieee.std_logic_1164.all;
+
+entity patternmoore is
+  port (
+    clk   : in    std_logic;
+    reset : in    std_logic;
+    a     : in    std_logic;
+    y     : out   std_logic
+  );
+end entity patternmoore;
+
+architecture synth of patternmoore is
+  type statetype is (s0, s1, s2);
+  signal state, nextstate : statetype;
+
+begin
+
+  -- регистр состояния
+  process (clk, reset) is begin
+    if (reset = '1') then
+      state <= s0;
+    elsif rising_edge(clk) then
+      state <= nextstate;
+    end if;
+  end process;
+
+  -- логика следующего состояния
+  process (all) is begin
+    case state is
+      when s0 =>
+        if (a = '1') then nextstate <= s0;
+        else nextstate <= s1;
+        end if;
+      when s1 =>
+        if (a = '1') then nextstate <= s2;
+        else nextstate <= s1;
+        end if;
+      when s2 =>
+        if (a = '1') then nextstate <= s0;
+        else nextstate <= s1;
+        end if;
+      when others =>
+        nextstate <= s0;
+    end case;
+
+  end process;
+
+  -- выходная логика
+  y <= '1' when state = s2 else
+       '0';
+
+end architecture synth;
+```
+
+---
+
+### Параметризированные модули
+
+До сих пор у модулей в наших примерах входы и выходы были фиксированной ширины. Но в языках описания аппаратуры HDL можно описывать и параметризированные модули с портами переменной ширины.
+
+Пример дешифратор.
+
+Широкий дешифратор $N:2^N$ довольно утомительно описывать с помощью оператора `case`, но это легко сделать с помощью параметризированного модуля, который просто устанавливает нужный бит в 1. Иначе говоря, в дешифраторе использовано блокирующее присваивание для установки всех битов в 0, а затем нужный бит изменяется в 1. 
+
+$2**N$ означает $2^N$
+
+Файл component_decoder_param.vhdl:
+
+```vhdl
+library ieee;
+  use ieee.std_logic_1164.all;
+  use ieee. numeric_std_unsigned.all;
+
+entity decoder is
+  generic (
+    n : integer := 3
+  );
+  port (
+    a : in    std_logic_vector(N-1 downto 0);
+    y : out   std_logic_vector(2 ** n - 1 downto 0)
+  );
+end entity decoder;
+
+architecture synth of decoder is
+
+begin
+  process (all) is
+  begin
+    y                <= (others => '0');
+    y(TO_INTEGER(a)) <= '1';
+  end process;
+end architecture synth;
+```
+
+---
+
+Оператор `generate` для получения разного количества аппаратуры в зависимости от значения параметра.
+
+В операторе `generate` допускаются циклы `for` и операторы `if` для определения количества и свойств желаемой аппаратуры.
+
+Демонстрируется, как использовать операторы `generate` для получения `N-входовой` функции `И` из каскада двухвходовых логических элементов `И`. Конечно, для этой конкретной цели лучше подошла бы операция сокращения, но этот пример иллюстрирует общий принцип использования оператора `generate`. Используйте операторы `generate` с осторожностью – из-за них можно легко непреднамеренно получить очень большую схему!
+
+Файл component_andN_gen.vhdl:
+
+Переменную цикла generate объявлять не нужно.
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity andn is
+  generic (
+    width : integer := 8
+  );
+  port (
+    a : in    std_logic_vector(width - 1 downto 0);
+    y : out   std_logic
+  );
+end entity andn;
+
+architecture synth of andn is
+  signal x : std_logic_vector(width - 1 downto 0);
+begin
+  x(0) <= a(0);
+  gen : for i in 1 to width - 1 generate
+    x(i) <= a(i) and x(i - 1);
+  end generate gen;
+    y <= x(width - 1);
+end architecture synth;
+```
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_component_andN_gen.png)
+
+---
+
+### Тестбенч
+
+
+*Тестбенч* – это модуль на HDL, который используется для тестирования другого модуля, называемого тестируемое устройство (device under test, DUT)
+
+Тестбенч содержит операторы для генерации значений, подаваемых на входы DUT, и также для проверки, что на выходе получаются правильные значения. Наборы входных и желаемых выходных значений называются *тестовыми векторами*.
+
+
+Таблица истинности (Truth Table) на основе заданной логической функции. Таблица истинности основа для написания тестбенча. Без этой таблицы невозможно составить правильные условия assert. Именно из неё берутся значения «ожидаемый выход y равен 1 или 0» для каждой комбинации входных сигналов.
+  
+$y = (\bar{a}\bar{b}\bar{c}) + (a\bar{b}\bar{c}) + (a\bar{b}c) = \bar{b}\bar{c}(\bar{a} + a) + a\bar{b}c = \bar{b}\bar{c} + a\bar{b}c = \bar{b}(\bar{c} + ac) = \bar{b}(\bar{c} + a)$
+
+Генерация всех возможных комбинация данных входа, используем [комбинаторику (размещения с повторениями)](Computer-Science-Bookshelf/discrete_mathematics/комбинаторика.html#Размещения-с-повторениями):
+
+```rust, editable
+fn generate_binary_sequences(n: usize) {
+    let total = 1 << n; // 2^n комбинаций
+
+    for i in 0..total {
+        // выводим число как бинарную строку с ведущими нулями
+        println!("{:0width$b}", i, width = n);
+    }
+}
+fn main() {
+    generate_binary_sequences(3);// 3 bit
+}
+```
+
+
+| a | b | c | **y** | Комментарий / Терм из кода |
+| --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | **1** | `not a and not b and not c` |
+| 0 | 0 | 1 | **0** |  |
+| 0 | 1 | 0 | **0** |  |
+| 0 | 1 | 1 | **0** |  |
+| 1 | 0 | 0 | **1** | `a and not b and not c` |
+| 1 | 0 | 1 | **1** | `a and not b and c` |
+| 1 | 1 | 0 | **0** |  |
+| 1 | 1 | 1 | **0** |  |
+ 
+
+Выход $y$ равен `1` только в трёх случаях:
+
+1. Когда все входы равны 0 ($a=0, b=0, c=0$)
+2. Когда $a=1, b=0, c=0$
+3. Когда $a=1, b=0, c=1$
+
+Во всех остальных случаях (включая любые комбинации, где $b=1$), выход будет равен `0`.
+   
+Файл sillyfunction.vhd:
+
+```vhdl
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+
+entity sillyfunction is
+  port (
+    a, b, c : in std_logic;
+    y       : out std_logic);
+
+end;
+architecture synth of sillyfunction is begin
+  y <= (not a and not b and not c) or
+    (a and not b and not c) or
+    (a and not b and c);
+end;
+```
+
+Синтезированная схема из кода файла sillyfunction.vhd
+
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_sillyfunction.png)
+
+Тестирование кода vhdl из файла sillyfunction.vhd в симуляторе Digital
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_sillyfunction.png)
+
+  
+Составление testbench. 
+
+В языке VHDL сигналы (`signal`) ведут себя как электронные регистры или защелки. Если Вы один раз присвоили сигналу значение (например, `a <= '0';`), оно сохраняется за ним неизменным до тех пор, пока Вы явно не присвоите ему новое значение.
+
+Оператор `assert` проверяет условие и печатает сообщение, указанное после `report`, если условие не выполнено.
+
+`DUT` это просто классическое имя (метка) для проверяемого компонента, расшифровывается как Device Under Test (тестируемое устройство) или иногда `UUT` (Unit Under Test).
+
+*В цифровом проектировании это общепринятый стандарт де-факто: называть экземпляр тестируемой схемы в тестбенче словом dut.*
+
+
+Файл тестбенча (Testbench) — специальный VHDL-код, который сам ничего не синтезирует, а просто генерирует тактовый сигнал, сброс и подает данные на входы Вашего модуля.
+ 
+Файл sillyfunction_tb.vhd:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity sillyfunction_tb is
+end entity sillyfunction_tb;
+
+architecture bench of sillyfunction_tb is
+  -- Simulation step period
+  constant clk_period : time := 10 ns;
+  
+  -- Signals for DUT connection
+  signal a : std_logic;
+  signal b : std_logic;
+  signal c : std_logic;
+  signal y : std_logic;
+begin
+
+  -- Direct instantiation of Device Under Test (DUT)
+  dut : entity work.sillyfunction
+  port map (
+    a => a,
+    b => b,
+    c => c,
+    y => y
+  );
+
+  -- Stimulus and verification process
+  stimulus : process
+  begin
+    -- 1. Combination 000 -> Expect 1
+    a <= '0'; b <= '0'; c <= '0'; wait for clk_period;
+    assert (y = '1') report "Error on combination 000! Expected 1." severity failure;
+    
+    -- 2. Combination 001 -> Expect 0
+    a <= '0'; b <= '0'; c <= '1'; wait for clk_period;
+    assert (y = '0') report "Error on combination 001! Expected 0." severity failure;
+    
+    -- 3. Combination 010 -> Expect 0
+    a <= '0'; b <= '1'; c <= '0'; wait for clk_period;
+    assert (y = '0') report "Error on combination 010! Expected 0." severity failure;
+    
+    -- 4. Combination 011 -> Expect 0
+    a <= '0'; b <= '1'; c <= '1'; wait for clk_period;
+    assert (y = '0') report "Error on combination 011! Expected 0." severity failure;
+    
+    -- 5. Combination 100 -> Expect 1
+    a <= '1'; b <= '0'; c <= '0'; wait for clk_period;
+    assert (y = '1') report "Error on combination 100! Expected 1." severity failure;
+    
+    -- 6. Combination 101 -> Expect 1
+    a <= '1'; b <= '0'; c <= '1'; wait for clk_period;
+    assert (y = '1') report "Error on combination 101! Expected 1." severity failure;
+    
+    -- 7. Combination 110 -> Expect 0
+    a <= '1'; b <= '1'; c <= '0'; wait for clk_period;
+    assert (y = '0') report "Error on combination 110! Expected 0." severity failure;
+    
+    -- 8. Combination 111 -> Expect 0
+    a <= '1'; b <= '1'; c <= '1'; wait for clk_period;
+    assert (y = '0') report "Error on combination 111! Expected 0." severity failure;
+
+    -- Final message upon success
+    report "All tests passed successfully! Component logic is correct." severity note;
+    
+    wait; -- Stop simulation
+  end process;
+
+end architecture bench;
+```
+
+Тест в среде AMD Xilinx Vivado: SIMULATION/Run Simulation. 
+
+Результат теста в Tcl Console: 
+`Note: All tests passed successfully! Component logic is correct.`
+
+[Пример Vivado с таймингами из файла delays_ex1.vhd](#amd-xilinx-vivado)
+
+> Разрабатывать код для каждого тестового вектора тоже становится утомительно, особенно для модулей, требующих большого количества тестовых векторов. Еще лучше держать тестовые векторы в отдельном файле. Тогда тестбенч будет просто читать их из файла, подавать входной вектор на входы DUT, проверять, что значения выходов совпадают с выходным вектором, и повторять, пока не будет достигнут конец файла.
+
+
