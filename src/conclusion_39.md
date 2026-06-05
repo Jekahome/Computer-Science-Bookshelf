@@ -2987,11 +2987,132 @@ end architecture Structural;
 
 ---
 
-**Схема 16-ти битного префиксного сумматора (архитектура Kogge-Stone)**
+#### Схема 16-ти битного префиксного сумматора (архитектура Kogge-Stone)
 
 ![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_adder16bit_Kogge-Stone.png)
 
 [Схема adder16bit для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/adder16bit_Kogge-Stone.dig)
 
 ![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_test_adder16bit_Kogge-testStone.png)
+
+---
+
+<details>
+
+<summary> Схема 8-ми битного префиксного сумматора (архитектура Kogge-Stone) </summary>
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_adder8bit_Kogge-Stone_2.png)
+
+[Схема adder16bit для Digital (Digital Logic Designer от Helmut Neemann)](img/harris/adder8bit_Kogge-Stone.dig)
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_test_adder8bit_Kogge-testStone.png)
+
+</details>
+
+---
+
+### Вычитание
+
+VHDL 8-ми битного subtractor
+
+Файл subtractor.vhdl:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std_unsigned.all;
+
+entity subtractor is
+  port (
+    A : in    std_logic_vector(7 downto 0);
+    B : in    std_logic_vector(7 downto 0);
+    Y : out   std_logic_vector(7 downto 0)
+  );
+end entity subtractor;
+
+architecture synth of subtractor is
+begin
+  Y <= A - B;
+end architecture synth;
+```
+
+![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_subtractor.png)
+
+
+### Компараторы
+
+* компаратор равенства выдает один выходной сигнал, показывая, равны ли А и В `(A==B)`;
+  * Значения будут равными, если все соответствующие разряды равны.
+* компаратор величины выдает один и более выходных сигналов, показывая отношение величин А и В.
+  * вычисляет `А – В` и анализирует знак (самый старший разряд) результата. Если результат отрицательный (самый старший разряд = 1), то А меньше В. В противном случае А больше или равно В.
+
+Файл comparators.vhd:
+
+```vhdl
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity comparators is
+  generic (
+    n : integer := 8
+  );
+  port (
+    a   : in    std_logic_vector(n - 1 downto 0);
+    b   : in    std_logic_vector(n - 1 downto 0);
+    eq  : out   std_logic;
+    neq : out   std_logic;
+    lt  : out   std_logic;
+    lte : out   std_logic;
+    gt  : out   std_logic;
+    gte : out   std_logic
+  );
+end entity comparators;
+
+architecture synth of comparators is
+begin
+  eq  <= '1' when (a = b) else
+         '0';
+  neq <= '1' when (a /= b) else
+         '0';
+  lt  <= '1' when (a < b) else
+         '0';
+  lte <= '1' when (a <= b) else
+         '0';
+  gt  <= '1' when (a > b) else
+         '0';
+  gte <= '1' when (a >= b) else
+         '0';
+end architecture synth;
+```
+ 
+![TerosHDL: Schematic Viewer](img/harris/Schematic_Viewer_comparators.png)
+
+---
+
+## Матрицы памяти
+
+Организация матрицы памяти 4 × 3
+
+![Матрицы памяти](img/harris/memory_matrix.png)
+
+При чтении содержимого памяти активируется линия выборки слов, и с запоминающих элементов соответствующей строки на линии записи/чтения поступает напряжение высокого или низкого логического уровня. При записи на линии записи/чтения с помощью усилителя записи/чтения подаются данные, которые будут сохранены в элементах строки, а затем активируется соответствующая линия выборки слов.
+
+Память всех типов хранит данные в матрице запоминающих элементов, но способ хранения битов различный.
+
+Запоминающие устройства делятся на два больших класса: 
+* оперативные запоминающие устройства (ОЗУ, RAM, память с произвольным доступом) 
+* постоянные запоминающие устройства (ПЗУ, ROM, память только для чтения). 
+
+ОЗУ является **энергозависимым**, то есть при отключении питания информация, которая хранилась в ОЗУ, утрачивается. ПЗУ **энергонезависимо**, оно сохраняет свои данные даже при отсутствии питания.
+
+Основными классами ОЗУ являются **динамическое** оперативное запоминающее устройство (динамическая память, DRAM) и **статическое** оперативное запоминающее устройство (статическая память, SRAM). Динамическая память сохраняет данные в виде заряда конденсаторов, а статическая – в виде состояния бистабильной схемы, состоящей из двух перекрестно соединенных инверторов.
+* В динамическом ОЗУ (DRAM) значениям битов соответствует наличие и отсутствие заряда конденсатора. Чтение уничтожает данные, которые хранились в конденсаторе, поэтому после каждого чтения данные должны быть восстановлены (перезаписаны). Даже если из динамического ОЗУ не нужно считывать данные, из-за саморазряда конденсаторов они должны регенерироваться (считываться и перезаписываться) каждые несколько миллисекунд. Задержка в динамическом ОЗУ больше, чем
+в статическом ОЗУ, потому что в нем линия записи/чтения фактически не управляется транзистором. Задержка динамического ОЗУ ограничивается относительно медленной передачей заряда из конденсатора на линию чтения/записи.
+* Статическое ОЗУ (SRAM) называется статическим, потому что в нем отсутствует необходимость регенерации хранимых данных.
+
+
+![Схема ячейки SRAM в симуляторе Digital](img/harris/Digital_sram_cell.png)
+ 
+[sram_cell (www.falstad.com/circuit)](https://www.falstad.com/circuit/circuitjs.html?ctz=DwYwlgTgBAZgvAIgIwKgFwM6IAwDpsEECsqYIiSeATAVQOx0DM2AHFQGwCcndqIARoiLZUAB0EJhqAG4QhqALaYhAUwC0SFAD4AUFCjAAMlAAeiACxJ2UIufNRGja7fOp4CEQHpd+o6YtWUHREVA5OQSFuOGIUCN56BsZmCJbWLIyhjmkZUR5xPon+KYGcSJnhpVS5IlCisfG+AIIAdgAmRURlUCyc1uys3b3V+QnAAO4dXZVQqVCVww0GE8mzLjZdLgsF45Oha52hLCw17l7bCgCuJkUs5ixBNIPWdDTDUBgq9edXRezm2A8AewjoC3h8vqNrslGEg6OsiGFOOsWGCwIgqK50J8EGMADYjXxQxAwxhBRwOcwIpjsVHozFobGtMDNAkGIkIGEIliUBxMbpIRi0hAY1AMxBM5oAfRZi2A7JhcJ61kY5kV3CFIqxiDGKlZOxWgWCoT+AKNW1Gy0Q-XuSqC2HsSvNvktCDo9v5z3djtg0VlAEkinRboDundQT68u9cThcCQoAALNGSPUu6khtPmIYRs4WwPhF6m4MFp1LIqzdKHMMVkv6xC3e5G0M2nLZlOBr29OZdb2nNvJabc6wDrO9-1FTh2EOUAbF1tRmNxxPyWUuk0htfsF411f-KCb0LT+777dFQ97l5QM+z0fbTDjyfWy8EI+sXIoKAQAD2zRj76-MHcadCGAmovwAcwoEDCFQJdkxXe97ALOYH1fVt4OSA4bEnTgqHuTY0NvDAEJmTsz0zGkIz-b9f1Qf9AKg4DaM-CDkAYmpYJIdDEBwvDsNwmY-hPft+LWHhnDsITuLocT7DEmwcMkhAeIE2TpJUxS5PMP45jUu4Tl9bYXQnexyLJaxyJrABZU9nxI6xNHdCyCNGazkjPR8HPsa0a3ZSgQVVBFNBVGYgw1elGU-C40D1XzWDwlh7KsJAbB6MLRQiqLpRGYBPHACBdCAA)
+
 
