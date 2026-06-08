@@ -33,6 +33,7 @@
     - [Владстон Феррейра Фило. Теоретический минимум по Computer Science Unleashed and Distilled (краткий справочник)]()
         - [Computer Science Unleashed (Безопасность) -> доб. в реп. Security Web]()
         - [Computer Science Unleashed (Сети) -> доб. в Отдельный раздел]()
+        - [Computer Science Distilled (Стратегия) -> доб. в реп. Algorithms]()
 
 - [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
