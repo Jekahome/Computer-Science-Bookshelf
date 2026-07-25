@@ -7293,7 +7293,7 @@ convert_video_gray_raw_to_bin("video_320x200_gray.raw", "video_320x200_gray.bin"
 
 <br>
 <video controls width="100%" muted playsinline preload="metadata">
-    <source src="/Computer-Science-Bookshelf/img/riscv/video_320x200_gray.mp4" type="video/mp4">
+    <source src="/Computer-Science-Bookshelf/img/riscv/video/video_320x200_gray.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
 </video>
 
@@ -7344,7 +7344,7 @@ convert_video_raw_to_rgb222_bin("video_320x200_rgb24.raw", "video_320x200_rgb222
 
 <br>
 <video controls width="100%" muted playsinline preload="metadata">
-    <source src="/Computer-Science-Bookshelf/img/riscv/video_320x200_rgb222.mp4" type="video/mp4">
+    <source src="/Computer-Science-Bookshelf/img/riscv/video/video_320x200_rgb222.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
 </video>
 
@@ -7355,9 +7355,9 @@ convert_video_raw_to_rgb222_bin("video_320x200_rgb24.raw", "video_320x200_rgb222
  
 ## Схемы, код и данные
 
-* [Схемы](/Computer-Science-Bookshelf/src/RISC-V/program/ProcessorRiscvDig.zip)
-* [Ассемблер и код программ](/Computer-Science-Bookshelf/src/RISC-V/program/ProcessorCode.zip)
-* [Данные](/Computer-Science-Bookshelf/src/RISC-V/program/DATA.zip)
+* [Схемы](/Computer-Science-Bookshelf/RISC-V/program/ProcessorRiscvDig.zip)
+* [Ассемблер и код программ](/Computer-Science-Bookshelf/RISC-V/program/ProcessorCode.zip)
+* [Данные](/Computer-Science-Bookshelf/RISC-V/program/DATA.zip)
 
 
 
