@@ -37,10 +37,10 @@
 
 - [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
-    - [Архитектура компьютера](conclusion_10.md)
     - [Ulrich Drepper. What Every Programmer Should Know About Memory](conclusion_38.md)
+    - [Single Cycle Processor RISC-V (RV32I + Zicsr, M)](RISC-V/RISC-V.md)
     - [Дэвид М. Харрис, Сара Л. Харрис - Цифровая схемотехника и архитектура компьютера RISC-V - 2021](conclusion_39.md)
- 
+    - [Архитектура компьютера (разное)](conclusion_10.md)
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
     - [Таненбаум Э., Стеен М. - Распределённые системы. Принципы и парадигмы 2003](conclusion_12.md)
 
