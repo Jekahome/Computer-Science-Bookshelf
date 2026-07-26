@@ -7280,7 +7280,6 @@ fn fill_fast(color: u8) {
             ptr = ptr.add(16);
         }
     }
-
     swap_buffers();
 }
 
@@ -7326,7 +7325,6 @@ riscv64-unknown-elf-ld -m elf32lriscv -T linker.ld startup.o trap.o test_framebu
 riscv64-unknown-elf-objcopy -O binary test_framebuffer_page_flipping.elf test_framebuffer_page_flipping.bin
 ```    
 
-
 Так происходит заливка цвета кадра 320x200 пикселей, с поддержкой двойной буферизации (page flipping). 
 Т.е. работают два буфера `B=0` и `B=1` и мы не видим наполнение кадра, но количество инструкций для отрисовки кадра не позволяет иметь плавную смену кадра.
 <br>
@@ -7351,6 +7349,41 @@ riscv64-unknown-elf-objdump -D test_framebuffer_page_flipping.elf
 
 Для ускорения частоты смены кадров, нам нужно сократить количество инструкций для обслуживания цикла. Применим оптимизацию **развертка цикла (Loop Unrolling)**, развернув цикл на 16 операций записи *подряд*. Поскольку инструкция `sb` умеет прибавлять постоянное смещение к базовому регистру прямо во время выполнения, компилятору не нужно вычислять промежуточные адреса без необходимости выполнять инкремент адреса на каждом шаге. Число 16 выбрано как оптимальный баланс между эффективностью цикла и финальным размером прошивки.
 
+Функция с разверткой цикла:
+
+```rust,editable,no_run
+fn fill_fast(color: u8) {
+   let mut ptr = get_back_buffer(); // *mut u8
+    
+    // 64 000 / 16 = 4 000 итераций вместо 64 000
+    let total_chunks = (WIDTH * HEIGHT) / 16; 
+
+    unsafe {
+        for _ in 0..total_chunks {
+            // Пишем 16 байт подряд за одну итерацию
+            ptr.offset(0).write_volatile(color);
+            ptr.offset(1).write_volatile(color);
+            ptr.offset(2).write_volatile(color);
+            ptr.offset(3).write_volatile(color);
+            ptr.offset(4).write_volatile(color);
+            ptr.offset(5).write_volatile(color);
+            ptr.offset(6).write_volatile(color);
+            ptr.offset(7).write_volatile(color);
+            ptr.offset(8).write_volatile(color);
+            ptr.offset(9).write_volatile(color);
+            ptr.offset(10).write_volatile(color);
+            ptr.offset(11).write_volatile(color);
+            ptr.offset(12).write_volatile(color);
+            ptr.offset(13).write_volatile(color);
+            ptr.offset(14).write_volatile(color);
+            ptr.offset(15).write_volatile(color);
+
+            ptr = ptr.add(16);
+        }
+    }
+    swap_buffers();
+}
+```
 
 Листинг дизассемблированного участка кода цикла ф-ции `fill_fast`:
 ```
