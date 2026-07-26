@@ -6329,7 +6329,6 @@ else
 Доп. ресурсы:
 * [Learn RISC-V](https://github.com/riscv/learn)
 * [RISC-V с нуля](https://habr.com/ru/articles/454208/)
-* [План создания RISC-V процессора и ОС](https://chat.deepseek.com/share/s1r19ke060jlorwe21)
 * [[UNИX] (2025, весна) Архитектура и язык ассемблера RISC-V](https://www.youtube.com/playlist?list=PL6kSdcHYB3x7TqvWZDPJM_TOBbdXQkd8v)
 * [[UNИX] Архитектура и язык ассемблера RISC-V (весна 2024)](https://www.youtube.com/playlist?list=PL6kSdcHYB3x5kaDr8VY9rD6gK3q-gI94I)
 
