@@ -6307,6 +6307,13 @@ else
 
 ## Примеры
 
+* [Вывод строки (C)](#Вывод-строки-c)
+* [Вывод строки (Rust)](#Вывод-строки-rust)
+* [Framebuffer](#framebuffer)
+     * [Рисование окружности алгоритмом Брезенхема](#Рисование-окружности-алгоритмом-Брезенхема)
+     * [Заливка цветом без поддержки буферизированного ввода](#Заливка-цветом-без-поддержки-буферизированного-ввода)
+     * [Заливка цветом с двойной буферизацией (Page Flipping)](#Заливка-цветом-с-двойной-буферизацией-page-flipping)
+* [DMA](#dma)
 
 ---
 
@@ -6319,16 +6326,12 @@ else
 > * [Single-Cycle-RISCV-Processor-using-Digital-Software](https://github.com/Anish-Rooj-cpu/Single-Cycle-RISCV-Processor-using-Digital-Software)
 > * [RISC-V Project](https://github.com/RISCeirb/Risc-v-processor) ([LAST VERSION : RV32IM (WITHOUT CSR AND FENCE INSTRUCTION)](https://github.com/RISCeirb/Risc-v-processor/tree/main/RV32IM))
 
-
-[Learn RISC-V](https://github.com/riscv/learn)
-
-[RISC-V с нуля](https://habr.com/ru/articles/454208/)
-
-[План создания RISC-V процессора и ОС](https://chat.deepseek.com/share/s1r19ke060jlorwe21)
-
-[[UNИX] (2025, весна) Архитектура и язык ассемблера RISC-V](https://www.youtube.com/playlist?list=PL6kSdcHYB3x7TqvWZDPJM_TOBbdXQkd8v)
- 
-[[UNИX] Архитектура и язык ассемблера RISC-V (весна 2024)](https://www.youtube.com/playlist?list=PL6kSdcHYB3x5kaDr8VY9rD6gK3q-gI94I)
+Доп. ресурсы:
+* [Learn RISC-V](https://github.com/riscv/learn)
+* [RISC-V с нуля](https://habr.com/ru/articles/454208/)
+* [План создания RISC-V процессора и ОС](https://chat.deepseek.com/share/s1r19ke060jlorwe21)
+* [[UNИX] (2025, весна) Архитектура и язык ассемблера RISC-V](https://www.youtube.com/playlist?list=PL6kSdcHYB3x7TqvWZDPJM_TOBbdXQkd8v)
+* [[UNИX] Архитектура и язык ассемблера RISC-V (весна 2024)](https://www.youtube.com/playlist?list=PL6kSdcHYB3x5kaDr8VY9rD6gK3q-gI94I)
 
  
 
@@ -6358,12 +6361,10 @@ riscv64-unknown-elf-gcc --version
 ```c
 volatile unsigned char *uart = (unsigned char *)0x10000000;
 
-
 void custom_putchar(char c)
 {
     *uart = c;
 }
-
 
 void print_array(const char *arr, int size)
 {
@@ -6372,7 +6373,6 @@ void print_array(const char *arr, int size)
         custom_putchar(arr[i]);
     }
 }
-
 
 int main()
 {
@@ -6387,7 +6387,6 @@ int main()
     return 0;
 }
 ```
-
 
 
 **Компиляция test_program_C.c**
@@ -6485,7 +6484,6 @@ VMA (Virtual Memory Address) это адрес, по которому прогр
 riscv64-unknown-elf-objdump -D test_program_C.elf
 
 ---
-
 
 test_program_C.elf:     file format elf32-littleriscv
 
@@ -6834,7 +6832,7 @@ riscv64-unknown-elf-nm test_program_Rust.o | grep main
     <source src="/Computer-Science-Bookshelf/img/riscv/test_program_Rust.mp4" type="video/mp4">
     Ваш браузер не поддерживает видео.
 </video>
-
+  
 ---
 
 ### Framebuffer
@@ -6870,8 +6868,156 @@ riscv64-unknown-elf-nm test_program_Rust.o | grep main
 
 ```
  
+---
 
-#### Заливка цветом без поддержки буферизированного ввода
+### Рисование окружности алгоритмом Брезенхема
+
+<br>
+<details>
+<summary> <b> Файл test_сircle.rs </b> </summary>
+  
+```rust
+#![no_std]
+#![no_main]
+
+use core::panic::PanicInfo;
+
+const WIDTH: usize = 320;
+const HEIGHT: usize = 200;
+
+const FRAMEBUFFER: *mut u8 = 0x9000_0000 as *mut u8;
+
+#[panic_handler]
+fn panic(_: &PanicInfo) -> ! {
+    loop {}
+}
+
+#[inline(always)]
+fn put_pixel(x: i32, y: i32, color: u8) {
+    if x < 0 || y < 0 {
+        return;
+    }
+    if x >= WIDTH as i32 || y >= HEIGHT as i32 {
+        return;
+    }
+    unsafe {
+        FRAMEBUFFER
+            .add(y as usize * WIDTH + x as usize)
+            .write_volatile(color);
+    }
+}
+
+// Рисуем 8 симметричных точек окружности
+#[inline(always)]
+fn circle_points(
+    xc: i32,
+    yc: i32,
+    x: i32,
+    y: i32,
+    color: u8
+) {
+    put_pixel(xc + x, yc + y, color);
+    put_pixel(xc - x, yc + y, color);
+
+    put_pixel(xc + x, yc - y, color);
+    put_pixel(xc - x, yc - y, color);
+
+    put_pixel(xc + y, yc + x, color);
+    put_pixel(xc - y, yc + x, color);
+
+    put_pixel(xc + y, yc - x, color);
+    put_pixel(xc - y, yc - x, color);
+}
+
+fn draw_circle(
+    xc: i32,
+    yc: i32,
+    radius: i32,
+    color: u8
+) {
+
+    let mut x = 0;
+    let mut y = radius;
+
+    // Начальная ошибка
+    let mut d = 3 - 2 * radius;
+    while x <= y {
+        circle_points(
+            xc,
+            yc,
+            x,
+            y,
+            color
+        );
+
+        if d < 0 {
+            d += 4 * x + 6;
+        } else {
+            d += 4 * (x - y) + 10;
+            y -= 1;
+        }
+        x += 1;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn main() -> ! {
+    // Большая окружность
+    draw_circle(
+        160,
+        100,
+        70,
+        10
+    );
+    // маленькие окружности для теста
+    draw_circle(
+        80,
+        50,
+        30,
+        20
+    );
+    draw_circle(
+        240,
+        150,
+        20,
+        30
+    );
+    loop {}
+}
+```
+
+</details>
+
+
+**Компиляция test_сircle.rs**
+```
+rustc --target=riscv32i-unknown-none-elf -C target-feature=+m,+zicsr -C opt-level=s -C panic=abort --emit=obj test_сircle.rs
+```
+ 
+**Линковка**
+```
+riscv64-unknown-elf-as -march=rv32im_zicsr -mabi=ilp32 startup.S -o startup.o
+riscv64-unknown-elf-as -march=rv32im_zicsr -mabi=ilp32 trap.S -o trap.o
+
+riscv64-unknown-elf-ld -m elf32lriscv -T linker.ld startup.o trap.o test_сircle.o -o test_сircle.elf
+```    
+
+
+**Создание чистого бинарного файла (flat binary)**
+```
+riscv64-unknown-elf-objcopy -O binary test_сircle.elf test_сircle.bin
+```    
+
+<br>
+<video controls width="100%" muted playsinline preload="metadata">
+    <source src="/Computer-Science-Bookshelf/img/riscv/test_сircle.mp4" type="video/mp4">
+    Ваш браузер не поддерживает видео.
+</video>
+  
+
+---
+
+### Заливка цветом без поддержки буферизированного ввода
 
 
 <br> 
@@ -6950,7 +7096,6 @@ const FRAMEBUFFER: *mut u8 = 0x9000_0000 as *mut u8;
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
-
 fn put_pixel(x: usize, y: usize, color: u8) {
     if x >= WIDTH || y >= HEIGHT {
         return;
@@ -6962,7 +7107,6 @@ fn put_pixel(x: usize, y: usize, color: u8) {
             .write_volatile(color);
     }
 }
-
 fn fill(color: u8) {
     unsafe {
         for i in 0..(WIDTH * HEIGHT) {
@@ -7019,7 +7163,7 @@ riscv64-unknown-elf-objcopy -O binary test_framebuffer.elf test_framebuffer.bin
 
 ---
 
-#### Заливка цветом с двойной буферизацией (Page Flipping)
+### Заливка цветом с двойной буферизацией (Page Flipping)
 
 Внутри компонента Graphic RAM физически есть два одинаковых массива памяти (Буфер 0 и Буфер 1). У них один общий вход записи (D) и одна общая шина адреса (A).
 
@@ -7031,9 +7175,9 @@ riscv64-unknown-elf-objcopy -O binary test_framebuffer.elf test_framebuffer.bin
 
 Аппаратная доработка модуля `VideoRAM`: чтобы управляющая программа могла переключать буферы, вход `B` (Buffer Select) нужно вывести на регистр управления (MMIO) например на адрес `0x1000000C`, запись по нему будет переключать вход `B` 
 
- 
-
-**Файл test_framebuffer_page_flipping.rs**
+<br>
+<details>
+<summary> <b> Файл test_framebuffer_page_flipping.rs </b> </summary>
 
 ```rust
 #![no_std]
@@ -7161,6 +7305,7 @@ pub extern "C" fn main() -> ! {
 }
 ```
 
+</details>
 
 **Компиляция test_framebuffer_page_flipping.rs**
 ```
@@ -7241,7 +7386,7 @@ riscv64-unknown-elf-objdump -D test_framebuffer_page_flipping.elf
 
 ---
 
-#### DMA
+### DMA
 
 DMA (Direct Memory Access/Прямой доступ к памяти) *"Memory-to-Memory"* - инструмент копирования больших кусков памяти.
    
@@ -7249,8 +7394,6 @@ DMA (Direct Memory Access/Прямой доступ к памяти) *"Memory-to
 
 Сперва нам необходимо загрузить источник данных т.е. RAM (так как мы не реализовывали V-расширение векторных инструкций) используя *три* иснтрукции `lui+addi+sw` для готового 32 битного числа, что покроет 4 пикселя 8-ми битного цвета. Это была шутка 🤪, если мы так сделаем, то процессор будет полностью занят программной генерацией данных (пусть даже и копированием готового видео) в RAM, что бы потом DMA ее снова копировало и занимало шину. Нам же, нужно напрямую обращаться к памяти. Для этого компьютер использует периферию, например HDD аналог которого в Digital это просто ROM с готовыми данными, которые DMA напрямую скопирует от и до, в видеопамять. 
 
-
- 
 **Тестовый модуль VideoDMA**
 
 **Вариант ч/б** для палитры компонента `Graphic RAM` 32–63 — градации серого (32 - почти черный, 63 - почти белый)
