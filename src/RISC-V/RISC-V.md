@@ -6327,6 +6327,7 @@ else
 > * [RISC-V Project](https://github.com/RISCeirb/Risc-v-processor) ([LAST VERSION : RV32IM (WITHOUT CSR AND FENCE INSTRUCTION)](https://github.com/RISCeirb/Risc-v-processor/tree/main/RV32IM))
 
 Доп. ресурсы:
+* [ARVES, разработка процессора через VHDL](https://youtube.com/playlist?list=PLeVWfsKqC7rN0b9k1TaQej1kG4wkKPtTJ&si=ChwiTCZpolsglppi)
 * [Learn RISC-V](https://github.com/riscv/learn)
 * [RISC-V с нуля](https://habr.com/ru/articles/454208/)
 * [[UNИX] (2025, весна) Архитектура и язык ассемблера RISC-V](https://www.youtube.com/playlist?list=PL6kSdcHYB3x7TqvWZDPJM_TOBbdXQkd8v)
