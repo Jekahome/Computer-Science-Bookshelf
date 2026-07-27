@@ -38,8 +38,8 @@
 - [Архитектура компьютера](chapter_computer_architecture_and_os.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
     - [Ulrich Drepper. What Every Programmer Should Know About Memory](conclusion_38.md)
-    - [Single Cycle Processor RISC-V (RV32I + Zicsr, M)](RISC-V/RISC-V.md)
     - [Дэвид М. Харрис, Сара Л. Харрис - Цифровая схемотехника и архитектура компьютера RISC-V - 2021](conclusion_39.md)
+    - [Single Cycle Processor RISC-V (RV32I + Zicsr, M)](RISC-V/RISC-V.md)
     - [Архитектура компьютера (разное)](conclusion_10.md)
 
 - [Операционная система]()
@@ -50,8 +50,8 @@
 
 - [Системное программирование и Linux](chapter_systems_programming_and_linuxs.md)
     - [Таненбаум & Бос — Современные операционные системы](conclusion_13.md)
-    - [Роберт Лав — Linux системное программирование](conclusion_14.md)
     - [Керриск — Linux API](conclusion_15.md)
+    - [Роберт Лав — Linux системное программирование](conclusion_14.md)
     - [Стивенс & Раго — UNIX. Профессиональное программирование](conclusion_18.md) 
     - [Роберт Лав. - Ядро Linux. Описание процесса разработки. 3-е изд. 2013](conclusion_19.md) 
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
