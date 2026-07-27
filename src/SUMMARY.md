@@ -35,14 +35,18 @@
         - [Computer Science Unleashed (Сети) -> доб. в Отдельный раздел]()
         - [Computer Science Distilled (Стратегия) -> доб. в реп. Algorithms]()
 
-- [Архитектура компьютера и ОС](chapter_computer_architecture_and_os.md)
+- [Архитектура компьютера](chapter_computer_architecture_and_os.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
     - [Ulrich Drepper. What Every Programmer Should Know About Memory](conclusion_38.md)
     - [Single Cycle Processor RISC-V (RV32I + Zicsr, M)](RISC-V/RISC-V.md)
     - [Дэвид М. Харрис, Сара Л. Харрис - Цифровая схемотехника и архитектура компьютера RISC-V - 2021](conclusion_39.md)
     - [Архитектура компьютера (разное)](conclusion_10.md)
+
+- [Операционная система]()
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
-    - [Таненбаум Э., Стеен М. - Распределённые системы. Принципы и парадигмы 2003](conclusion_12.md)
+    - [Operating Systems: Three Easy Pieces (OSTEP)](conclusion_12.md)
+    - [xv6 Book]()
+    - [Operating Systems: Design and Implementation (MINIX)]()
 
 - [Системное программирование и Linux](chapter_systems_programming_and_linuxs.md)
     - [Таненбаум & Бос — Современные операционные системы](conclusion_13.md)
