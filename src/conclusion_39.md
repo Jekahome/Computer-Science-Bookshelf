@@ -2726,7 +2726,11 @@ end;
 
 Файл тестбенча (Testbench) — специальный VHDL-код, который сам ничего не синтезирует, а просто генерирует тактовый сигнал, сброс и подает данные на входы Вашего модуля.
  
-Файл sillyfunction_tb.vhd:
+<br>
+<details> 
+
+<summary> Файл sillyfunction_tb.vhd: </summary>
+
 
 ```vhdl
 library ieee;
@@ -2800,6 +2804,9 @@ begin
 end architecture bench;
 ```
 
+<br>
+</details> 
+
 Тест в среде AMD Xilinx Vivado: SIMULATION/Run Simulation. 
 
 Результат теста в Tcl Console: 
@@ -2868,7 +2875,11 @@ end architecture synth;
 
 В архитектуре Kogge-Stone при наличии внешнего $cin\_in$ каждый промежуточный бит переноса ($C_0 \dots C_7$) обязан физически включать в себя $cin\_in$. Если просто сдвигать индексы или добавлять $cin\_in$ только в крайние ячейки, длинная цепочка переноса «рвется» (что и происходило на критических тестах CIN=1 A=1 B=254 и CIN=1 A=128 B=127).
 
-**VHDL 8-ми битного префиксного сумматора (архитектура Kogge-Stone)**
+ 
+<br>
+<details> 
+
+<summary> <b>VHDL 8-ми битного префиксного сумматора (архитектура Kogge-Stone)</b></summary>
 
 ```vhdl
 library IEEE;
@@ -2973,6 +2984,10 @@ begin
 
 end architecture Structural;
 ```
+
+
+</details>
+<br>
   
 ![Тестирование кода vhdl в симуляторе Digital](img/harris/Digital_adder8bit_Kogge-Stone.png)
 

@@ -47,6 +47,7 @@
     - [Operating Systems: Three Easy Pieces (OSTEP)](conclusion_12.md)
     - [xv6 Book]()
     - [Operating Systems: Design and Implementation (MINIX)]()
+    - [OS](OS/OS.md)
 
 - [Системное программирование и Linux](chapter_systems_programming_and_linuxs.md)
     - [Таненбаум & Бос — Современные операционные системы](conclusion_13.md)
