@@ -2,7 +2,7 @@
 
 [Introduction](README.md)
  
-- [Основы архитектуры компьютера, культура кода, ...]()
+- [Основы архитектуры компьютера, культура кода, ...](chapter_fundamentals_of_computer_architecture.md)
     - [Чарльз Петцольд. КОД тайный язык информатики](conclusion_3.md)
     - [Turing Complete](turingcomplete/turing_complete.md)
         - [Basic logic](turingcomplete/turingcomplete_basic_logic.md)
