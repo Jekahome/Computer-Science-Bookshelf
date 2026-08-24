@@ -35,7 +35,7 @@
         - [Computer Science Unleashed (Сети) -> доб. в Отдельный раздел]()
         - [Computer Science Distilled (Стратегия) -> доб. в реп. Algorithms]()
 
-- [Архитектура компьютера](chapter_computer_architecture_and_os.md)
+- [Архитектура компьютера](chapter_computer_architecture.md)
     - [Джастис М. - Как на самом деле работают компьютеры 2022](conclusion_37.md)
     - [Ulrich Drepper. What Every Programmer Should Know About Memory](conclusion_38.md)
     - [Дэвид М. Харрис, Сара Л. Харрис - Цифровая схемотехника и архитектура компьютера RISC-V - 2021](conclusion_39.md)
