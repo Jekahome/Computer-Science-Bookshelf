@@ -46,8 +46,8 @@
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
 
 - [Системное программирование и Linux](chapter_systems_programming_and_linuxs.md)
-    - [Керриск — Linux API](conclusion_15.md)
     - [Роберт Лав — Linux системное программирование](conclusion_14.md)
+    - [Керриск — Linux API](conclusion_15.md)
     - [Стивенс & Раго — UNIX. Профессиональное программирование](conclusion_18.md) 
     - [Роберт Лав. - Ядро Linux. Описание процесса разработки. 3-е изд. 2013](conclusion_19.md) 
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
