@@ -42,12 +42,8 @@
     - [Single Cycle Processor RISC-V (RV32I + Zicsr, M)](RISC-V/RISC-V.md)
     - [Архитектура компьютера (разное)](conclusion_10.md)
 
-- [Операционная система]()
+- [Операционная система](OS/OS.md)
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
-    - [Operating Systems: Three Easy Pieces (OSTEP)](conclusion_12.md)
-    - [xv6 Book]()
-    - [Operating Systems: Design and Implementation (MINIX)]()
-    - [OS](OS/OS.md)
 
 - [Системное программирование и Linux](chapter_systems_programming_and_linuxs.md)
     - [Таненбаум & Бос — Современные операционные системы](conclusion_13.md)
