@@ -45,20 +45,20 @@
 - [Операционная система. Системное программирование](OS/OS.md)
     - [Таненбаум Э. - Современные операционные системы. 4-е изд. 2015](conclusion_11.md)
     - [Роберт Лав — Linux системное программирование](conclusion_14.md)
+ 
+- [Алгоритмы, структуры данных, автоматы, теория вычислений](Algorithms_DS/Algorithms_DS.md)
+    - [Алгоритмы и структуры данных](conclusion_25.md)
+    - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
+    - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
+    - [rep. Data-Structures](https://github.com/Jekahome/Data-Structures)
+    - [rep. Algorithms](https://github.com/Jekahome/Algorithms)
 
 - [Сети](chapter_networks.md)
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
     - [Олифер В., Олифер Н. Компьютерные сети. Принципы, технологии, протоколы: Юбилейное издание. 2021](conclusion_21.md) 
     - [Куроуз. Компьютерные сети, нисходящий подход](conclusion_22.md) 
 
-- [Алгоритмы, структуры данных, автоматы, теория вычислений](chapter_algorithms_data_structures.md)
-    - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
-    - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
-    - [В. В. Григорьев-Голубев. Теория вероятностей и математическая статистика. Руководство по решению](conclusion_25.md)
-    - [rep. Data-Structures](https://github.com/Jekahome/Data-Structures)
-    - [rep. Algorithms](https://github.com/Jekahome/Algorithms)
-
-- [Безопасность]()
+- [Security-Web]()
     - [rep. Security-Web](https://github.com/Jekahome/Security-Web)    
 
 - [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)
