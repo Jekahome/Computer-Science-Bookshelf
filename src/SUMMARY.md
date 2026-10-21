@@ -47,7 +47,8 @@
     - [Роберт Лав — Linux системное программирование](conclusion_14.md)
  
 - [Алгоритмы, структуры данных, автоматы, теория вычислений](Algorithms_DS/Algorithms_DS.md)
-    - [Алгоритмы и структуры данных](conclusion_25.md)
+    - [Структуры данных](conclusion_25.md)
+    - [Алгоритмы]()
     - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
     - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
     - [rep. Data-Structures](https://github.com/Jekahome/Data-Structures)
@@ -58,7 +59,7 @@
     - [Олифер В., Олифер Н. Компьютерные сети. Принципы, технологии, протоколы: Юбилейное издание. 2021](conclusion_21.md) 
     - [Куроуз. Компьютерные сети, нисходящий подход](conclusion_22.md) 
 
-- [Security-Web]()
+- [Security-Web](SecurityWeb/SecurityWeb.md)
     - [rep. Security-Web](https://github.com/Jekahome/Security-Web)    
 
 - [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)

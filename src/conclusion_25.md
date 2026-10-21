@@ -1,4 +1,4 @@
-# Алгоритмы и структуры данных
+# Структуры данных
 
 > Нет структуры данных, которая была бы лучшей для **всех** операций. *Приходится* чем-то жертвовать. Каждая структура представляет собой компромисс между скоростью поиска, вставки и удаления, расходом памяти, упорядоченностью данных и другими характеристиками. Выбор зависит от конкретной задачи.
 
@@ -6,34 +6,22 @@
 
 Для практики важнее научиться узнавать профиль нагрузки и выбирать структуру под него.
 
-```
- 
-Массивы
-   ↓
-Связные списки
-   ↓
-Stack / Queue / Deque
-   ↓
-Hash Table
-   ↓
-Trees
-   ├── Binary Tree
-   ├── BST
-   ├── AVL / Red-Black
-   └── B-Tree
-   ↓
-Heap / Priority Queue
-   ↓
-Graph
-   ↓
-Trie
-   ↓
-Специализированные структуры
-    ├── Union-Find
-    ├── Segment Tree
-    ├── Fenwick Tree
-    └── Bloom Filter
-```
+
+## Содержание
+
+* [Array](#array)
+* [Linked List](#linked-list)
+* [Stack](#stack)
+* [Queue / Deque](#queue--deque)
+* [Hash Table](#hash-table)
+* [Binary Search Tree (BST)](#binary-search-tree-bst)
+* [Self-balancing Binary Search Tree (Self-balancing BST)](#self-balancing-binary-search-tree-self-balancing-bst)
+    * [Red-Black Tree](#red-black-tree)
+    * [B-Tree](#b-tree)
+* [Heap (Priority Queue)](#heap-priority-queue)
+* [Graph](#graph)
+* [Trie](#trie)
+
 
 ---
 
@@ -8656,7 +8644,11 @@ A----B
 C----D
 ```
 
-> Главное преимущество Graph: он хранит не порядок элементов, а отношения между ними
+> Главное преимущество Graph: он хранит не порядок элементов, а **отношения** между ними
+
+<details>
+<summary>Graph ознакомление</summary>
+
 
 #### Сильные стороны
 * Гибкие связи. Вершина может быть связана с любым количеством других вершин.
@@ -8667,7 +8659,7 @@ C----D
 
 #### Слабые стороны
 * Нет быстрого универсального поиска пути. Чтобы найти путь между двумя вершинами, может потребоваться обойти значительную часть графа.
-* Расход памяти зависит от представления. Матрица смежности требует ($O(V^2)$) памяти, даже если связей мало. Список смежности обычно требует ($O(V+E)$), где $V$  число вершин, а $E$ — число рёбер.&#x20;
+* Расход памяти зависит от представления. Матрица смежности требует $O(V^2)$ памяти, даже если связей мало. Список смежности обычно требует $O(V+E)$, где $V$  число вершин, а $E$ — число рёбер.&#x20;
 * Алгоритмы могут быть сложными. Поиск кратчайшего пути, обнаружение циклов и анализ связности требуют отдельных алгоритмов.
 * Нет автоматической сортировки. В отличие от BST и B-Tree, граф сам по себе не поддерживает упорядоченный поиск по ключам.
 
@@ -8676,7 +8668,7 @@ C----D
 
 Граф можно хранить по-разному, и от этого очень сильно зависит расход памяти.
 
-**Список смежности** (*Adjacency List*). Храним только реальные связи. Для каждой вершины храним список её соседей в `Vec<Vec<usize>>` или `HashMap<Node, Vec<Node>>`.
+**Список смежности** (*Adjacency List*). Храним только реальные связи. Для каждой вершины храним список её соседей в `Vec<Vec<usize>>` если вершины имеют числовые индексы от 0 до V - 1, часто удобнее и экономнее использовать иначе можно организовать граф через `HashMap<Node, Vec<Node>>` или если нужна более высокая производительность для поиска конкретного ребра, можно использовать `HashSet` вместо `Vec` - `HashMap<Node, HashSet<Node>>`.
 
 Например граф:
 ```text
@@ -8702,7 +8694,11 @@ E -> B, D
 
 ![Sparse graph](img/algorithms/Sparse_graph.jpg "Sparse graph")
 
-Но поиск в списке смежности дороже чем у матрицы смежности из-за того что нужно искать в списке соседей вершины, и чем больше ребер тем дороже искать.
+Если граф хранится в виде списка смежности (Adjacency List) и количество рёбер (`E`) примерно равно количеству вершин (`V`), то граф обычно является разреженным (Sparse Graph), и список смежности позволяет экономить память.
+
+Сложность поиска связи между двумя вершинами составляет $O(deg(v))$, где $deg(v)$ — количество соседей проверяемой вершины. Если число соседей ограничено константой, поиск выполняется за $O(1)$. Если же у вершины много соседей, поиск может занимать $O(V)$ в худшем случае, что медленнее проверки в матрице смежности (Adjacency Matrix), где она выполняется за $O(1)$.
+
+Поэтому для разреженных графов обычно предпочтительнее список смежности, а для плотных графов, где важна быстрая проверка наличия ребра, может быть предпочтительнее матрица смежности.
 
 **Матрицы смежности** (*Adjacency Matrix*). Резервируем место под все возможные связи в двумерном массиве `Vec<Vec<bool/u8>>`. 
 
@@ -8734,34 +8730,42 @@ D   0 1 1 0
 
 Обозначения: (V) — количество вершин, (E) — количество рёбер.
 
-| Операция                         | Adjacency List (список смежности)         | Adjacency Matrix (матрица смежности) |
-| -------------------------------- | ------------------------ | ----------------- |
-| Добавить вершину                 | $O(1)$\*             | $O(V^2)$\*    |
-| Добавить ребро                   | $O(1)$\*             | $O(1)$        |
-| Удалить ребро                    | $O(deg(v))$         | $O(1)$        |
-| Проверить наличие ребра          | $O(deg(v))$         | $O(1)$        |
-| Получить соседей вершины         | $O(deg(v))$         | $O(V)$        |
-| Удалить вершину                  | $O(V+E)$             | $O(V^2)$      |
-| Обход BFS / DFS                  | $O(V+E)$             | $O(V^2)$      |
-| Найти кратчайший путь (Дейкстра) | $O((V+E)log V)$\*\* | $O(V^2)$      |
+| Операция                         | Adjacency List (список смежности)| Adjacency Matrix (матрица смежности) |
+| -------------------------------- | -------------------------------- | ------------------------------------ |
+| Добавить вершину                 | $O(1)$\*                         | $O(V^2)$\*    |
+| Добавить ребро                   | $O(1)$\*                         | $O(1)$        |
+| Удалить ребро                    | $O(deg(v))$                      | $O(1)$        |
+| Проверить наличие ребра          | $O(deg(v))$                      | $O(1)$        |
+| Получить соседей вершины         | $O(deg(v))$                      | $O(V)$        |
+| Удалить вершину                  | $O(V+E)$                         | $O(V^2)$      |
+| Обход BFS / DFS                  | $O(V+E)$                         | $O(V^2)$      |
+| Найти кратчайший путь (Дейкстра) | $O((V+E)log V)$\*\*              | $O(V^2)$      |
 
 $(deg(v))$ — количество рёбер, связанных с вершиной (v).
 
-\* Добавление вершины в список смежности — $(O(1))$ амортизированно, если вершины хранятся в динамическом массиве и идентификаторы позволяют добавлять их без поиска. Для матрицы добавление вершины требует расширения матрицы, поэтому указана типичная стоимость перераспределения.
+\* Добавление вершины в список смежности — $O(1)$ амортизированно, если вершины хранятся в динамическом массиве и идентификаторы позволяют добавлять их без поиска. Для матрицы добавление вершины требует расширения матрицы, поэтому указана типичная стоимость перераспределения.
 
 \*\* Для реализации Дейкстры с бинарной кучей и списком смежности.
 
-Главное различие: список смежности экономнее по памяти для разреженных графов — $(O(V+E))$. Матрица смежности занимает $(O(V^2))$, но проверяет наличие ребра за $(O(1))$.
+Главное различие: список смежности экономнее по памяти для разреженных графов — $O(V+E)$. Матрица смежности занимает $O(V^2)$, но проверяет наличие ребра за $O(1)$.
 
 
 #### Основные понятия
 
-Adjacency List
+* Vertex - вершина графа
+* Edge - связь между двумя вершинами
+* Degree - количество рёбер вершины. В направленном графе различают входящие `in-degree` и исходящие `out-degree` ребра
+* Directed Graph - ребро имеет направление
+* Undirected Graph - связь двусторонняя
+* Weighted Graph - у ребра есть стоимость связи
+* Unweighted Graph - все связи считаются одинаковыми
+* Path - последовательность связанных вершин `A → B → D → E`
+* Cycle - путь возвращается в исходную вершину
+* Connected Graph - из любой вершины можно добраться до любой другой
+* Disconnected Graph - есть отдельные компоненты без связи между собой
+* Sparse Graph - рёбер мало относительно количества возможных связей: ($E << V²$)
+* Dense Graph - связей очень много: ($E ≈ V²$)
 
-Adjacency Matrix
-
-adjacency list   → хорошо для sparse graph
-adjacency matrix → хорошо для dense graph
 
 #### Когда использовать
 
@@ -8783,15 +8787,778 @@ Graph нужен, когда данные естественно описыва�
 
 
 
+#### Упражнения
+
+> В стандартной библиотеке Rust нет готовой универсальной структуры Graph. Обычно граф реализуют самостоятельно с помощью `Vec`, `HashMap` или матрицы смежности — в зависимости от задачи. Но есть реализация графа в [crate petgraph](https://crates.io/crates/petgraph) и его расширение в [crate rustworkx-core](https://crates.io/crates/rustworkx-core)
+
+BFS и Dijkstra решают похожие задачи, но критерии разные:
+- BFS ищет путь с минимальным количеством рёбер. Он подходит для невзвешенного графа или когда каждое ребро имеет одинаковую стоимость.
+- Dijkstra ищет путь с минимальной суммой весов. Меняя передаваемую функцию cost, мы можем искать минимальное расстояние, цену или время. Все веса должны быть неотрицательными.
+
+
+ 
+**1. Поиск маршрута между городами Murcia и Zaragoza** — по четырём критериям:
+1. Minimum number of roads — маршрут с минимальным количеством дорог (рёбер).
+2. Minimum distance — маршрут с минимальной общей дистанцией в километрах.
+3. Minimum price — маршрут с минимальной суммарной стоимостью в евро.
+4. Minimum travel time — маршрут с минимальным общим временем в минутах.
+
+![map](img/algorithms/map.png "map")
+
+```toml
+[dependencies]
+petgraph = "0.8.3"
+```
+
+```rust,editable
+extern crate petgraph;
+use petgraph::algo::{astar, is_cyclic_undirected};
+use petgraph::graph::{NodeIndex, UnGraph};
+
+#[derive(Clone, Copy)]
+struct Road {
+    distance_km: u32,
+    price_eur: u32,
+    minutes: u32,
+}
+
+type RoadGraph = UnGraph<&'static str, Road>;
+
+fn print_path(graph: &RoadGraph, path: &[NodeIndex]) {
+    for (i, node) in path.iter().enumerate() {
+        if i > 0 {
+            print!(" -> ");
+        }
+        print!("{}", graph[*node]);
+    }
+    println!();
+}
+fn main() {
+    let mut graph = RoadGraph::new_undirected();
+    let madrid = graph.add_node("Madrid");
+    let murcia = graph.add_node("Murcia");
+    let valencia = graph.add_node("Valencia");
+    let zaragoza = graph.add_node("Zaragoza");
+    graph.add_edge(madrid, murcia, Road {
+        distance_km: 400,
+        price_eur: 25,
+        minutes: 245,
+    });
+    graph.add_edge(madrid, valencia, Road {
+        distance_km: 360,
+        price_eur: 20,
+        minutes: 220,
+    });
+    graph.add_edge(murcia, valencia, Road {
+        distance_km: 230,
+        price_eur: 15,
+        minutes: 145,
+    });
+    
+    graph.add_edge(valencia, zaragoza, Road {
+        distance_km: 310,
+        price_eur: 18,
+        minutes: 190,
+    });
+    graph.add_edge(madrid, zaragoza, Road {
+        distance_km: 320,
+        price_eur: 22,
+        minutes: 200,
+    });
+
+    // 1. Minimum number of roads.
+    // Each edge has weight 1.
+    println!("1. Минимальное количество дорог/городов:");
+    let (cost, path) = astar(
+        &graph,
+        murcia,
+        |node| node == zaragoza,
+        |_| 1u32,
+        |_| 0u32,
+    )
+    .unwrap();
+
+    print_path(&graph, &path);
+    println!("Roads: {cost}");
+
+    // 2. Minimum distance.
+    println!("\n2. Минимальная дистанция:");
+    let (distance, path) = astar(
+        &graph,
+        murcia,
+        |node| node == zaragoza,
+        |edge| edge.weight().distance_km,
+        |_| 0u32,
+    )
+    .unwrap();
+
+    print_path(&graph, &path);
+    println!("Distance: {distance} km");
+
+    // 3. Minimum price.
+    println!("\n3. Минимальная цена маршрута:");
+    let (price, path) = astar(
+        &graph,
+        murcia,
+        |node| node == zaragoza,
+        |edge| edge.weight().price_eur,
+        |_| 0u32,
+    )
+    .unwrap();
+
+    print_path(&graph, &path);
+    println!("Price: {price} EUR");
+
+    // 4. Minimum travel time.
+    println!("\n4. Минимальное время:");
+    let (minutes, path) = astar(
+        &graph,
+        murcia,
+        |node| node == zaragoza,
+        |edge| edge.weight().minutes,
+        |_| 0u32,
+    )
+    .unwrap();
+
+    print_path(&graph, &path);
+    println!("Time: {minutes} minutes");
+
+    // 5. Cycle detection.
+    println!("\n5. Cycle detection:");
+    println!(
+        "Contains cycle: {}",
+        is_cyclic_undirected(&graph)
+    );
+}
+```
+
+ 
+ 
+**2. Социальная сеть**
+
+Для примера социальной сети на petgraph используем неориентированный граф: вершины — пользователи, рёбра — дружеские связи.
+
+
+Решим три задачи: найти общих друзей двух пользователей, определить степень связи и найти компоненты связности.
+- Common friends — пользователи, которые дружат одновременно с обоими выбранными пользователями.
+- Degree of separation — минимальное количество дружеских связей между двумя пользователями. Например, 2 означает, что они связаны через одного промежуточного пользователя.
+- Connected components — группы пользователей, внутри которых все связаны друг с другом напрямую или через других пользователей. Между разными группами путей нет.
+
+ 
+![NetworkDiagram](img/algorithms/NetworkDiagram.png "NetworkDiagram")
+
+```rust,editable
+extern crate petgraph;
+use petgraph::algo::{astar, connected_components};
+use petgraph::graph::{NodeIndex, UnGraph};
+use petgraph::visit::EdgeRef;
+
+type SocialGraph = UnGraph<&'static str, ()>;
+
+fn print_path(graph: &SocialGraph, path: &[NodeIndex]) {
+    for (i, user) in path.iter().enumerate() {
+        if i > 0 {
+            print!(" -> ");
+        }
+        print!("{}", graph[*user]);
+    }
+    println!();
+}
+fn main() {
+    let mut graph = SocialGraph::new_undirected();
+
+    let alice = graph.add_node("Alice");
+    let bob = graph.add_node("Bob");
+    let charlie = graph.add_node("Charlie");
+    let diana = graph.add_node("Diana");
+    let eve = graph.add_node("Eve");
+    let frank = graph.add_node("Frank");
+    let grace = graph.add_node("Grace");
+
+    // Установить связи
+    graph.add_edge(alice, bob, ());
+    graph.add_edge(alice, charlie, ());
+    graph.add_edge(bob, charlie, ());
+    graph.add_edge(bob, diana, ());
+    graph.add_edge(charlie, diana, ());
+    graph.add_edge(diana, eve, ());
+
+    // Отдельная группа пользователей
+    graph.add_edge(frank, grace, ());
+
+    // 1. Общие друзья
+    println!("1. Общие друзья Алисы и Боба:");
+    let alice_friends: Vec<NodeIndex> = graph.neighbors(alice).collect();
+    let bob_friends: Vec<NodeIndex> = graph.neighbors(bob).collect();
+
+    for user in alice_friends {
+        if bob_friends.contains(&user) {
+            println!("{}", graph[user]);
+        }
+    }
+    // 2. Степень связи:
+    // * 0 — пользователь связан сам с собой
+    // * 1 — пользователи дружат напрямую
+    // * 2 — между ними один промежуточный пользователь
+    // * 3 — между ними два промежуточных пользователя
+    println!("\n2. Кратчайшая цепочка дружеских связей между: Alice -> Eve");
+    if let Some((distance, path)) = astar(
+        &graph,
+        alice,
+        |user| user == eve,
+        |_| 1u32,
+        |_| 0u32,
+    ) {
+        print_path(&graph, &path);
+        println!("Дистанция связи: {distance}");
+    } else {
+        println!("Нет связи");
+    }
+    // 3. Компоненты связности
+    println!("\n3. Компоненты связности:");
+    println!(
+        "Количество компонентов: {}",
+        connected_components(&graph)
+    );
+}
+```
 
 
 
+
+
+**3. Dependency graph**
+
+Нужно определить порядок сборки.
+
+> ```text
+> package A зависит от B
+> package B зависит от C
+> ```
+> 
+> Граф зависимостей: `A → B → C` поэтому собирать нужно в обратном порядке зависимостей: `C → B → A`
+> 
+> Это значит `A` нельзя собрать, пока не собран `B`. И `B` нельзя собрать, пока не собран `C`.
+
+Для этого используется `Topological Sort` — он строит такой порядок вершин, чтобы каждая зависимость была обработана раньше того, кто от неё зависит.
+
+Более интересный пример зависимостей:
+```text
+A зависит от B
+B зависит от C
+D зависит от B
+E зависит от C
+```
+
+Граф зависимостей:
+```text
+A → B → C
+D → B
+E → C
+```
+
+```rust,editable
+extern crate petgraph;
+use petgraph::algo::toposort;
+use petgraph::graph::DiGraph;
+
+fn main() {
+    let mut graph = DiGraph::<&str, ()>::new();
+
+    let a = graph.add_node("A");
+    let b = graph.add_node("B");
+    let c = graph.add_node("C");
+    let d = graph.add_node("D");
+    let e = graph.add_node("E");
+
+    graph.add_edge(b, a, ());
+    graph.add_edge(c, b, ());
+    graph.add_edge(b, d, ());
+    graph.add_edge(c, e, ());
+
+    let order = toposort(&graph, None).unwrap();
+
+    println!("Порядок сборки:");
+    for node in order {
+        println!("{}", graph[node]);
+    }
+}
+```
+
+</details>
 
 ---
 
-Сводная таблица ...
+## Trie
+
+Trie — это не бинарное дерево для хранения строк по символам, чтобы быстро искать слова по префиксу.
+
+> Главная идея: общие префиксы хранятся один раз и используются всеми задействованными узлами.
+>
+> Trie работает не с целым ключом сразу, а проходит его посимвольно.
+>
+> Trie особенно полезен, когда ключ — это последовательность, и решение можно принимать постепенно, проходя её часть за частью.
 
 
+<details>
+<summary>Trie ознакомление</summary>
+
+Например для хранения слов: `car, card, care, cat, dog`
+
+Trie будет выглядеть примерно так:
+```text
+        root
+       /    \
+      c      d
+      |      |
+      a      o
+     / \     |
+    r   t    g
+   / \
+  d   e
+```
+
+И такие слова как `car, card, care`, будут использовать общие узлы и путь: `c → a → r`  
+
+> Hash Table обычно удобнее, когда нужно проверить наличие конкретного слова. Trie особенно удобен, когда нужно находить слова по началу строки и получать все совпадения по префиксу.
+
+#### Сильные стороны
+* Очень быстрый поиск слова по префиксу. Быстрее обычных Map/Set для prefix-задач
+* Удобно получать ключи в лексикографическом порядке. Если дети узлов хранятся упорядоченно, можно обходить Trie сразу в алфавитном порядке.
+
+#### Слабые стороны
+* Может потреблять много памяти. У каждого узла нужно хранить ссылки на дочерние узлы, а таких узлов может быть очень много.
+* Плохо подходит для длинных ключей с малым количеством общих префиксов. Тогда Trie разрастается почти на каждый символ каждого ключа и теряет главное преимущество по памяти.
+ 
+#### Сложность операций
+
+| Операция | Сложность |
+|---|---:|
+| Insert | `O(L)` |
+| Search | `O(L)` |
+| Prefix search | `O(L)` |
+| Delete | `O(L)` |
+
+где `L` = длина слова
+
+Например поиск `computer`, требует пройти символы: `c → o → m → p → u → t → e → r` т.е. 8 шагов, а количество остальных слов в Trie почти не влияет.
+
+Время поиска зависит в основном от длины слова, а не от количества слов.
+
+#### Память
+
+Каждая вершина хранит: `символ + ссылки на следующие символы + признак конца слова` 
+
+У каждой вершины обычно есть структура для детей: `HashMap<char, Node>` или `[Option<Node>; 26]`
+
+Именно поэтому Trie может быть довольно тяжёлым по памяти. Особенно много памяти расходуется, если общих префиксов мало. Тогда Trie почти не переиспользует узлы и создаёт отдельные узлы почти для каждого символа.
+
+#### Когда использовать
+
+Когда нужны операции по префиксу:
+* Автодополнение (autocomplete). Пользователь ввёл `ca` — быстро находим `car, cat, care`
+* Поиск слов по префиксу (по началу слов). Найти все слова, начинающиеся с pre, например prefix, prepare, prevent
+* Проверка существования слова. Например, есть ли в словаре слово `care`
+* Поиск по словарю и исправление опечаток. Trie можно использовать как часть алгоритмов проверки правописания
+* Маршрутизация по префиксам (routing prefixes, поиск URL). Например, поиск наиболее подходящего IP-маршрута по префиксу сети
+ 
+#### Когда не использовать
+Если нужен только точный поиск (лучше `HashSet<String>`) или поиск по ключу без поиска по префиксу (лучше `HashMap`)
+
+#### Основные понятия
+
+`Prefix` - начало слова
+
+`End of word` - у каждого узла есть специальный флаг, например `is_end`, который показывает, заканчивается ли на этом узле какое-либо слово. В обычном Trie у каждого узла есть ровно один путь от корня. Поэтому флаг `is_end` однозначно определяет, заканчивается ли слово на этом пути.
+
+#### Упражнения
+
+> В стандартной библиотеке Rust готового Trie нет. Поэтому есть два варианта: взять сторонний crate или реализовать Trie самостоятельно.
+
+
+**1. Autocomplete**
+
+
+```rust,editable
+use std::collections::HashMap;
+
+#[derive(Default)]
+struct TrieNode {
+    children: HashMap<char, TrieNode>,
+    is_end: bool,
+}
+
+#[derive(Default)]
+struct Trie {
+    root: TrieNode,
+    len: usize,
+}
+impl Trie {
+    fn insert(&mut self, word: &str) -> bool {
+        let mut node = &mut self.root;
+        for ch in word.chars() {
+            node = node.children.entry(ch).or_default();
+        }
+        if node.is_end {
+            return false;
+        }
+        node.is_end = true;
+        self.len += 1;
+        true
+    }
+    fn contains(&self, word: &str) -> bool {
+        let mut node = &self.root;
+        for ch in word.chars() {
+            match node.children.get(&ch) {
+                Some(child) => node = child,
+                None => return false,
+            }
+        }
+        node.is_end
+    }
+    fn remove(&mut self, word: &str) -> bool {
+        if !self.contains(word) {
+            return false;
+        }
+        Self::remove_from(&mut self.root, &mut word.chars());
+        self.len -= 1;
+        true
+    }
+    fn remove_from(
+        node: &mut TrieNode,
+        chars: &mut std::str::Chars<'_>,
+    ) -> bool {
+        let Some(ch) = chars.next() else {
+            node.is_end = false;
+            return node.children.is_empty();
+        };
+        let remove_child = {
+            let child = node.children.get_mut(&ch).unwrap();
+            Self::remove_from(child, chars)
+        };
+        if remove_child {
+            node.children.remove(&ch);
+        }
+        !node.is_end && node.children.is_empty()
+    }
+    fn autocomplete(&self, prefix: &str) -> Vec<String> {
+        let mut node = &self.root;
+
+        for ch in prefix.chars() {
+            match node.children.get(&ch) {
+                Some(child) => node = child,
+                None => return Vec::new(),
+            }
+        }
+        let mut results = Vec::new();
+        let mut word = prefix.to_string();
+
+        Self::collect_words(node, &mut word, &mut results);
+        results.sort();
+
+        results
+    }
+    fn collect_words(
+        node: &TrieNode,
+        word: &mut String,
+        results: &mut Vec<String>,
+    ) {
+        if node.is_end {
+            results.push(word.clone());
+        }
+        for (&ch, child) in &node.children {
+            word.push(ch);
+            Self::collect_words(child, word, results);
+            word.pop();
+        }
+    }
+    fn len(&self) -> usize {
+        self.len
+    }
+    #[allow(dead_code)]
+    fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+}
+fn main() {
+    let mut trie = Trie::default();
+    trie.insert("Alice");
+    trie.insert("Alex");
+    trie.insert("Alexander");
+    trie.insert("Bob");
+    trie.insert("Charlie");
+    println!("Autocomplete 'Al':");
+    for name in trie.autocomplete("Al") {
+        println!("{name}");
+    }
+    println!("\nRemove Alex: {}", trie.remove("Alex"));
+    println!("\nAutocomplete 'Al' after removal:");
+    for name in trie.autocomplete("Al") {
+        println!("{name}");
+    }
+    println!("\nContains Alex: {}", trie.contains("Alex"));
+    println!("Contains Alexander: {}", trie.contains("Alexander"));
+    println!("Number of names: {}", trie.len());
+}
+```
+
+<br>
+
+Тот же пример, но с применением готовой реализации Trie: [crate trie-rs](https://crates.io/crates/trie-rs)
+
+> `crate trie-rs` не поддерживает удаление узлов из существующего Trie. Что бы иметь возможность удалять узлы нам придется пересоздавать полностью всё дерево.  
+> 
+> Причина в том, что `trie-rs` реализован не как обычное дерево из отдельных узлов с указателями. Он использует `LOUDS` — компактное представление дерева в битовых последовательностях, ориентированное на экономию памяти (минимальный расход памяти и быстрый поиск в неизменяемом дереве). API библиотеки рассчитан прежде всего на построение дерева и последующий поиск, а не на постоянное изменение его структуры т.е. после создания Trie добавлять и удалять узлы нельзя.
+
+
+```rust,no_run
+
+extern crate trie_rs;
+use trie_rs::TrieBuilder;
+
+fn main() {
+    // Создаём Trie один раз.
+    let mut builder = TrieBuilder::new();
+
+    builder.push("Alice");
+    builder.push("Alex");
+    builder.push("Alexander");
+    builder.push("Bob");
+    builder.push("Charlie");
+
+    let trie = builder.build();
+
+    // Проверка полного совпадения.
+    assert!(trie.exact_match("Alice"));
+    assert!(!trie.exact_match("Al"));
+
+    // Автодополнение по префиксу.
+    let mut names: Vec<String> = trie.predictive_search("Al").collect();
+
+    // Сортируем для предсказуемого вывода.
+    names.sort();
+
+    println!("Names starting with 'Al':");
+    for name in names {
+        println!("{name}");
+    }
+}
+```
+
+Output:
+```text
+Names starting with 'Al':
+Alex
+Alexander
+Alice
+```
+
+
+**2. Longest Prefix Match**
+
+Смысл задачи такой: у нас есть несколько правил, и одно значение может подходить сразу под несколько правил. Нужно выбрать самое конкретное.
+
+Найти самый длинный подходящий префикс. Классический пример — IP routing:
+```text
+10.0.0.0/8
+10.1.0.0/16
+10.1.2.0/24
+```
+ 
+Что значит `/8, /16, /24`: 
+* `/8`  → совпасть должна первая часть адреса (подходит всё, что начинается с `10`)
+* `/16` → первые две части (подходит всё, что начинается с `10.1`)
+* `/24` → первые три части (подходит всё, что начинается с `10.1.2`)
+
+Например для `IP: 10.1.2.15` подходят все три маршрута, но нам нужен *самый длинный* совпавший prefix: `10.1.2` так как он более точно соответствует запрашиваемому IP
+
+Trie хорошо подходщит для задачи поиска самого длинного маршрута. Мы идём по адресу постепенно и запоминаем последнее найденное правило:
+```text
+10            ← найден маршрут /8
+ ↓
+10.1          ← найден маршрут /16
+ ↓
+10.1.2        ← найден маршрут /24
+ ↓
+10.1.2.15     ← дальше правила нет
+```
+
+Та же идея работает и для URL-правил:
+```text
+/api
+/api/users
+/api/users/admin
+```
+
+В crate trie-rs для задачи поиска `Longest Prefix Match`, хорошо подходит `common_prefix_search()`, она возвращает все ключи Trie, которые являются префиксами запроса. Потом берём самый длинный из них.
+
+> В реальном коде используют структуры, которые работают с битовыми префиксами IP, например Patricia/Radix Trie или специализированные IP prefix crates. Но для понимания Longest Prefix Match через Trie этот пример показывает именно нужную механику.
+
+```rust,no_run
+extern crate trie_rs;
+use trie_rs::TrieBuilder;
+
+fn main() {
+    let mut builder = TrieBuilder::new();
+
+    builder.push("10");
+    builder.push("10.1");
+    builder.push("10.1.2");
+
+    let trie = builder.build();
+
+    let ip = "10.1.2.15";
+
+    let longest_prefix = trie
+        .common_prefix_search::<String, _>(ip)
+        .max_by_key(|prefix| prefix.len()); // max_by_key выберет самый длинный путь
+
+    match longest_prefix {
+        Some(prefix) => {
+            println!("IP: {ip}");
+            println!("Самый длинный подходящий prefix: {prefix}");
+        }
+        None => {
+            println!("Подходящий маршрут не найден");
+        }
+    }
+}
+```
+
+Ouitput:
+```text
+IP: 10.1.2.15
+Самый длинный подходящий prefix: 10.1.2
+```
+
+ 
+
+**3. URL routing**
+
+Например маршруты:
+
+```text
+/api/users
+/api/orders
+/admin
+/assets
+```
+
+Можно представить так:
+```text
+root
+├── api
+│   ├── users
+│   └── orders
+├── admin
+└── assets
+```
+
+Trie хранит не отдельные буквы, а части URL. 
+Можно использовать Trie для поиска маршрутов по частям пути.
+
+Trie-подобные структуры хорошо подходят для роутеров, особенно когда маршрутов очень много и у них общие части пути.
+
+Например запрос: `/api/users/123` подходит сразу под:
+* `/api`
+* `/api/users`
+
+Но мы выбираем самый длинный: `/api/users`
+
+```rust,no_run
+extern crate trie_rs;
+use trie_rs::map::TrieBuilder;
+
+#[derive(Debug, Clone, Copy)]
+enum Handler {
+    Api,
+    ListUsers,
+    ListOrders,
+    Admin,
+    Assets,
+}
+fn main() {
+    // Регистрируем маршруты.
+    let mut builder = TrieBuilder::new();
+
+    builder.push("/api", Handler::Api);
+    builder.push("/api/users", Handler::ListUsers);
+    builder.push("/api/orders", Handler::ListOrders);
+    builder.push("/admin", Handler::Admin);
+    builder.push("/assets", Handler::Assets);
+
+    let routes = builder.build();
+
+    // Обрабатываем запросы.
+    dispatch(&routes, "/api/users");
+    dispatch(&routes, "/api/users/123");
+    dispatch(&routes, "/api/orders/500");
+    dispatch(&routes, "/admin/settings");
+    dispatch(&routes, "/assets/logo.png");
+    dispatch(&routes, "/unknown");
+}
+
+fn dispatch(
+    routes: &trie_rs::map::Trie<u8, Handler>,
+    path: &str,
+) {
+    let matched = routes
+        .common_prefix_search::<String, _>(path)
+        .max_by_key(|(route, _)| route.len());
+
+    match matched {
+        Some((route, handler)) => {
+            println!("Request: {path}");
+            println!("Matched route: {route}");
+
+            match handler {
+                Handler::Api => {
+                    println!("  -> API handler");
+                }
+                Handler::ListUsers => {
+                    println!("  -> Listing users");
+                }
+                Handler::ListOrders => {
+                    println!("  -> Listing orders");
+                }
+                Handler::Admin => {
+                    println!("  -> Opening admin panel");
+                }
+                Handler::Assets => {
+                    println!("  -> Serving static assets");
+                }
+            }
+        }
+        None => {
+            println!("404 Not Found: {path}");
+        }
+    }
+}
+```
+
+Output:
+```text
+Request: /api/users
+Matched route: /api/users
+  -> Listing users
+Request: /api/users/123
+Matched route: /api/users
+  -> Listing users
+Request: /api/orders/500
+Matched route: /api/orders
+  -> Listing orders
+Request: /admin/settings
+Matched route: /admin
+  -> Opening admin panel
+Request: /assets/logo.png
+Matched route: /assets
+  -> Serving static assets
+404 Not Found: /unknown
+```
+
+</details>
+ 
+ 
 ---
 
 <script>
