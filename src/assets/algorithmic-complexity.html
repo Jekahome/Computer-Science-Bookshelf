@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Algorithmic Complexity — интерактивный график</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}*{box-sizing:border-box}body{margin:0;padding:18px;background:transparent;color:CanvasText}.panel{border:1px solid color-mix(in srgb,CanvasText 18%,transparent);border-radius:12px;padding:18px;max-width:1000px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.muted{color:GrayText;font-size:13px}h2{margin:3px 0;font-size:25px}select,input{accent-color:#4786d1}select{font:inherit;padding:7px 10px;border:1px solid #999;border-radius:7px;background:Canvas;color:CanvasText}input[type=range]{width:100%;margin:18px 0 4px}.marks{display:flex;justify-content:space-between;font-size:12px;color:GrayText}svg{width:100%;height:auto;display:block;margin:12px 0}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.choice{border:1px solid color-mix(in srgb,CanvasText 18%,transparent);border-radius:7px;padding:8px;display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}.dot{width:10px;height:10px;border-radius:50%;flex:none}.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 20px;margin-top:16px}.result{display:flex;justify-content:space-between;gap:8px;font-size:13px}.name{display:flex;align-items:center;gap:8px}.note{font-size:12px;line-height:1.6;color:GrayText;margin:16px 0 0}@media(max-width:570px){body{padding:6px}.panel{padding:12px}.choices{grid-template-columns:repeat(2,minmax(0,1fr))}.results{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="panel">
+<div class="top"><div><div class="muted">Количество элементов (N)</div><h2 id="n-value">100</h2></div><label class="muted">Шкала <select id="mode"><option value="log">Логарифмическая</option><option value="linear">Обычная</option></select></label></div>
+<input id="size" type="range" min="1" max="4" step="0.05" value="2" aria-label="Размер входных данных">
+<div class="marks"><span>10</span><span>100</span><span>1 000</span><span>10 000</span></div>
+<svg id="chart" viewBox="0 0 700 340" role="img" aria-label="Графики роста сложности алгоритмов"></svg>
+<div class="muted">Выбери алгоритмы для сравнения</div><div class="choices" id="choices"></div>
+<div class="muted" style="margin-top:18px" id="result-label">Условные операции</div><div class="results" id="results"></div>
+<p class="note">Модельные количества операций без постоянных множителей, не реальное время выполнения. Логарифмическая шкала помогает сравнивать кривые при сильно различающихся значениях.</p>
+</div>
+<script>
+(()=>{'use strict';
+const defs=[
+{name:'O(1)',color:'#888888',log:x=>0},
+{name:'O(log n)',color:'#1f9a79',log:x=>Math.log10(Math.max(1,Math.log2(x)))},
+{name:'O(√n)',color:'#289ccc',log:x=>Math.log10(x)/2},
+{name:'O(n)',color:'#5375ea',log:x=>Math.log10(x)},
+{name:'O(n log n)',color:'#9971de',log:x=>Math.log10(x*Math.max(1,Math.log2(x)))},
+{name:'O(n²)',color:'#db9b2b',log:x=>2*Math.log10(x)},
+{name:'O(n³)',color:'#df7544',log:x=>3*Math.log10(x)},
+{name:'O(2ⁿ)',color:'#d44e68',log:x=>x*Math.LOG10E*Math.LN2},
+{name:'O(n!)',color:'#a84277',log:x=>logFact(x)}
+];
+const logFact=x=>{if(x<2)return 0;let sum=0;for(let k=2;k<=Math.floor(x);k++)sum+=Math.log10(k);return sum};
+const size=document.getElementById('size'),mode=document.getElementById('mode'),chart=document.getElementById('chart'),choices=document.getElementById('choices'),results=document.getElementById('results');
+const chosen=new Set(defs.map(d=>d.name));
+for(const d of defs){const lab=document.createElement('label');lab.className='choice';const cb=document.createElement('input');cb.type='checkbox';cb.checked=true;cb.addEventListener('change',()=>{cb.checked?chosen.add(d.name):chosen.delete(d.name);draw()});const dot=document.createElement('span');dot.className='dot';dot.style.background=d.color;const name=document.createElement('span');name.textContent=d.name;lab.append(cb,dot,name);choices.append(lab)}
+const NS='http://www.w3.org/2000/svg',fmtNumber=x=>Math.round(x).toLocaleString('ru-RU');
+function svgEl(tag,attrs,text){const e=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));if(text!==undefined)e.textContent=text;chart.append(e);return e}
+function formatLog(p){if(!Number.isFinite(p))return '—';if(p>15)return '≈ 10^'+p.toFixed(1);return fmtNumber(10**p)}
+function draw(){const n=Math.round(10**Number(size.value)),active=defs.filter(d=>chosen.has(d.name)),maxLog=Math.max(1,...active.map(d=>d.log(n)));document.getElementById('n-value').textContent=fmtNumber(n);document.getElementById('result-label').textContent='Количество условных операций при N = '+fmtNumber(n);chart.replaceChildren();results.replaceChildren();const L=58,R=680,T=15,B=289;
+const px=x=>L+(x-1)/(n-1)*(R-L);
+const py=p=>{const fraction=mode.value==='log'?p/maxLog:Math.pow(10,Math.min(0,p-maxLog));return B-Math.max(0,Math.min(1,fraction))*(B-T)};
+for(let j=0;j<=4;j++){const y=B-(B-T)*j/4;svgEl('line',{x1:L,y1:y,x2:R,y2:y,stroke:'currentColor','stroke-opacity':'.14','stroke-dasharray':'4 5'});let label;if(j===0)label='0';else{const p=mode.value==='log'?maxLog*j/4:maxLog+Math.log10(j/4);label=p>6?'10^'+p.toFixed(0):fmtNumber(10**p)}svgEl('text',{x:L-8,y:y+4,'text-anchor':'end',fill:'currentColor','fill-opacity':'.7','font-size':11},label)}
+for(let j=0;j<=4;j++){const x=1+(n-1)*j/4;svgEl('text',{x:px(x),y:B+20,'text-anchor':'middle',fill:'currentColor','fill-opacity':'.7','font-size':11},fmtNumber(x))}svgEl('text',{x:(L+R)/2,y:B+40,'text-anchor':'middle',fill:'currentColor','font-size':12},'Количество элементов N');
+for(const d of active){const points=[];for(let j=0;j<=240;j++){const x=1+(n-1)*j/240;points.push(px(x).toFixed(1)+','+py(d.log(x)).toFixed(1))}svgEl('polyline',{points:points.join(' '),fill:'none',stroke:d.color,'stroke-width':2.7,'stroke-linejoin':'round'});svgEl('circle',{cx:px(n),cy:py(d.log(n)),r:3.5,fill:d.color});const row=document.createElement('div');row.className='result';const name=document.createElement('span');name.className='name';const dot=document.createElement('span');dot.className='dot';dot.style.background=d.color;name.append(dot,document.createTextNode(d.name));const number=document.createElement('strong');number.textContent=formatLog(d.log(n));row.append(name,number);results.append(row)}
+}
+size.addEventListener('input',draw);mode.addEventListener('change',draw);draw();
+})();
+</script>
+</body>
+</html>
