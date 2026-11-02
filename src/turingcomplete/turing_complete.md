@@ -1,5 +1,5 @@
 
-# Turing Complete 
+# Turing Complete (beta)
 
 * [Turing Complete](https://turingcomplete.game/) — это игра о компьютерных науках.
 * [Turing Complete youtube channel](https://www.youtube.com/@TuringCompleteGame)

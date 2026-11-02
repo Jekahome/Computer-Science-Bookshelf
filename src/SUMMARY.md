@@ -51,9 +51,7 @@
     - [Алгоритмы](conclusion_9.md)
     - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
     - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
-    - [rep. Data-Structures](https://github.com/Jekahome/Data-Structures)
-    - [rep. Algorithms](https://github.com/Jekahome/Algorithms)
-
+  
 - [Сети](chapter_networks.md)
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
     - [Олифер В., Олифер Н. Компьютерные сети. Принципы, технологии, протоколы: Юбилейное издание. 2021](conclusion_21.md) 
