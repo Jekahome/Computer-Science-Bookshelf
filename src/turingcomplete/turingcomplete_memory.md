@@ -201,12 +201,8 @@ Input → [Delay 1] → [Delay 2] → Output
 (!A AND B) ─▶ buffer ┘
 
 ```
-
-
+ 
 ![Bit Switch (для версии 2)](/Computer-Science-Bookshelf/img/tc/Bit_Switch2.png)
-
-
-![Bit Switch](/Computer-Science-Bookshelf/img/tc/Bit_Switch.png)
  
 Из 8 штук битовых переключателей, можно сконструировать 8-ми битный переключатель самостоятельно.
 
