@@ -1,4 +1,6 @@
 
+[![Build and Deploy](https://github.com/Jekahome/Computer-Science-Bookshelf/actions/workflows/mdbook.yml/badge.svg?branch=main)](https://github.com/Jekahome/Computer-Science-Bookshelf/actions/workflows/mdbook.yml)
+
 [jekahome.github.io/Computer-Science-Bookshelf](https://jekahome.github.io/Computer-Science-Bookshelf/)
 
 **Цель - разобрать склад книг, найти ценное, важное и взять себе**.

@@ -53,6 +53,17 @@
     - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
   
 - [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)
+    - [Patterns](patterns/patterns.md)
+        - [Clean Code Principles](patterns/clean_code_principles.md)
+        - [Семантическая и цикломатическая сложность кода](patterns/semantic_cyclomatic_complexity.md)
+        - [Programming Paradigms](patterns/programming_paradigms.md)
+        - [Подходят ли ООП паттерны для Rust?](patterns/oop_and_rust.md)
+        - [Rust idioms](patterns/rust_idioms.md)  
+        - [Anti patterns](patterns/anti_patterns.md) 
+        - [Design principles](patterns/design_principles.md)  
+        - [Gangs of Four (GoF) Design Patterns](patterns/gof.md)  
+        - [Database patterns](patterns/database_patterns.md) 
+    - [Architecture](software_architecture/architecture.md)
     - [Клеппман Мартин. Высоконагруженные приложения 2024](software_architecture/designing_data_intensive_applications.md)
     - [Ричардс М., Форд Н. Фундаментальный подход к программной архитектуре](software_architecture/fundamentals_of_software_architecture.md)
     - [System Design. Подготовка к сложному интервью](software_architecture/system_design.md)
@@ -63,7 +74,7 @@
     - [Роберт Мартин. Чистая архитектура 2021](conclusion_31.md)
     - [Роберт Мартин. Чистый код создание, анализ и рефакторинг 2019](conclusion_33.md)
     - [Гради Буч - Объектно-ориентированный анализ и проектирование с примерами приложений на С++](conclusion_26.md)
-    - [rep. Patterns](https://github.com/Jekahome/Patterns)
+    
 
 - [Сети](chapter_networks.md)
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
