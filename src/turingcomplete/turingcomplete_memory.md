@@ -1111,6 +1111,12 @@ MUX
 
 ![Little Box](/Computer-Science-Bookshelf/img/tc/Little_Box.png)
 
+<br>
+
+Для версии 2:
+![Little Box 2](/Computer-Science-Bookshelf/img/tc/Little_Box2.png)
+
+
 (Так же можно использовать компонент Switch вместо NOT + AND. Узел Switch можно использовать как логическое И, поскольку для его включения необходимо выполнение двух условий.)
 
 **2 bit decoder (2 to 4)** нужен для выбора одного из четырех регистров
