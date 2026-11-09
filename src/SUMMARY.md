@@ -52,6 +52,19 @@
     - [Кормен Томас, Ч.Лейзерсон, Р.Ривест, К.Штайн - Алгоритмы. Построение и анализ. - 3-изд 2013](conclusion_23.md) 
     - [Хопкрофт Д., Мотвани Р., Ульман Дж. - Введение в теорию автоматов, языков и вычислений - 2008](conclusion_24.md)
   
+- [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)
+    - [Клеппман Мартин. Высоконагруженные приложения 2024](software_architecture/designing_data_intensive_applications.md)
+    - [Ричардс М., Форд Н. Фундаментальный подход к программной архитектуре](software_architecture/fundamentals_of_software_architecture.md)
+    - [System Design. Подготовка к сложному интервью](software_architecture/system_design.md)
+    - [System Design II. Распределенные системы. Подготовка к сложному интервью](software_architecture/system_design_2.md)
+    - [Петров Алекс. Распределенные данные. Алгоритмы работы современных систем хранения информации 2021](conclusion_28.md)
+    - [Стренгхольт Питхейн. Масштабируемые данные 2022](conclusion_29.md) 
+    - [Пол Батчер. Семь моделей конкуренции и параллелизма за семь недель](conclusion_30.md) 
+    - [Роберт Мартин. Чистая архитектура 2021](conclusion_31.md)
+    - [Роберт Мартин. Чистый код создание, анализ и рефакторинг 2019](conclusion_33.md)
+    - [Гради Буч - Объектно-ориентированный анализ и проектирование с примерами приложений на С++](conclusion_26.md)
+    - [rep. Patterns](https://github.com/Jekahome/Patterns)
+
 - [Сети](chapter_networks.md)
     - [Стивенс — Разработка сетевых приложений](conclusion_20.md) 
     - [Олифер В., Олифер Н. Компьютерные сети. Принципы, технологии, протоколы: Юбилейное издание. 2021](conclusion_21.md) 
@@ -59,19 +72,7 @@
 
 - [Security-Web](SecurityWeb/SecurityWeb.md)
     - [rep. Security-Web](https://github.com/Jekahome/Security-Web)    
-
-- [Проектирование ПО, архитектура, clean-code](chapter_software_design_architecture_clean_code.md)
-    - [Роберт Мартин. Чистая архитектура 2021](conclusion_31.md)
-    - [Роберт Мартин. Чистый код создание, анализ и рефакторинг 2019](conclusion_33.md)
-    - [Гради Буч - Объектно-ориентированный анализ и проектирование с примерами приложений на С++](conclusion_26.md)
-    - [rep. Patterns](https://github.com/Jekahome/Patterns)
-
-- [Backend, распределённые системы, большие данные](chapter_backend_distributed_systems_big_data.md)
-    - [Клеппман Мартин. Высоконагруженные приложения 2024](conclusion_27.md)
-    - [Петров Алекс. Распределенные данные. Алгоритмы работы современных систем хранения информации 2021](conclusion_28.md)
-    - [Стренгхольт Питхейн. Масштабируемые данные 2022](conclusion_29.md) 
-    - [Пол Батчер. Семь моделей конкуренции и параллелизма за семь недель](conclusion_30.md) 
-
+ 
 - [Компиляторы](chapter_compilers.md)
     - [Альфред Ахо. Компиляторы. Принципы, технологии, инструменты](conclusion_32.md) 
     - [Вирт Н. - Построение компиляторов (Классика программирования) - 2010](conclusion_34.md) 
