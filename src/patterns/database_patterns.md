@@ -25,7 +25,7 @@
 
 ## Identity Map	
 
-(Identity Map => Data Mapper => Repository => Unit of Work)
+(`Identity Map => Data Mapper => Repository => Unit of Work`)
 
 `TODO: добавить больше информации, пример, пояснение`
 
@@ -51,7 +51,7 @@ Identity Map — это, по сути, способ кэширования да
 
 ## Data Mapper
 
-(Identity Map => Data Mapper => Repository => Unit of Work)
+(`Identity Map => Data Mapper => Repository => Unit of Work`)
 
 `TODO: добавить больше информации, пример, пояснение`
 
@@ -82,7 +82,7 @@ Identity Map — это, по сути, способ кэширования да
 
 ## Repository
 
-(Identity Map => Data Mapper => Repository => Unit of Work)
+(`Identity Map => Data Mapper => Repository => Unit of Work`)
 
 `Pattern Repository` - это абстракция бизнес модели над данными из которых она состоит. Реализация репозитория инкапсулирует доступ к данным.
 Бизнес логика работает с абстракным репозиторием, поэтому бизнес логика остается персистентной 
@@ -642,7 +642,7 @@ fn main() {
 
 ## Unit of Work (UOW)
 
-(Identity Map => Data Mapper => Repository => Unit of Work)
+(`Identity Map => Data Mapper => Repository => Unit of Work`)
 
 Этот шаблон принадлежит каталогу объектно-реляционных поведенческих шаблонов, а этот каталог принадлежит шаблонам архитектуры корпоративных приложений.
 

@@ -1287,7 +1287,7 @@ Adapter это объект-переводчик, который трансфо�
 Таким образом, декоратор более прозрачен для приложения, чем адаптер. 
 Как следствие, `Pattern Decorator` поддерживает рекурсивную композицию, что невозможно при использовании чистых адаптеров.
 
-![Adapter](/img/software_architecture/patterns/Adapter.png "Adapter")
+![Adapter](/Computer-Science-Bookshelf/img/software_architecture/patterns/Adapter.png "Adapter")
 
 Пример:
 
@@ -1406,11 +1406,11 @@ fn main() {
 
 Bridge Before:
 
-![BridgeBefore](/img/software_architecture/patterns/BridgeBefore.png "BridgeBefore")
+![BridgeBefore](/Computer-Science-Bookshelf/img/software_architecture/patterns/BridgeBefore.png "BridgeBefore")
 
 Bridge After:
 
-![BridgeAfter](/img/software_architecture/patterns/BridgeAfter.png "BridgeAfter")
+![BridgeAfter](/Computer-Science-Bookshelf/img/software_architecture/patterns/BridgeAfter.png "BridgeAfter")
 
 
 Пример:
@@ -1926,7 +1926,7 @@ fn main() {
 **Пример**
 Приложение оборачивает класс данных в шифрующую и сжимающую обёртки, которые при чтении выдают оригинальные данные, а при записи — зашифрованные и сжатые.
 
-![Decorator](/img/software_architecture/patterns/Decorator.jpg "Decorator")
+![Decorator](/Computer-Science-Bookshelf/img/software_architecture/patterns/Decorator.jpg "Decorator")
 
 
 Пример:
@@ -2479,7 +2479,7 @@ fn main() {
 
 - Объекты Facade часто являются синглтонами, поскольку требуется только один объект Facade.
 
-![Facade](/img/software_architecture/patterns/Facade.png "Facade")
+![Facade](/Computer-Science-Bookshelf/img/software_architecture/patterns/Facade.png "Facade")
 
 Пример:
 
@@ -2720,7 +2720,7 @@ fn main() {
 File и Directory оба trait Component имеют один search метод. 
 Для файла он просто просмотрит содержимое файла; для папки он просмотрит все файлы этой папки, чтобы найти это ключевое слово.
 
-![Composite](/img/software_architecture/patterns/Composite.png "Composite")
+![Composite](/Computer-Science-Bookshelf/img/software_architecture/patterns/Composite.png "Composite")
 
 ```rust
 pub trait Component {
@@ -3847,7 +3847,7 @@ Context - содержит информацию, которая является
 Client - (ExpressionParser): строит (или предоставляет) AST, собранный из TerminalExpression и NonTerminalExpression.
     Клиент вызывает операцию interpret()
 
-![Interpreter](/img/software_architecture/patterns/Interpreter.png "Interpreter")
+![Interpreter](/Computer-Science-Bookshelf/img/software_architecture/patterns/Interpreter.png "Interpreter")
 
 Пример:
 ```rust
@@ -5523,9 +5523,9 @@ fn main() {
 Цель `Pattern Mediator` — убрать обоюдные зависимости между компонентами системы. Вместо этого они становятся зависимыми от самого посредника. 
 С другой стороны, цель `Pattern Observer` — обеспечить динамическую одностороннюю связь, в которой одни объекты косвенно зависят от других.
 
-![Mediator](/img/software_architecture/patterns/Mediator.png "Mediator")
+![Mediator](/Computer-Science-Bookshelf/img/software_architecture/patterns/Mediator.png "Mediator")
 
-![Mediator](/img/software_architecture/patterns/Mediator2.png "Mediator")
+![Mediator](/Computer-Science-Bookshelf/img/software_architecture/patterns/Mediator2.png "Mediator")
 
 Пример:
 Типичная реализация Mediator на других языках — это классический антишаблон в Rust: многие объекты содержат изменяемые перекрестные ссылки друг на друга, пытаясь изменить друг друга,
@@ -5962,7 +5962,7 @@ fn main() {
     Опекун может хранить историю прошлых состояний создателя в виде стека из снимков. 
     Когда понадобится отменить выполненную операцию, он возьмёт «верхний» снимок из стека и передаст его создателю для восстановления.
     
-![Memento](/img/software_architecture/patterns/Memento.png "Memento")
+![Memento](/Computer-Science-Bookshelf/img/software_architecture/patterns/Memento.png "Memento")
 
 Пример:
 ```rust
@@ -6144,7 +6144,7 @@ middleware
 `Pattern Chain Of Responsibilities` и `Pattern Decorator` имеют очень похожие структуры. 
 Оба паттерна базируются на принципе рекурсивного выполнения операции через серию связанных объектов. Но `Pattern Decorator` не прерывает ход выполнения.
 
-![Сhain-of-responsibility](/img/software_architecture/patterns/chain-of-responsibility.png "Сhain-of-responsibility")
+![Сhain-of-responsibility](/Computer-Science-Bookshelf/img/software_architecture/patterns/chain-of-responsibility.png "Сhain-of-responsibility")
 
 Пример:
 ```rust
