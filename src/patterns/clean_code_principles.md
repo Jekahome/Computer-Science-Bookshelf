@@ -32,12 +32,12 @@
 
   1. **Неочевидные приоритеты операций**
 
-  ```rust
+  ```rust,editable
   let result = a & b == 0; // Неочевидно: сравнение или побитовое И?
   ```
   2. **Перекрытие переменных**
 
-  ```rust
+  ```rust,editable
   let count = 10;
   {
       let count = get_count(); // Затеняет внешнюю переменную
@@ -89,7 +89,7 @@
 1. **Будьте последовательны**.
    Делайте однотипные вещи одинаково. Последовательность повышает предсказуемость и снижает нагрузку на понимание.
 
-   ```rust
+   ```rust,editable
    // ❌ — разный стиль имён функций
    fn get_user() { }
    fn fetch_order() { }
@@ -104,7 +104,7 @@
 2. **Используйте поясняющие переменные**.
    Явные и содержательные имена переменных делают код самодокументируемым.
 
-   ```rust
+   ```rust,editable
    // ❌
    let s = "2024-07-20T12:34:56Z";
    let t = DateTime::parse_from_rfc3339(s).unwrap();
@@ -117,7 +117,7 @@
 3. **Инкапсулируйте граничные условия**.
    Храните проверку диапазонов и пределов в одном месте — это снижает дублирование и ошибки.
 
-   ```rust
+   ```rust,editable
    // ❌
    fn is_valid_age(age: u32) -> bool {
        age >= 0 && age <= 120
@@ -135,7 +135,7 @@
 4. **Предпочитайте специализированные объекты значений примитивам**.
    Используйте отдельные типы вместо "голых" примитивов, чтобы выразить смысл и избежать ошибок.
 
-   ```rust
+   ```rust,editable
    struct Money { amount: f64 }
 
    impl Money {
@@ -153,7 +153,7 @@
 5. **Избегайте логической зависимости методов**.
    Метод не должен работать правильно только при условии, что перед этим вызван другой метод.
 
-   ```rust
+   ```rust,editable
    // ❌
    fn print_total(&self) {
        println!("{}", self.total); // требует, чтобы calculate_total был вызван ранее
@@ -168,7 +168,7 @@
 6. **Избегайте отрицательных условий**.
    Положительные проверки читаются легче, чем отрицательные.
 
-   ```rust
+   ```rust,editable
    // ❌
    fn is_not_error(status: &str) -> bool {
        status != "error"
@@ -189,7 +189,7 @@
 1. **Делайте только одно**.
    Функция должна решать одну задачу и решать её полностью. Это повышает понятность, упрощает тестирование и повторное использование.
 
-   ```rust
+   ```rust,editable
    // ❌ — функция делает всё сразу
    fn process_order(order: &Order) {
       /* 
@@ -216,7 +216,7 @@
    Чем больше аргументов, тем сложнее понять и использовать функцию.
    Оптимально — до трёх аргументов. Если нужно больше — объедините их в структуру.
 
-   ```rust
+   ```rust,editable
    // ❌
    fn create_user(name: &str, age: u32, email: &str, address: &str) { /* ... */ }
 
@@ -233,7 +233,7 @@
 3. **Избегайте побочных эффектов**.
    Функция не должна менять состояние вне своего тела или модифицировать аргументы неожиданным образом.
 
-   ```rust
+   ```rust,editable
    // ❌ — меняет глобальное состояние
    static mut GLOBAL_STATE: HashMap<String, String> = HashMap::new();
    fn update_state(key: String, value: String) {
@@ -250,7 +250,7 @@
    Если в функции есть флаг (`true/false`), это признак, что она делает больше одной задачи.
    Разделите её на две или более функций.
 
-   ```rust
+   ```rust,editable
    // ❌
    fn set_user_status(user: &mut User, active: bool) {
        if active {
@@ -281,7 +281,7 @@
 
 Используйте `TODO` для обозначения незавершённых задач, добавляя идентификатор задачи и ответственного. Это упрощает отслеживание.
 
-```rust
+```rust,editable
 // TODO [ISSUE-101] (Owner: Bob) Refactor this function
 fn refactor_function() {
     // ...
@@ -291,7 +291,7 @@ fn refactor_function() {
 1. **Объясняйте суть в коде, без необходимости обьяснять его в комментариях**.
    Пишите код так, чтобы он был самодокументируемым.
 
-   ```rust
+   ```rust,editable
    // ❌
    // Функция для проверки, является ли пользователь активным
    fn check(user: &User) -> bool {
@@ -307,7 +307,7 @@ fn refactor_function() {
 2. **Не дублируйте очевидное. Избегайте «шума»**.
    Комментарий, который повторяет код, бесполезен.
 
-   ```rust
+   ```rust,editable
    // ❌
    let x = x + 1; // Увеличиваем x на 1
 
@@ -319,7 +319,7 @@ fn refactor_function() {
    Лишний код засоряет репозиторий. Если он не нужен — удалите его, история Git его сохранит.
    Если код "ценный" - просто сохраните в свое личное хранилище.
 
-   ```rust
+   ```rust,editable
    // ❌
    // fn old_function() {
    //  // старый код
@@ -333,7 +333,7 @@ fn refactor_function() {
 
 4. **Поясняйте намерения т.е. *почему*, а не *что* делает код**.
 
-   ```rust
+   ```rust,editable
    // ❌
    let result = calculate(); // Вызываем calculate
 
@@ -345,7 +345,7 @@ fn refactor_function() {
 5. **Документируйте сложные участки**.
    Если логика нетривиальна — поясните её словами.
 
-   ```rust
+   ```rust,editable
    // ❌
    let data = fetch_data();
 
@@ -357,7 +357,7 @@ fn refactor_function() {
 6. **Предупреждайте о последствиях**.
    Если операция имеет побочные эффекты — напишите об этом.
 
-   ```rust
+   ```rust,editable
    // ❌
    delete_user(user_id);
 
@@ -385,7 +385,7 @@ fn refactor_function() {
  
   3. **Используйте пустые строки для разделения логической структуры, разделения слабо связанных частей**.
        
-      ```rust
+      ```rust,editable
       // ❌ Плохо
       let a = 1;
       let b = 2;
@@ -411,7 +411,7 @@ fn refactor_function() {
 
       Фигурные скобки `{...}` для изоляции области видимости переменных, и визуального выделения логической части кода.
 
-      ```rust
+      ```rust,editable
       let a = 1;
       let b = {
           // какая-то своя логика ...
@@ -424,12 +424,12 @@ fn refactor_function() {
 
       Короткие строки облегчают чтение кода и предотвращают горизонтальный скроллинг.
 
-      ```rust
+      ```rust,editable
       // ❌
       let very_long_variable_name = "This is a very long string that exceeds the recommended line length for readability";
       ```
 
-      ```rust
+      ```rust,editable
       // ✅
       let very_long_variable_name = "This is a very long string \
                                   that exceeds the recommended \
@@ -442,7 +442,7 @@ fn refactor_function() {
         Когда вы выравниваете переменные и комментарии по горизонтали, изменение одного элемента может потребовать перестановки остальных элементов на той же линии. 
         И `rustfmt` всё равно его уберёт, а выравнивание вручную усложняет правки.
 
-      ```rust
+      ```rust,editable
       // ❌
       let first_variable    = 1;    // Первый комментарий
       let second_variable   = 2;    // Второй комментарий
@@ -463,7 +463,7 @@ fn refactor_function() {
 
 Приватность особенностей внутренней структуры обьекта, помогает избежать зависимостей от конкретных деталей реализации и делает ваш код более устойчивым к будущим изменениям.
 
-  ```rust
+  ```rust,editable
   // ❌ публичные поля структуры, позволяют использовать ее неверным способом  
   pub struct Order {
       pub items: Vec<Item>,
@@ -475,7 +475,6 @@ fn refactor_function() {
       items: Vec<Item>,
       total: f64,
   }
-
   impl Order {
     pub fn new() -> Self {
         Order {
@@ -483,16 +482,13 @@ fn refactor_function() {
             total: 0.0,
         }
     }
-
     pub fn add_item(&mut self, item: Item) {
         self.items.push(item);
         self.update_total();
     }
-
     pub fn get_total(&self) -> f64 {
         self.total
     }
-
     fn update_total(&mut self) {
         self.total = self.items.iter().map(|item| item.price).sum();
     }
@@ -507,7 +503,7 @@ fn refactor_function() {
 
 ❌ структура хранит данные и дублирует вычисления и состояние.
 
-  ```rust
+  ```rust,editable
   pub struct Item {
       pub price: f64,
   }
@@ -517,7 +513,6 @@ fn refactor_function() {
       items: Vec<Item>,
       total: f64,  // состояние, требующее обновления вручную
   }
-
   impl Order {
       pub fn new() -> Self {
           Order {
@@ -525,12 +520,10 @@ fn refactor_function() {
               total: 0.0,
           }
       }
-
       pub fn add_item(&mut self, item: Item) {
           self.items.push(item);
           self.total += item.price;  // риск рассинхронизации total и items
       }
-
       pub fn get_total(&self) -> f64 {
           self.total
       }
@@ -540,18 +533,15 @@ fn refactor_function() {
   pub struct Order {
       items: Vec<Item>,
   }
-
   impl Order {
       pub fn new() -> Self {
           Order {
               items: Vec::new(),
           }
       }
-
       pub fn add_item(&mut self, item: Item) {
           self.items.push(item);
       }
-
       pub fn calculate_total(&self) -> f64 {
           self.items.iter().map(|item| item.price).sum()
       }
@@ -574,7 +564,7 @@ fn refactor_function() {
 
   Если в трейте есть ассоциированные типы (associated types) или связанные константы, и мы заставляем реализацию использовать определённые типы, то в некотором смысле трейт начинает иметь представление о типах, связанных с реализациями.
 
-  ```rust
+  ```rust,editable
   pub trait Animal {
       type Food;
 
@@ -596,7 +586,7 @@ fn refactor_function() {
 
   Разделение кода на множество функций, позволяет лучше организовать логику и избежать сложных конструкций, таких как флаговые аргументы.
 
-  ```rust
+  ```rust,editable
   // ❌ использование флага для выбора поведения
   pub fn handle_order(order: &Order, use_discount: bool) {
       if use_discount {
@@ -605,12 +595,10 @@ fn refactor_function() {
           // Без скидки
       }
   }
-
   // ✅ использование отдельных функций, избежание флагов повышает читаемость и упрощает тестирование.
   pub fn handle_order_with_discount(order: &Order) {
       // Применение скидки
   }
-
   pub fn handle_order_without_discount(order: &Order) {
       // Без скидки
   }
@@ -633,13 +621,12 @@ fn refactor_function() {
 
   Программное обеспечение становится трудным для изменения, поскольку небольшое изменение вызывает каскад последующих изменений. Это происходит из-за сильных зависимостей между компонентами системы.
 
-  ```rust
+  ```rust,editable
   // ❌ Order напрямую зависит от структуры Item, и добавление новых стратегий скидок, жёстко связано с ним.
   struct Order {
       items: Vec<Item>,
       discount: f64,
   }
-
   impl Order {
       fn new() -> Self {
           Order {
@@ -647,13 +634,11 @@ fn refactor_function() {
               discount: 0.0,
           }
       }
-
       fn apply_discount(&mut self) {
           let total = self.items.iter().map(|item| item.price).sum::<f64>();
           self.discount = total * 0.1;
       }
   }
-
   struct Item {
       price: f64,
   }
@@ -665,16 +650,14 @@ fn refactor_function() {
 
   Используйте абстракции, такие как трейты и интерфейсы, чтобы уменьшить взаимные зависимости.
 
-  ```rust
+  ```rust,editable
   #[derive(Debug)]
   pub struct Item {
       pub price: f64,
   }
-
   pub trait DiscountStrategy {
       fn apply_discount(&self, total: f64) -> f64;
   }
-
   pub struct PercentageDiscount;
 
   impl DiscountStrategy for PercentageDiscount {
@@ -682,12 +665,10 @@ fn refactor_function() {
           total * 0.1
       }
   }
-
   pub struct Order<T: DiscountStrategy> {
       items: Vec<Item>,
       discount_strategy: T,
   }
-
   impl<T: DiscountStrategy> Order<T> {
       pub fn new(discount_strategy: T) -> Self {
           Self {
@@ -695,11 +676,9 @@ fn refactor_function() {
               discount_strategy,
           }
       }
-
       pub fn add_item(&mut self, item: Item) {
           self.items.push(item);
       }
-
       pub fn apply_discount(&self) -> f64 {
           let total: f64 = self.items.iter().map(|item| item.price).sum();
           self.discount_strategy.apply_discount(total)
@@ -711,12 +690,11 @@ fn refactor_function() {
 
   Программное обеспечение ломается в нескольких местах из-за одного изменения. Это часто вызвано слишком сильной связью между компонентами.
 
-  ```rust
+  ```rust,editable
     // ❌ хрупкий код, у Order есть метод update_inventory, что связывает логику заказа с инвентарём.
     struct Order {
         items: Vec<Item>,
     }
-
     impl Order {
         fn add_item(&mut self, item: Item) {
             self.items.push(item);
@@ -727,7 +705,6 @@ fn refactor_function() {
             // Логика обновления инвентаря
         }
     }
-
     struct Item {
         price: f64,
     }
@@ -738,21 +715,18 @@ fn refactor_function() {
   Разделите ответственность между компонентами и используйте принципы инкапсуляции и декомпозиции.
   Чтобы избежать копирования Inventory при клонировании Order, стоит хранить ссылку или использовать Arc (в зависимости от контекста). Здесь для простоты — владение.
 
-  ```rust
+  ```rust,editable
     // Inventory как отдельный компонент
     pub struct Inventory;  
-
     impl Inventory {
         pub fn update(&self) {
             // Логика обновления инвентаря
         }
     }
-
     pub struct Order {
         items: Vec<Item>,
         inventory: Inventory,
     }
-
     impl Order {
         pub fn new(inventory: Inventory) -> Self {
             Self {
@@ -760,7 +734,6 @@ fn refactor_function() {
                 inventory,
             }
         }
-
         pub fn add_item(&mut self, item: Item) {
             self.items.push(item);
             self.inventory.update();
@@ -775,17 +748,15 @@ fn refactor_function() {
   - Невозможно легко изменить логику скидки без правки самой структуры `Order`.
   - Из-за такой жёсткой связи сложно переиспользовать логику расчёта скидок в других местах или проектах — каждый раз придется копировать и менять код.
 
-  ```rust
+  ```rust,editable
   // ❌ сложно повторно использовать
   struct Order {
       items: Vec<Item>,
   }
-
   impl Order {
       fn calculate_total(&self) -> f64 {
           self.items.iter().map(|item| item.price).sum()
       }
-
       fn apply_discount(&self) -> f64 {
           let total = self.calculate_total();
           total * 0.1
@@ -802,30 +773,25 @@ fn refactor_function() {
   - Такой код проще расширять, тестировать и переиспользовать в разных проектах — просто реализуй новую стратегию скидки, не меняя код заказа.
   - Это уменьшает связанность (`coupling`) и улучшает модульность.
 
-  ```rust
+  ```rust,editable
     pub struct Item {
         pub price: f64,
     }
-
     pub trait DiscountStrategy {
         fn apply_discount(&self, total: f64) -> f64;
     }
-
     pub struct PercentageDiscount;
-
     impl DiscountStrategy for PercentageDiscount {
         fn apply_discount(&self, total: f64) -> f64 {
             total * 0.1
         }
     }
-
     // Используем жизненный цикл 'a, чтобы Order не владел стратегией скидки,
     // а только ссылался на нее — так можно использовать одну стратегию для разных заказов.
     pub struct Order<'a, T: DiscountStrategy> {
         pub items: Vec<Item>,
         discount_strategy: &'a T,
     }
-
     impl<'a, T: DiscountStrategy> Order<'a, T> {
         pub fn new(discount_strategy: &'a T) -> Self {
             Self {
@@ -833,11 +799,9 @@ fn refactor_function() {
                 discount_strategy,
             }
         }
-
         pub fn calculate_total(&self) -> f64 {
             self.items.iter().map(|item| item.price).sum()
         }
-
         pub fn apply_discount(&self) -> f64 {
             let total = self.calculate_total();
             self.discount_strategy.apply_discount(total)
@@ -849,12 +813,11 @@ fn refactor_function() {
  
   Код содержит ненужные усложнения, которые делают его трудным для понимания и поддержки.
  
-  ```rust
+  ```rust,editable
   // ❌ избыточная сложность
   struct Order {
       items: Vec<Item>,
   }
-
   impl Order {
       fn calculate(&self, tax: f64, discount: f64) -> f64 {
           let subtotal = self.items.iter().map(|item| item.price).sum::<f64>();
@@ -869,16 +832,14 @@ fn refactor_function() {
 
   Разделите код на более простые и понятные части. Разбил метод `calculate` на `subtotal` и `total` — так понятнее и проще тестировать.
 
-  ```rust
+  ```rust,editable
     pub struct Order {
         items: Vec<Item>,
     }
-
     impl Order {
         pub fn subtotal(&self) -> f64 {
             self.items.iter().map(|item| item.price).sum()
         }
-
         pub fn total(&self, tax: f64, discount: f64) -> f64 {
             let subtotal = self.subtotal();
             let taxed = subtotal * (1.0 + tax);
@@ -892,12 +853,11 @@ fn refactor_function() {
   Код содержит повторяющиеся фрагменты, что делает его сложным для поддержки и увеличивает вероятность ошибок.
  
 
-  ```rust
+  ```rust,editable
   // ❌ избыточное повторение
   fn calculate_price(item: &Item, quantity: u32) -> f64 {
       item.price * quantity as f64
   }
-
   fn calculate_total(order: &Order) -> f64 {
       let mut total = 0.0;
       for item in &order.items {
@@ -911,11 +871,10 @@ fn refactor_function() {
 
   Используйте общие функции и абстракции для устранения повторений. Упростил подсчёт цены, избавившись от цикла с мутабельной переменной.
 
-  ```rust
+  ```rust,editable
     pub fn calculate_price(item: &Item, quantity: u32) -> f64 {
         item.price * quantity as f64
     }
-
     pub fn calculate_total(order: &Order) -> f64 {
         order.items.iter().map(|item| calculate_price(item, 1)).sum()
     }
@@ -926,7 +885,7 @@ fn refactor_function() {
   Код трудно понять из-за неясных или запутанных конструкций, что затрудняет его поддержку.
  
 
-  ```rust
+  ```rust,editable
   // ❌ непрозрачный код
   fn process_data(data: &str) -> String {
       let mut result = String::new();
@@ -945,7 +904,7 @@ fn refactor_function() {
 
   Упрощайте код и добавляйте комментарии, чтобы сделать его более понятным.
 
-  ```rust
+  ```rust,editable
     pub fn process_data(data: &str) -> String {
         let mut result = String::new();
 

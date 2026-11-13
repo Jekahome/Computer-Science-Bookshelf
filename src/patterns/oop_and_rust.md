@@ -20,13 +20,13 @@ Rust — это статически типизированный язык си�
 ### Наследование → Трейты + Композиция
 В Rust **нет наследования реализации**, только:
 - **Наследование интерфейсов** через `super-trait`:
-  ```rust
+  ```rust,editable
   trait Animal: Display {  // Требует реализации Display
       fn speak(&self);
   }
   ```
 - **Композиция** (встраивание структур):
-  ```rust
+  ```rust,editable
   struct Engine { power: u32 }
   struct Car { engine: Engine }  // Вместо наследования
   ```
@@ -35,7 +35,7 @@ Rust — это статически типизированный язык си�
 
 Динамическая диспетчеризация возможна, но требует явного указания:
 
-```rust
+```rust,editable
 trait Draw { fn draw(&self); }
 impl Draw for Circle { ... }
 
@@ -48,7 +48,7 @@ let shapes: Vec<Box<dyn Draw>> = vec![Box::new(Circle)];  // Явное указ
 
 Вместо отдельного класса стратегии — просто трейт:
 
-```rust
+```rust,editable
 trait SortStrategy { fn sort(&self, data: &mut [i32]); }
 
 struct QuickSort;
@@ -61,7 +61,7 @@ struct Sorter<T: SortStrategy> { strategy: T }  // Статическая дис
 
 Композиция + трейты:
 
-```rust
+```rust,editable
 trait Coffee { fn cost(&self) -> f64; }
 struct SimpleCoffee;
 impl Coffee for SimpleCoffee { ... }
@@ -78,7 +78,7 @@ impl<T: Coffee> Coffee for MilkDecorator<T> {
 ### Строитель (Builder)
 Идеален для Rust из-за неизменяемости по умолчанию:
 
-```rust
+```rust,editable
 #[derive(Default)]
 struct ConfigBuilder { timeout: Option<u32> }
 
@@ -93,7 +93,7 @@ impl ConfigBuilder {
 ### Посетитель (Visitor)
 
 Реализуется через трейты и `match`:
-```rust
+```rust,editable
 trait Visitor {
     fn visit_circle(&self, c: &Circle);
     fn visit_rect(&self, r: &Rect);
@@ -106,7 +106,7 @@ trait Visitor {
 ### Итераторы и замыкания
 
 Вместо ООП-шаблонов часто хватает комбинаторов:
-```rust
+```rust,editable
 let sum: i32 = (1..=10).filter(|x| x % 2 == 0).sum();  // Декларативный стиль
 ```
 
@@ -114,7 +114,7 @@ let sum: i32 = (1..=10).filter(|x| x % 2 == 0).sum();  // Декларативн
 
 `enum` + `match` заменяют полиморфизм подтипов:
 
-```rust
+```rust,editable
 enum Shape { Circle(f64), Rect(f64, f64) }
 
 fn area(s: Shape) -> f64 {
@@ -164,7 +164,7 @@ fn area(s: Shape) -> f64 {
 <details>
 <summary>1. Null Object — полиморфизм для отсутствия поведения</summary>
 
-```rust
+```rust,editable
 trait Logger {
     fn log(&self, message: &str);
 }
@@ -199,7 +199,7 @@ fn process(logger: &impl Logger) {
 <details>
 <summary>2. Strategy — полиморфизм для замены алгоритмов</summary>
 
-```rust
+```rust,editable
 trait SortingStrategy {
     fn sort(&self, data: &mut [i32]);
 }
@@ -231,7 +231,7 @@ struct Sorter {
 <details>
 <summary>3. Adapter — полиморфизм для совместимости интерфейсов</summary>
 
-```rust
+```rust,editable
 // Старый интерфейс
 trait OldService {
     fn old_method(&self);
@@ -262,7 +262,7 @@ impl NewService for Adapter {
 <details>
 <summary>4. Decorator — полиморфизм для добавления функциональности</summary>
 
-```rust
+```rust,editable
 trait Coffee {
     fn cost(&self) -> f64;
 }
@@ -293,7 +293,7 @@ impl Coffee for MilkDecorator {
 <details>
 <summary>5. Composite — полиморфизм для древовидных структур</summary>
 
-```rust
+```rust,editable
 trait Graphic {
     fn draw(&self);
 }
@@ -328,7 +328,7 @@ impl Graphic for Picture {
 <details>
 <summary>6. Proxy — полиморфизм для контроля доступа</summary>
 
-```rust
+```rust,editable
 trait Database {
     fn query(&self, sql: &str) -> Result<(), String>;
 }
@@ -364,7 +364,7 @@ impl Database for DatabaseProxy {
 <details>
 <summary>7. State — полиморфизм для изменения поведения</summary>
  
-```rust
+```rust,editable
 trait State {
     fn handle(&self, context: &mut Context);
 }
@@ -402,7 +402,7 @@ struct Context {
 - Позволяет писать код, работающий с разными типами.  
 - Этот код создаёт monomorphization, компилятор создаёт **отдельную версию функции `max` для каждого типа**, с которым мы используем функцию, что раздувает бинарный файл.
 
-```rust
+```rust,editable
 fn max<T: PartialOrd>(a: T, b: T) -> T {
     if a > b { a } else { b }
 }
@@ -420,7 +420,7 @@ fn main(){
 - Этот код создаёт monomorphization, компилятор создаёт **отдельную версию функции `animal_sound` для каждого типа**, с которым мы используем функцию, что раздувает бинарный файл.  
 
 **Альтернатива в Rust:**
-```rust
+```rust,editable
 trait Animal {
     fn make_sound(&self);
 }
@@ -454,7 +454,7 @@ fn main(){
 - Но можно **перегружать операторы** через трейты (`std::ops`).  
 
 **Пример перегрузки оператора:**
-```rust
+```rust,editable
 use std::ops::Add;
 
 struct Point { x: i32, y: i32 }
@@ -477,7 +477,7 @@ fn main(){
 - Rust **не допускает неявных преобразований** (в отличие от C++/Java). 
 - Но есть **явные приведения** (`as`) и трейты типа `From`/`Into`. 
 
-```rust
+```rust,editable
 let x: i32 = 5;
 let y: f64 = x as f64;  // Явное приведение
 
@@ -499,7 +499,7 @@ let z: f64 = f64::from(x);
 
 Вызов `animal.make_sound()` - идёт через виртуальную таблицу `vtable`.
 
-```rust
+```rust,editable
 trait Animal {
     fn make_sound(&self);
 }
@@ -529,7 +529,7 @@ fn main(){
 - Можно реализовывать для разных структур.  
 - Этот код создаёт monomorphization, компилятор создаёт **отдельную версию функции `render` для каждого типа**, с которым мы используем функцию, что раздувает бинарный файл.  
 
-```rust
+```rust,editable
 trait Drawable {
     fn draw(&self);
 }

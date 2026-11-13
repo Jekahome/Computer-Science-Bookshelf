@@ -15,7 +15,7 @@
 Год появления: \~1940-е (машинный код)
 
 
-**Пример на Python:**
+Пример на Python:
 
 ```python
 total = 0
@@ -54,7 +54,7 @@ print(total)
 Год появления: \~1950-е
 
 
-**Пример на C:**
+Пример на C:
 
 ```c
 #include <stdio.h>
@@ -62,11 +62,9 @@ print(total)
 void greet() {
     printf("Hello, world!\n");
 }
-
 int main() {
     // Сначала вызываем функцию greet
     greet();
-
     // Затем выполняем завершение программы
     return 0;
 }
@@ -93,7 +91,7 @@ int main() {
 
 Избегает использования goto, использует последовательности, ветвления и циклы для упорядочивания кода.
 
-**Пример на C:**
+Пример на C:
 
 ```c
 int factorial(int n) {
@@ -123,13 +121,13 @@ int factorial(int n) {
 SELECT name FROM users WHERE age > 18;
 ```
 
-```rust
+```rust,editable
 println!("{}", (1..11).fold(0, |a, b| a + b));
 ```
 
 т.е. мы говорим **что** нам надо, с минимум деталей в отличии от императивного подхода описания каждого шага. 
 
-```rust
+```rust,editable
 // Императивный
 let mut sum = 0;
 for x in &arr {
@@ -196,9 +194,9 @@ Number у = new Between(S, 9, 13); // еще не вычисляется!
 
 В  нулевых годах начали массово распространяться многоядерные и многопроцессорные системы. Возникла потребность в распределенных вычислениях, а чуть позже в вычислениях на графических процессорах. Оказалось, что ООП справляется с такими задачами значительно хуже, чем функциональные программы.
 
-**Пример на Rust (итераторы):**
+Пример на Rust (итераторы):
 
-```rust
+```rust,editable
 fn main() {
     let numbers = vec![1, 2, 3, 4];
     let sum_of_squares: i32 = numbers.iter()
@@ -217,7 +215,7 @@ fn main() {
 
 Чистые функции - это функции, которые не имеют побочных эффектов и всегда возвращают одинаковый результат при одинаковых входных данных. Такие функции легко тестировать и сопровождать.
 
-```rust
+```rust,editable
 fn sum(a: usize, b: usize) -> usize {
     return a + b;
 }
@@ -227,15 +225,13 @@ fn sum(a: usize, b: usize) -> usize {
 
 Композиция функций - это процесс объединения нескольких функций в одну. Это позволяет создавать более сложные функции и повторно использовать код. Кроме того, композиция функций улучшает читаемость кода и позволяет избежать дублирования кода.
 
-```rust
+```rust,editable
 fn multiply_by_two(x: i32) -> i32 {
     x * 2
 }
-
 fn add_three(x: i32) -> i32 {
     x + 3
 }
-
 // Функция-композитор: принимает две функции и возвращает новую
 fn compose<F, G>(f: F, g: G) -> impl Fn(i32) -> i32
 where
@@ -244,7 +240,6 @@ where
 {
     move |x| f(g(x))
 }
-
 fn main() {
     // Создаём композицию: сначала multiply_by_two, потом add_three
     let multiply_then_add = compose(add_three, multiply_by_two);
@@ -260,19 +255,17 @@ fn main() {
 
 Ленивая оценка или нестрогая оценка - это процесс задержки оценки выражения до тех пор, пока он не понадобится. В общем, Rust проводит строгую / энергичную оценку. Мы можем использовать функции высшего порядка, замыкания и методы запоминания для выполнения ленивых вычислений.
 
-```rust
+```rust,editable
 fn add(x: usize) -> usize {
     // Это выводится, так как функции оцениваются в первую очередь
     println!("executing add"); 
     return x + x;
 }
-
 fn multiply(x: usize) -> usize {
     // Это выводится, так как функции оцениваются в первую очередь
     println!("executing multiply"); 
     return x * x;
 }
-
 fn add_or_multiply(add: bool, on_add: usize, on_multiply: usize) -> usize {
     if add {
         on_add
@@ -299,7 +292,7 @@ executing multiply
 
 Мы можем использовать функции **высшего порядка**, чтобы переписать это в лениво оцененную версию
 
-```rust
+```rust,editable
 fn add(x: usize) -> usize {
     // это печатается, поскольку функции оцениваются первыми
     println!("executing add"); 
@@ -339,10 +332,8 @@ executing multiply
 
 ```rust
 use std::collections::HashMap;
-
 fn main() {
     let mut cached_added = HashMap::new();
-
     let mut add = |x: usize| -> usize {
         return match cached_added.get(&x) {
             Some(&val) => val,
@@ -354,9 +345,7 @@ fn main() {
             }
         };
     };
-
     let mut cached_multiplied = HashMap::new();
-
     let mut multiply = |x: usize| -> usize {
         return match cached_multiplied.get(&x) {
             Some(&val) => val,
@@ -368,7 +357,6 @@ fn main() {
             }
         };
     };
-
     fn add_or_multiply(add: bool, on_add: usize, on_multiply: usize) -> usize {
         if add {
             on_add
@@ -376,7 +364,6 @@ fn main() {
             on_multiply
         }
     }
-
     println!("{}", add_or_multiply(true, add(4), multiply(4))); // 8
     println!("{}", add_or_multiply(false, add(4), multiply(4))); // 16
 }
@@ -390,7 +377,7 @@ fn main() {
 
 В традиционном итеративном подходе:
 
-```rust
+```rust,editable
 fn main() {
     fn factorial(mut num: usize) -> usize {
         let mut result = 1;
@@ -407,7 +394,7 @@ fn main() {
 
 То же самое можно сделать с помощью рекурсии:
 
-```rust
+```rust,editable
 fn main() {
     fn factorial(num: usize) -> usize {
         return match num {
@@ -433,7 +420,7 @@ fn main() {
 
 - Чистота и читаемость — особенно полезно в цепочках функционального стиля.
 
-```rust
+```rust,editable
 fn add(x: i32) -> impl Fn(i32) -> i32 {
     move |y| x + y
 }
@@ -460,7 +447,7 @@ println!("{}", add5(3)); // 8
 
 Год появления: 1960-е (Simula), активно популяризировано в 1980-х.
 
-**Пример на Python:**
+Пример на Python:
 
 ```python
 class Animal:
@@ -585,7 +572,7 @@ Rust — мультипарадигмальный язык программир�
 
 Функциональная парадигма - последовательный вызов ф-ции с передачей контекста, методы итераторов и векторов 
 
-```rust  
+```rust,editable
 fn main(){   
     let value:[i32;5] = [1,2,3,4,5];
     let res:i32 = value.iter().filter(|&x| x % 2 == 0).map(|v|v*2).sum();
@@ -597,7 +584,7 @@ fn main(){
 
 Вариант с итераторами:
 
-```rust     
+```rust,editable     
 type Filter<'a> = core::iter::Filter<std::slice::IterMut<'a, i32>,for<'r> fn(&'r &mut i32) -> bool>;
 fn filter(iter:&mut [i32])->Filter{
     iter.into_iter().filter(|x| **x % 2 == 0)
@@ -615,7 +602,7 @@ fn main(){
 
 Вариант с классическими циклами:
 
-```rust
+```rust,editable
 fn filter(v:&mut Vec<i32>){
     let mut indexes:Vec<usize>=vec![];
     for (pos,value) in v.iter().enumerate(){
@@ -648,7 +635,7 @@ fn main(){
 
 Разница с классическим ООП: нет наследования состояния, но есть композиция и полиморфизм через трейты.
 
-```rust
+```rust,editable
 use oop::Value;
 mod oop{
     pub struct Value{

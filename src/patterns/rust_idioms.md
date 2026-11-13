@@ -17,9 +17,8 @@
 <summary>Newtype</summary>
 
 
-```rust,no_run
+```rust,no_run,editable
 /// 1.1 Newtype
-
 mod no_correct{
     mod user{
         struct User{
@@ -28,19 +27,16 @@ mod no_correct{
             name:String
         }
     }
-
     fn get_user(id:i32) -> User{
         // search db ...
         User{id:id,age:0,name:"".into()}
     }
-
     fn main(){
         let age:i32 = 68;
         let user:User = get_user(age);// Некорректное использование ф-ции `get_user`
         // Вместо `id` передали `age`
     }
 }
-
 mod correct{
     mod user{
         struct UserId(i32);
@@ -87,7 +83,7 @@ Newtype не несет дополнительных накладных расх
 <details>
 <summary>Вариант основан на преобразовании From</summary>
 
-```rust
+```rust,editable
 #![allow(dead_code)]
 ///Вариант основан на преобразовании From
 
@@ -103,32 +99,27 @@ impl From<New> for Unmoderated {
         Unmoderated
     }
 }
-
 /// Unmoderated --  Published
 impl From<Unmoderated> for Published {
     fn from(_val: Unmoderated) -> Published {
         Published
     }
 }
-
 /// Unmoderated --  Deleted
 impl From<Unmoderated> for Deleted {
     fn from(_val: Unmoderated) -> Deleted {
         Deleted
     }
 }
-
 /// Published --  Deleted
 impl From<Published> for Deleted {
     fn from(_val: Published) -> Deleted {
         Deleted
     }
 }
-
 fn new() -> New {
     New
 }
-
 fn publish(a: New) -> Unmoderated {
     println!("New -- \"publish()\" --> Unmoderated");
     Unmoderated::from(a)
@@ -137,17 +128,14 @@ fn allow(a: Unmoderated) -> Published {
     println!("Unmoderated -- \"allow()\" --> Published");
     Published::from(a)
 }
-
 fn deny(a: Unmoderated) -> Deleted {
     println!("Unmoderated -- \"deny()\" --> Deleted");
     Deleted::from(a)
 }
-
 fn delete(a: Published) -> Deleted {
     println!("Published -- \"delete()\" --> Deleted");
     Deleted::from(a)
 }
-
 fn main() {
     let in_new: New = new();
     let in_unmoderated: Unmoderated = publish(in_new);
@@ -170,11 +158,10 @@ fn main() {
 <details>
 <summary>Вариант 2, основан на преобразовании From</summary>
 
-```rust
+```rust,editable
 #![allow(dead_code)]
 ///Вариант основан на преобразовании From
 use std::string::String;
-
 mod post {
     #[derive(Clone)]
     pub struct Id(pub u64);
@@ -185,12 +172,10 @@ mod post {
     #[derive(Clone)]
     pub struct Body(pub String);
 }
-
 mod user {
     #[derive(Clone)]
     pub struct Id(pub u64);
 }
-
 /// Состояния
 struct New {
     post_id: post::Id,
@@ -216,7 +201,6 @@ impl From<New> for Unmoderated {
         }
     }
 }
-
 /// Unmoderated --  Published
 impl From<Unmoderated> for Published {
     fn from(_val: Unmoderated) -> Published {
@@ -225,7 +209,6 @@ impl From<Unmoderated> for Published {
         }
     }
 }
-
 /// Unmoderated --  Deleted
 impl From<Unmoderated> for Deleted {
     fn from(_val: Unmoderated) -> Deleted {
@@ -234,7 +217,6 @@ impl From<Unmoderated> for Deleted {
         }
     }
 }
-
 /// Published --  Deleted
 impl From<Published> for Deleted {
     fn from(_val: Published) -> Deleted {
@@ -243,7 +225,6 @@ impl From<Published> for Deleted {
         }
     }
 }
-
 fn new(post_id: post::Id, user_id: user::Id, title: post::Title, body: post::Body) -> New {
     New {
         post_id: post_id,
@@ -252,7 +233,6 @@ fn new(post_id: post::Id, user_id: user::Id, title: post::Title, body: post::Bod
         body: body,
     }
 }
-
 fn publish(post: New) -> Unmoderated {
     println!("New -- \"publish()\" --> Unmoderated");
     //Unmoderated::from(post)
@@ -263,19 +243,16 @@ fn allow(post: Unmoderated) -> Published {
     //Published::from(post)
     post.into()
 }
-
 fn deny(post: Unmoderated) -> Deleted {
     println!("Unmoderated -- \"deny()\" --> Deleted");
     //Deleted::from(post)
     post.into()
 }
-
 fn delete(post: Published) -> Deleted {
     println!("Published -- \"delete()\" --> Deleted");
     // Deleted::from(post)
     post.into()
 }
-
 fn main() {
     let in_new: New = new(
         post::Id(1),
@@ -286,9 +263,7 @@ fn main() {
     let in_unmoderated: Unmoderated = publish(in_new);
     let in_published: Published = allow(in_unmoderated);
     let _in_delete: Deleted = delete(in_published);
-
     println!("\n");
-
     let in_new: New = new(
         post::Id(1),
         user::Id(2),
@@ -310,7 +285,7 @@ fn main() {
 <details>
 <summary>Вариант основан на преобразовании From и PhantomData</summary>
 
-```rust
+```rust,editable
 /*
 struct Post {
     id: post::Id,
@@ -326,14 +301,12 @@ struct ModerablePost<S>(Post, PhatomData<S>)
 ///Вариант основан на преобразовании From и PhantomData
 use std::marker::PhantomData;
 use std::string::String;
-
 /// Сущности
 struct User {
     user_id: u64,
     full_name: String,
     email: String,
 }
-
 struct Post<S> {
     post_id: u64,
     user: User,
@@ -341,13 +314,11 @@ struct Post<S> {
     body: String,
     state: PhantomData<S>,
 }
-
 /// Состояния
 struct New;
 struct Unmoderated;
 struct Published;
 struct Deleted;
-
 /// New -- Unmoderated
 impl From<Post<New>> for Post<Unmoderated> {
     fn from(_val: Post<New>) -> Post<Unmoderated> {
@@ -360,7 +331,6 @@ impl From<Post<New>> for Post<Unmoderated> {
         }
     }
 }
-
 /// Unmoderated -- Published
 impl From<Post<Unmoderated>> for Post<Published> {
     fn from(_val: Post<Unmoderated>) -> Post<Published> {
@@ -373,7 +343,6 @@ impl From<Post<Unmoderated>> for Post<Published> {
         }
     }
 }
-
 /// Unmoderated -- Deleted
 impl From<Post<Unmoderated>> for Post<Deleted> {
     fn from(_val: Post<Unmoderated>) -> Post<Deleted> {
@@ -386,7 +355,6 @@ impl From<Post<Unmoderated>> for Post<Deleted> {
         }
     }
 }
-
 /// Published -- Deleted
 impl From<Post<Published>> for Post<Deleted> {
     fn from(_val: Post<Published>) -> Post<Deleted> {
@@ -399,7 +367,6 @@ impl From<Post<Published>> for Post<Deleted> {
         }
     }
 }
-
 /// Create new Post
 /// state New
 fn new(user: User, title: String, body: String) -> Post<New> {
@@ -412,7 +379,6 @@ fn new(user: User, title: String, body: String) -> Post<New> {
     };
     post
 }
-
 fn publish(post: Post<New>) -> Post<Unmoderated> {
     println!("New -- \"publish()\" --> Unmoderated");
     post.into()
@@ -421,30 +387,23 @@ fn allow(post: Post<Unmoderated>) -> Post<Published> {
     println!("Unmoderated -- \"allow()\" --> Published");
     post.into()
 }
-
 fn deny(post: Post<Unmoderated>) -> Post<Deleted> {
     println!("Unmoderated -- \"deny()\" --> Deleted");
     post.into()
 }
-
 fn delete(post: Post<Published>) -> Post<Deleted> {
     println!("Published -- \"delete()\" --> Deleted");
     post.into()
 }
-
 fn main() {
     let user = User {
         user_id: 1u64,
         full_name: String::from("Egor Egorov"),
         email: String::from("email@mail.ru"),
     };
-
     let post_new: Post<New> = new(user, String::from("title"), String::from("body"));
-
     let post_unmoderated: Post<Unmoderated> = publish(post_new);
-
     let post_published: Post<Published> = allow(post_unmoderated);
-
     let _post_delete: Post<Deleted> = delete(post_published);
 }
 ```
@@ -458,7 +417,7 @@ fn main() {
 <details>
 <summary>Вариант основан на преобразовании From и методах структуры</summary>
 
-```rust
+```rust,editable
 ///Вариант основан на преобразовании From
 ///
 /// Базовая структура
@@ -466,14 +425,12 @@ fn main() {
 struct StateMachine<S> {
     state: S,
 }
-
 /// Состояния
 /// Следующие состояния могут быть 'S' в StateMachine<S>
 struct New;
 struct Unmoderated;
 struct Published;
 struct Deleted;
-
 /// New -- Unmoderated
 impl From<StateMachine<New>> for StateMachine<Unmoderated> {
     fn from(_val: StateMachine<New>) -> StateMachine<Unmoderated> {
@@ -483,7 +440,6 @@ impl From<StateMachine<New>> for StateMachine<Unmoderated> {
         }
     }
 }
-
 /// Unmoderated -- Published
 impl From<StateMachine<Unmoderated>> for StateMachine<Published> {
     fn from(_val: StateMachine<Unmoderated>) -> StateMachine<Published> {
@@ -493,7 +449,6 @@ impl From<StateMachine<Unmoderated>> for StateMachine<Published> {
         }
     }
 }
-
 /// Unmoderated -- Deleted
 impl From<StateMachine<Unmoderated>> for StateMachine<Deleted> {
     fn from(_val: StateMachine<Unmoderated>) -> StateMachine<Deleted> {
@@ -501,7 +456,6 @@ impl From<StateMachine<Unmoderated>> for StateMachine<Deleted> {
         StateMachine { state: Deleted {} }
     }
 }
-
 /// Published -- Deleted
 impl From<StateMachine<Published>> for StateMachine<Deleted> {
     fn from(_val: StateMachine<Published>) -> StateMachine<Deleted> {
@@ -509,10 +463,8 @@ impl From<StateMachine<Published>> for StateMachine<Deleted> {
         StateMachine { state: Deleted {} }
     }
 }
-
 /// Вариант основан на методах структуры
 /// Передача владения в методах обеспечивает продвижение состояния
-
 /// начальное состояние
 impl StateMachine<New> {
     fn new() -> Self {
@@ -525,7 +477,6 @@ impl StateMachine<New> {
         }
     }
 }
-
 impl StateMachine<Unmoderated> {
     fn allow(self) -> StateMachine<Published> {
         println!("Unmoderated -- \"allow()\" --> Published");
@@ -538,7 +489,6 @@ impl StateMachine<Unmoderated> {
         StateMachine { state: Deleted {} }
     }
 }
-
 impl StateMachine<Published> {
     fn delete(self) -> StateMachine<Deleted> {
         println!("Published -- \"delete()\" --> Deleted");
@@ -550,7 +500,6 @@ impl StateMachine<Published> {
         val.into()
     }
 }
-
 fn main() {
     println!("Через реализацию типажа From:\n");
     //let _in_delete = StateMachine::<Published>::delete_(in_published);
@@ -567,10 +516,8 @@ fn main() {
     let in_published: StateMachine<Published> = in_unmoderated.allow();
     //let _in_delete = in_unmoderated.deny();
     let _in_delete: StateMachine<Deleted> = in_published.delete();
-
     println!("\nЦепочка:\n");
     StateMachine::<New>::new().publish().allow().delete();
-
     println!("\nЦепочка:\n");
     StateMachine::<New>::new().publish().deny();
 }
@@ -584,7 +531,7 @@ fn main() {
 <details>
 <summary>Вариант основан на enum</summary>
 
-```rust
+```rust,editable
 /// Продвижение состояния обеспечивает enum
 /// Текущее состояние
 #[derive(Debug)]
@@ -592,7 +539,6 @@ struct StateMachine<S> {
     shared_value: bool,
     state: S,
 }
-
 /// Состояния
 #[derive(Debug)]
 struct New;
@@ -602,7 +548,6 @@ struct Unmoderated;
 struct Published;
 #[derive(Debug)]
 struct Deleted;
-
 /// Родитель обеспечивает единственное состояние на текущий момент
 #[derive(Debug)]
 enum StateMachineWrapper {
@@ -611,7 +556,6 @@ enum StateMachineWrapper {
     Published(StateMachine<Published>),
     Deleted(StateMachine<Deleted>),
 }
-
 #[derive(Debug)]
 struct Factory {
     machine: StateMachineWrapper,
@@ -765,7 +709,7 @@ fn main() {
 Мы, конечно, могли бы `.clone()` назвать и поместить клон в наш `MyEnum::B`, но это будет экземпляр антипаттерна «Клон для проверки заимствований». 
 В любом случае, мы можем избежать лишнего распределения, изменив `e` только изменяемое заимствование.
 
-```rust
+```rust,editable
 use std::fmt::Debug;
 use std::default::Default;
 use std::mem;
@@ -800,7 +744,7 @@ fn main() {
 
 [Rust Design Patterns: mem::replace to keep owned values in changed enums](https://github.com/rust-unofficial/patterns/blob/main/src/idioms/mem-replace.md)
 
-```rust,no_run
+```rust,no_run,editable
 enum MyEnum {
     A { name: String },
     B { name: String },
@@ -818,7 +762,7 @@ fn swizzle(e: &mut MyEnum) {
 
 ### Обойти двойное заимствование
 
-```rust
+```rust,editable
 use std::default::Default;
 use std::mem;
 use std::collections::HashSet;
@@ -853,7 +797,7 @@ fn main() {
 
 ### Мутация внутренней коллекции
 
-```rust
+```rust,no_run,editable
 struct Names {
     exclusions: Vec<String>,
     names: HashSet<String>,
@@ -899,7 +843,7 @@ impl Names {
 
 Еще пример:
 
-```rust
+```rust,editable
 #[derive(Clone, Debug, PartialEq, Default)]
 struct Trinity<T> {
     a: T,
@@ -979,7 +923,7 @@ fn main() {
 
 Размещение границ признаков на impl блоках, методах и функциях, а не на типах, уменьшает загрязнение границ признаков, уменьшает связанность частей кода и делает общий код более чистым, простым и эргономичным.
 
-```rust,no_run
+```rust,no_run,editable
 trait UserRepo{}
 
 // Плохо -------------------------------------------------------------------------------------
@@ -991,7 +935,7 @@ struct UserService<R: UserRepo> {
 Мы указываем `R: UserRepo` здесь `bound`, поскольку мы хотим ограничить типы в `repo` поле для реализации `UserRepo` поведения.
 Однако такое ограничение непосредственно на тип приводит к так называемому «загрязнению границ признаков»: мы должны повторять эту границу в каждом отдельном случае `impl`, даже в тех, которые вообще не имеют отношения к UserRepo поведению.
 
-```rust,no_run
+```rust,no_run,editable
 impl<R> Display for UserService<R>
 where
     R: Display + UserRepo, // Здесь нас не интересует UserRepo,  все, что нам нужно, это просто Display.
@@ -1009,7 +953,7 @@ where
 Именно в функциях и методах происходит поведение. 
 Итак, давайте просто ожидаем определенного поведения, когда нам это действительно нужно:
  
-```rust,no_run
+```rust,no_run,editable
 // Хорошо -------------------------------------------------------------------------------------
  
 struct UserService<R> {
@@ -1033,7 +977,7 @@ impl<R: UserRepo> UserService<R> {
 
 ### Структуры данных не дублируют производные границы признаков
 
-```rust,ro_run
+```rust,ro_run,editable
 // Хорошо -------------------------------------------------------------------------------------
 #[derive(Clone, Debug, PartialEq)]
 struct Good<T> { /* ... */ }
@@ -1057,7 +1001,7 @@ struct Bad<T: Clone + Debug + PartialEq> { /* ... */ }
 
 Поднять границы признаков для расширения возможностей использования типа
 
-```rust,ro_run
+```rust,ro_run,editable
 // Вы должны попытаться максимально поднять границы признаков (особенно в коде библиотеки), поскольку это расширяет возможности использования типа.
 // Плохо -------------------------------------------------------------------------------------
 
@@ -1073,7 +1017,7 @@ let copy = loader.clone(); // compile error as `My` doesn't impl `Clone`
 
 Это происходит из-за того, что `#[derive(Clone)]` применяются к `K: Clone` и `V: Clone` в производном коде, несмотря на то, что они вообще не нужны
 
-```rust,ro_run
+```rust,ro_run,editable
 // Хорошо -------------------------------------------------------------------------------------
 // Предоставляя ручную реализацию, мы можем `Loader<My, My>` без проблем клонировать значения типа:
 
@@ -1095,7 +1039,7 @@ let copy = loader.clone(); // it compiles now!
  
 Пример:
 
-```rust
+```rust,editable
 use std::{
     borrow::{Borrow, BorrowMut},
     num::NonZeroU64,
@@ -1329,7 +1273,7 @@ impl<I, A> BorrowMut<HydratedAggregate<A>> for Entity<I, A> {
   
 Типаж `AsRef` используется в обобщённом коде для преобразования некоторого значения в ссылку на внутренние данные структуры.
 
-```rust,no_run
+```rust,no_run,editable
 fn take_a_str(some: impl AsRef<str>) { // тоже самое `fn take_a_str<T:AsRef<str>>(some: T) {...`
     let some = some.as_ref();
     println!("{some}");
@@ -1357,7 +1301,7 @@ fn main() {
 
 Типаж `Borrow` когда цель абстрагироваться типа владения, нам нужно владеть значением или ссылаться ссылкой, нам это неважно, любой тип `T, &T, &mut T` нам подойдут
 
-```rust,no_run
+```rust,no_run,editable
 fn validate(email:&str)->bool{
     true
 }
@@ -1374,7 +1318,7 @@ fn main() {
 }
 ```
 
-```rust,no_run
+```rust,no_run,editable
 use std::borrow::Borrow;
 fn check_borrow<T: Borrow<str>+std::fmt::Display>(s: T) {
     validate(s.borrow());
@@ -1391,7 +1335,7 @@ fn main() {
 
 Ф-ция возвращает `String` или `&str`  
 
-```rust,no_run
+```rust,no_run,editable
 use std::borrow::Cow;
 // Если входные данные будут мутироваться то вернем String иначе возвращать входную строку &str
 // Т.е. клонирование при мутации Cow, отложите выделение памяти как можно дольше.
@@ -1431,7 +1375,7 @@ fn main(){
 
 Каноническое решение этой проблемы — исключить внутренний метод, содержащий весь код за вычетом универсальных преобразований, и оставить внешний метод в качестве оболочки.
 
-```rust,no_run
+```rust,no_run,editable
 #[inline]
 pub fn this<I: Into<String>>(i: I) -> usize {
     _this_inner(i.into())
@@ -1463,7 +1407,7 @@ fn _this_inner(i: String) -> usize {
 Используйте полный список вариантов перечисления.
 Не используйте подстановочный знак `_` в match выражениях. Так как при добавлении нового вариант в перечисление оно не будет корректно учтено в логиге кода.
 
-```rust,no_run
+```rust,no_run,editable
 fn grant_permissions(role: &Role) -> Permissions {
     match role {
         Role::Reporter => Permissions::Read,
@@ -1475,7 +1419,7 @@ fn grant_permissions(role: &Role) -> Permissions {
 
 Следует заменить на полный список вариантов перечисления и тогда при добавлении нового варианта код не скомпилируется, что даст вам повод исправить код.
 
-```rust,no_run
+```rust,no_run,editable
 fn grant_permissions(role: &Role) -> Permissions {
     match role {
         Role::Reporter => Permissions::Read,
@@ -1488,7 +1432,7 @@ fn grant_permissions(role: &Role) -> Permissions {
 Для структур так же следует использовать полный список полей с помощью деструктуризации.
 В случае добавления нового поля, код не скомпилируется, что даст вам повод для его исправить.
 
-```rust,no_run
+```rust,no_run,editable
 struct Address {
     country: Country,
     city: City,
@@ -1545,7 +1489,7 @@ Sealed трейт — общедоступный трейт, который не
 
 `Sealed` трейт — общедоступный трейт, который не может быть реализован вне места его определения (модуля или крейта, в зависимости от видимости этого трейта).
 
-```rust,no_run
+```rust,no_run,editable
 /// This trait is sealed and cannot be implemented for types outside this crate.
 pub trait TheTrait: private::Sealed {
     // Zero or more methods that the user is allowed to call.
@@ -1574,7 +1518,7 @@ mod private {
 
 Крейт [sealed](https://docs.rs/sealed) предоставляет удобный макрос для запечатывания.
 
-```rust,no_run
+```rust,no_run,editable
 use sealed::sealed;
 
 #[sealed]
@@ -1586,7 +1530,7 @@ impl TheTrait for usize {}
 
 ### Однако существуют альтернативные способы запечатать признак через [сигнатуру его метода](https://predr.ag/blog/definitive-guide-to-sealed-traits-in-rust/#sealing-traits-via-method-signatures) или даже частично запечатать его
 
-```rust,no_run
+```rust,no_run,editable
 mod private {
     pub struct Token;
 }
@@ -1606,7 +1550,7 @@ impl SealedTrait for TypeThatImplsSealed {
 
 И при этом код вне модуля не сможет, ни реализовать признак, ни вызвать метод
 
-```rust,no_run
+```rust,no_run,editable
 struct DownstreamType {}
 
 impl upstream::SealedTrait for DownstreamType {
@@ -1625,7 +1569,7 @@ fn call_method(value: impl upstream::SealedTrait) {
 
 Это позволяет нам явно решить, какие методы должны быть невызываемыми из последующих крейтов. 
 
-```rust,no_run
+```rust,no_run,editable
 mod upstream{
     mod private {
         pub struct Token;
@@ -1649,7 +1593,7 @@ fn call_method(value: impl upstream::SealedTrait) {
 
 Чтобы сделать `SealedTrait` частично изолированной — нам просто нужно предоставить реализацию по умолчанию для всех методов, которые принимают аргумент, который последующие ящики не могут реализовать.
 
-```rust,no_run
+```rust,no_run,editable
 mod private {
     pub struct Token;
 }
@@ -1689,7 +1633,7 @@ pub fn call_method_indirectly(value: &PartiallySealedTrait) {
 <details>
 <summary>...</summary>
 
-```rust
+```rust,editable,no_run
 /// Time in seconds.
 ///
 /// # Example
@@ -1718,7 +1662,7 @@ impl Second {
 
 **Конструктор по умолчанию**
 
-```rust
+```rust,editable,no_run
 /// Time in seconds.
 ///
 /// # Example
@@ -1768,7 +1712,7 @@ Rust не умеет абстрагироваться по признаку "у 
 
 Если все поля структуры реализуют `Default`, можно просто написать:
 
-```rust
+```rust,editable
 #[derive(Default, Debug)]
 struct Config {
     // Option — по умолчанию None
@@ -1797,18 +1741,16 @@ fn main() {
 
 Если поля не имеют `Default`, можно реализовать самому:
 
-```rust
+```rust,editable
 struct Point {
     x: i32,
     y: i32,
 }
-
 impl Default for Point {
     fn default() -> Self {
         Self { x: 0, y: 0 }
     }
 }
-
 fn main() {
     let p = Point::default();
     println!("({}, {})", p.x, p.y);
@@ -1819,11 +1761,10 @@ fn main() {
 
 `Default` полезен, когда функция не знает конкретный тип:
 
-```rust
+```rust,editable
 fn make_default<T: Default>() -> T {
     T::default()
 }
-
 fn main() {
     let v: Vec<i32> = make_default(); // пустой вектор
     let n: i32 = make_default();      // 0
@@ -1855,7 +1796,7 @@ fn main() {
 
 Чтобы увеличить время жизни объекта при необходимости, можно использовать отложенную условную инициализацию, как показано ниже:
 
-```rust
+```rust,editable,no_run
 use std::io;
 use std::fs;
 
@@ -1880,7 +1821,7 @@ let readable: &mut dyn io::Read = if arg == "-" {
 
 Версия аналогичного кода но с выделением памяти в куче:
 
-```rust
+```rust,editable,no_run
 let readable: Box<dyn io::Read> = if arg == "-" {
     Box::new(io::stdin())
 } else {
@@ -1902,7 +1843,7 @@ let readable: Box<dyn io::Read> = if arg == "-" {
 <details>
 <summary>...</summary>
 
-```rust
+```rust,editable,no_run
 use std::rc::Rc;
 
 let num1 = Rc::new(1);
@@ -1950,7 +1891,7 @@ let closure = move || {
 Скажем, вектор перед использованием необходимо отсортировать.
 
 **Использование вложенного блока:**
-```rust
+```rust,editable,no_run
 let data = {
     let mut data = get_vec();
     data.sort();
@@ -1961,7 +1902,7 @@ let data = {
 ```
 
 **Использование перепривязки переменных:**
-```rust
+```rust,editable,no_run
 let mut data = get_vec();
 data.sort();
 let data = data;
@@ -1978,7 +1919,7 @@ let data = data;
 <details>
 <summary>...</summary>
 
-```rust
+```rust,editable,no_run
 pub struct SendError(String);
 
 pub fn send(value: String) -> Result<(), SendError> {
@@ -2023,7 +1964,7 @@ pub fn send(value: String) -> Result<(), SendError> {
 
 **Пример использования аргумента ф-ции как `&str` или `String`**:
 
-```rust
+```rust,editable
 // Если нужна только ссылка (чтение)
 // Используйте AsRef<str> — функция будет принимать всё, 
 // что можно превратить в &str (String, &String, &str, Arc<str>, и т. д.):
@@ -2055,7 +1996,7 @@ fn main() {
 
 **Обобщенный вариант для заимствования `&Vec<T>` и `&[T]`**
 
-```rust
+```rust,editable
 fn process<S, T>(data: S)
 where
     S: AsRef<[T]>,
@@ -2065,7 +2006,6 @@ where
         println!("{:?}", item);
     }
 }
-
 fn main() {
     let v = vec![1, 2, 3];
     let arr = [4, 5, 6];
@@ -2077,7 +2017,7 @@ fn main() {
 
 **Обобщенный вариант для владения (чтобы функция принимала и потребляла данные, а не только заимствовала)**
 
-```rust
+```rust,editable
 fn process<S, T>(data: S)
 where
     S: Into<Vec<T>>,
@@ -2088,7 +2028,6 @@ where
         println!("{:?}", item);
     }
 }
-
 fn main() {
     let v = vec![1, 2, 3];
     let arr = [4, 5, 6];
@@ -2108,27 +2047,33 @@ fn main() {
 
 Строки можно создавать: 
 - используя методы `push` и `push_str` для изменяемого объекта `String`. Это наиболее эффективно но неудобно.  
-  ```rust
+  ```rust,editable
+  fn main(){
     let mut result = "Hello ".to_owned();
     result.push_str(name);
     result.push('!');
+  }
     ```
 - или с помощью оператора + у `String`
-  ```rust
+  ```rust,editable
+  fn main(){
     let hello = String::from("Hello");
     let world = String::from("world");
     let rust = " in Rust";
 
     let sentence = hello + " " + &world + rust;
+  }
   ```
 
 - однако часто удобнее использовать [`format!`](https://doc.rust-lang.org/std/macro.format.html)
-  ```rust
+  ```rust,editable
+  fn main(){
     let s1 = String::from("tic");
     let s2 = String::from("tac");
     let s3 = String::from("toe");
 
-    let s:String = format!("{}-{s2}-{s4}", s1, s4=s3); // tic-tac-toe
+    let s:String = format!("{}-{s2}-{s4}", s1, s4=s3); // tic-tac-toe  
+  } 
   ```
 </details>
 
@@ -2143,7 +2088,7 @@ fn main() {
 
 Пример с `Vec` и `Deref`:
 
-```rust
+```rust,editable,no_run
 use std::ops::Deref;
 
 struct Vec<T> {
@@ -2165,7 +2110,7 @@ impl<T> Deref for Vec<T> {
 
 Благодаря `Deref` можно вызывать методы срезов на `&Vec<T>` напрямую, например:
 
-```rust
+```rust,editable
 let v = vec![1, 2, 3];
 let slice: &[i32] = &v; // благодаря Deref это работает
 println!("Длина: {}", slice.len()); // метод среза вызван через Vec
@@ -2207,12 +2152,11 @@ println!("Длина: {}", slice.len()); // метод среза вызван �
 <details>
 <summary>...</summary>
 
-```rust
+```rust,editable
 fn baz() -> Result<(), ()> {
     // Здесь могла быть логика, но просто вернем ошибку
     Err(())
 }
-
 fn bar() -> Result<(), ()> {
     struct Finalizer;
 
@@ -2221,7 +2165,6 @@ fn bar() -> Result<(), ()> {
             println!("Функция bar завершена!");
         }
     }
-
     // Создаем объект, деструктор которого выполнится при выходе из функции
     let _finalizer = Finalizer;
 
@@ -2262,13 +2205,12 @@ fn main() {
 
 Пример с мьютексом: мьютекс разблокируется в деструкторе `MutexGuard`, даже если произойдет `panic!` в середине блока.
 
-```rust
+```rust,editable
 use std::sync::{Mutex, Arc};
 use std::thread;
 
 fn main() {
     let data = Arc::new(Mutex::new(0));
-
     let data_clone = Arc::clone(&data);
     thread::spawn(move || {
         let mut num = data_clone.lock().unwrap(); // lock захвачен
@@ -2314,7 +2256,7 @@ panic = 'abort'
 * Освобождение мьютексов (чтобы избежать deadlock).
 * Откат изменений в системах, где важно оставить корректное состояние.
 
-```rust
+```rust,editable
 use std::fs::File;
 use std::io::{self, Write};
 
@@ -2380,7 +2322,7 @@ fn main() {
 <details>
 <summary>...</summary>
 
-```rust,no_run
+```rust,no_run,editable
 enum MyEnum {
     A { name: String, x: u8 },
     B { name: String },
@@ -2402,7 +2344,7 @@ Rust предлагает два стандартных способа:
 * Заменяет значение **на его `Default`** (например, `String` → пустая строка).
 * Возвращает старое значение.
 
-```rust,no_run
+```rust,no_run,editable
 use std::mem;
 
 fn a_to_b(e: &mut MyEnum) {
@@ -2420,7 +2362,7 @@ fn a_to_b(e: &mut MyEnum) {
 * Заменяет значение на **то, что вы явно указали**.
 * Не требует `Default`.
 
-```rust,no_run
+```rust,no_run,editable
 use std::mem;
 
 fn a_to_b_with_replace(e: &mut MyEnum) {
@@ -2434,7 +2376,7 @@ fn a_to_b_with_replace(e: &mut MyEnum) {
 
 **Более сложный пример: перестановка вариантов**
 
-```rust,no_run
+```rust,no_run,editable
 use std::mem;
 
 enum MultiEnum {
@@ -2483,7 +2425,7 @@ fn swizzle(e: &mut MultiEnum) {
 
 Если у вас есть коллекция, вы можете добавить в неё элемент из `Option` без `if let`:
 
-```rust,no_run
+```rust,no_run,editable
 let turing = Some("Turing");
 let mut logicians = vec!["Curry", "Kleene", "Markov"];
 
@@ -2500,7 +2442,7 @@ if let Some(inner) = turing {
 
 Если хотите добавить элемент в конец существующего итератора:
 
-```rust,no_run
+```rust,no_run,editable
 let turing = Some("Turing");
 let logicians = vec!["Curry", "Kleene", "Markov"];
 
@@ -2512,7 +2454,7 @@ for name in logicians.iter().chain(turing.iter()) {
 
 Если элемент **всегда есть**, лучше использовать `std::iter::once`:
 
-```rust,no_run
+```rust,no_run,editable
 for name in logicians.iter().chain(std::iter::once(&"Turing")) {
     println!("{name} is a logician");
 }
@@ -2522,7 +2464,7 @@ for name in logicians.iter().chain(std::iter::once(&"Turing")) {
 
 Можно итерироваться по `Option` напрямую в цикле `for`:
 
-```rust,no_run
+```rust,no_run,editable
 let opt = Some("Rust");
 
 for value in opt {
@@ -2543,7 +2485,7 @@ if let Some(value) = opt {
 * `option.iter_mut()` — даёт итератор по изменяемой ссылке (`&mut T`).
 
 
-```rust,no_run
+```rust,no_run,editable
 let mut opt = Some(10);
 
 for x in opt.iter_mut() {
@@ -2573,7 +2515,7 @@ Rust предлагает два решения этой проблемы:
 
 Представьте, что ыы написали библиотеку с таким enum:
 
-```rust,no_run
+```rust,no_run,editable
 pub enum Shape {
     Circle(f64),
     Square(f64),
@@ -2582,7 +2524,7 @@ pub enum Shape {
 
 Кто-то использует ваш код и пишет:
 
-```rust,no_run
+```rust,no_run,editable
 match shape {
     Shape::Circle(r) => println!("radius {r}"),
     Shape::Square(s) => println!("side {s}"),
@@ -2596,7 +2538,7 @@ match shape {
 
 1. Для **enum**
 
-```rust,no_run
+```rust,no_run,editable
 #[non_exhaustive]
 pub enum Shape {
     Circle(f64),
@@ -2606,7 +2548,7 @@ pub enum Shape {
 
 Теперь пользователь **обязан** писать `_` или `..` в `match`, чтобы обработать будущее расширение:
 
-```rust,no_run
+```rust,no_run,editable
 match shape {
     Shape::Circle(r) => println!("circle {r}"),
     Shape::Square(s) => println!("square {s}"),
@@ -2618,7 +2560,7 @@ match shape {
 
 2. Для **struct**
 
-```rust,no_run
+```rust,no_run,editable
 #[non_exhaustive]
 pub struct Config {
     pub name: String,
@@ -2627,14 +2569,14 @@ pub struct Config {
 
 Теперь нельзя будет создать его напрямую:
 
-```rust,no_run
+```rust,no_run,editable
 // ❌ Ошибка — конструктор недоступен
 let cfg = Config { name: "hi".into() };
 ```
 
 Придётся использовать `..`:
 
-```rust,no_run
+```rust,no_run,editable
 let Config { name, .. } = cfg;
 ```
 
@@ -2644,7 +2586,7 @@ let Config { name, .. } = cfg;
 
 Если `#[non_exhaustive]` нужен только **внутри** текущего крейта, можно просто добавить приватное поле:
 
-```rust,no_run
+```rust,no_run,editable
 pub struct Config {
     pub name: String,
     _private: (),
@@ -2682,7 +2624,7 @@ pub struct Config {
 
 Например, чтобы вызвать метод `send_request`, вам приходится в каждой доке повторять:
 
-```rust,no_run
+```rust,no_run,editable
 struct Connection {
     name: String,
     stream: TcpStream,
@@ -2721,7 +2663,7 @@ impl Connection {
 
 Вместо того, чтобы повторять код, выносим всю инициализацию в функцию-хелпер, а в примерах просто показываем вызов метода.
 
-```rust,no_run
+```rust,no_run,editable
 /// # Example
 /// &#96;&#96;&#96;
 /// # fn call_send(connection: Connection, request: Request) {
@@ -2753,7 +2695,7 @@ Rustdoc проверит, что он компилируется, но тест�
 
 Пример:
 
-```rust,no_run
+```rust,no_run,editable
 #[doc(hidden)]
 pub fn test_connection() -> Connection {
     Connection {
@@ -2765,7 +2707,7 @@ pub fn test_connection() -> Connection {
 
 И в доках:
 
-```rust,no_run
+```rust,no_run,editable
 /// &#96;&#96;&#96;
 /// let conn = mycrate::test_connection();
 /// let status = conn.check_status();

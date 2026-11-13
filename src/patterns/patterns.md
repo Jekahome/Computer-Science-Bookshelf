@@ -11,6 +11,7 @@
 * [Подходят ли ООП паттерны для Rust?](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/oop_and_rust.html)
 * [Rust idioms](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/rust_idioms.html)
 * [Anti patterns](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/anti_patterns.html)
+* [Dependency Injection](#dependency-injection-Внедрение-зависимостей)
 * [Design principles](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/design_principles.html)
 * [Gangs of Four (GoF) Design Patterns](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/gof.html)
 * [Database Patterns](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/database_patterns.html)  
@@ -294,7 +295,7 @@
 
    Лечение: завернув обший тип (примитив) в свою оболочку мы получаем свой собственный тип данных, который неполучится спутать с его внутренным типом и подставить в неверное место, так же вы можете обеспечить требуемые инварианты для значений типа, ограничив или расширив их. Также newtype ближе к предметной области и следовательно лучше документировать и понять его применение.
 
-   [Rust: Type safety (Newtype)](#type-safety-newtype-typestate)
+   [Rust: Type safety (Newtype)](https://jekahome.github.io/Computer-Science-Bookshelf/patterns/rust_idioms.html#type-safety-newtype-typestate)
 
 * **Операторы типа switch**
 
@@ -310,7 +311,6 @@
       Paypal { amount: f64 },
       Crypto { amount: f64 },
    }
-
    impl Payment {
       fn process(&self) {
          match self {
@@ -326,7 +326,6 @@
          }
       }
    }
-
    fn main() {
       let p = Payment::Paypal { amount: 42.0 };
       p.process();
@@ -339,62 +338,48 @@
    trait Payment {
       fn process(&self);
    }
-
    struct CreditCard {
       amount: f64,
    }
-
    impl Payment for CreditCard {
       fn process(&self) {
          println!("Processing credit card payment: ${}", self.amount);
       }
    }
-
    struct Paypal {
       amount: f64,
    }
-
    impl Payment for Paypal {
       fn process(&self) {
          println!("Processing PayPal payment: ${}", self.amount);
       }
    }
-
    struct Crypto {
       amount: f64,
    }
-
    impl Payment for Crypto {
       fn process(&self) {
          println!("Processing crypto payment: ${}", self.amount);
       }
    }
-
    // Обобщённая функция, которая работает с любым типом, реализующим Payment
    fn process_payment<T: Payment>(payment: &T) {
       payment.process();
    }
-
    fn main() {
-
       // статическая диспетчеризация
-
       let credit = CreditCard { amount: 100.0 };
       let paypal = Paypal { amount: 42.0 };
       let crypto = Crypto { amount: 0.005 };
-
       process_payment(&credit);
       process_payment(&paypal);
       process_payment(&crypto);
-
       // динамическая диспетчеризация (trait objects)
-
       let payments: Vec<Box<dyn Payment>> = vec![
          Box::new(CreditCard { amount: 100.0 }),
          Box::new(Paypal { amount: 42.0 }),
          Box::new(Crypto { amount: 0.005 }),
       ];
-
       for p in payments {
          p.process();
       }
@@ -486,13 +471,12 @@
 
 Проектируя программу, обдумайте уровни абстракции:
 
-|Уровни абстракции| 
-|:------:| 
-|4. Высокоуровневые элементы | 
-|3. Низкоуровневые элементы | 
-|2. Низкоуровневые структуры реализации | 
-|1. Структуры и средства языка программирования | 
-|0. Возможности операционной системы и машинные команды | 
+Уровни абстракции:
+4. Высокоуровневые элементы 
+3. Низкоуровневые элементы  
+2. Низкоуровневые структуры реализации 
+1. Структуры и средства языка программирования 
+0. Возможности операционной системы и машинные команды 
 
 Программа может быть разделена на несколько уровней абстракции. Удачное проектирование позволяет программистам проводить значительную часть времени, сосредоточившись только на верхних уровнях, игнорируя более низкие уровни.
 
@@ -517,6 +501,245 @@
 
 </details>
  
+
+# Dependency Injection (Внедрение зависимостей)
+
+Dependency Injection (Внедрение зависимостей) — это архитектурный шаблон проектирования и техника реализации принципа инверсии управления (Inversion of Control, IoC), при которой объект получает зависящие от него компоненты извне, вместо того чтобы создавать их самостоятельно.
+
+Основная цель DI — отделение создания зависимостей от их использования, что делает код более гибким, тестируемым и поддерживаемым. 
+
+Используя DI, можно легко заменять реальные зависимости на заглушки (stubs) или моки (mocks) при тестировании. Это позволяет изолировать код от внешних зависимостей, таких как базы данных, веб-сервисы или другие ресурсы, что упрощает процесс тестирования и делает тесты более надежными и быстрыми.
+
+DI способствует более гибкой архитектуре приложения. Если зависимости передаются через конструктор или методы, это позволяет легко менять их реализацию на другую, без необходимости изменения кода, который использует эти зависимости.
+
+DI помогает снизить уровень связности между компонентами системы. Вместо жесткого связывания объектов с конкретными реализациями, объекты получают зависимости извне, что способствует более слабой связи (loose coupling) и более модульному и повторно используемому коду.
+
+**Ключевые аспекты и преимущества**
+
+* Слабая связанность (Loose Coupling): Ваши классы взаимодействуют через интерфейсы или абстракции, а не через жестко зашитые конкретные реализации, что позволяет менять внутреннее устройство модулей без переписывания зависимого кода.
+* Тестируемость: Благодаря внешней передаче зависимостей Вы можете легко подменять реальные компоненты (например, драйверы базы данных или сетевые клиенты) на легковесные заглушки (mocks и stubs) при написании юнит-тестов.
+* Соответствие принципам SOLID: Техника напрямую реализует принцип инверсии зависимостей (*Dependency Inversion Principle*), отделяя создание объектов от их бизнес-логики.
+
+**Основные способы реализации**
+
+1. Внедрение через конструктор (Constructor Injection): Зависимости передаются в класс в момент его создания. Это наиболее предпочтительный и безопасный вариант, гарантирующий, что объект никогда не окажется в невалидном состоянии без необходимых компонентов.
+2. Внедрение через сеттер (Setter Injection): Зависимости устанавливаются через специальные методы после инициализации объекта. Подходит для опциональных или изменяемых в ходе работы зависимостей.
+3. Внедрение через параметры метода (Method Injection): Зависимость передается непосредственно в сигнатуру метода, которому она требуется для выполнения разовой операции.
+
+В крупных программных системах для автоматизации этого процесса применяются специальные контейнеры внедрения зависимостей (DI Containers или IoC Containers), которые самостоятельно разрешают граф зависимостей и управляют жизненным циклом объектов.
+
+
+"Локатор служб" (Service Locator) — это альтернативный, но часто считающийся антипаттерном, шаблон для управления зависимостями. Ключевое отличие от DI:
+* DI (Внедрение зависимостей): Класс пассивно получает зависимости извне ("Don't call us, we'll call you"). Это делает зависимости явными (особенно в конструкторе).
+* Service Locator: Класс активно запрашивает зависимости из глобального или доступного контейнера ("Дайте мне то, что мне нужно"). Это скрывает зависимости, делая код менее прозрачным и усложняя тестирование.
+
+Контейнер внедрения зависимостей (DI Container) — это тот самый "общий механизм", который автоматизирует создание объектов и разрешение их зависимостей. Он знает, как создавать сервисы и что куда передавать (на основе конфигурации, атрибутов или авторегистрации).
+
+Внедрение зависимости позволяет переложить часть ответственности за какой-то функционал на другие объекты. 
+Например если нам требуется нанять новый персонал, то мы можем не создавать свой отдел кадров, а внедрить зависимость от компании по подбору персонала, которая свою очередь по первому нашему требованию «нам нужен человек», будет либо сама работать как отдел кадров, либо же найдет другую компанию (при помощи «локатора служб»), которая предоставит данные услуги.
+«Внедрение зависимости» позволяет перекладывать и взаимозаменять отдельные части компании без потери общей функциональности.
+
+Пример:
+
+```rust
+use std::io::{self, BufWriter, Write};
+use std::cell::RefCell;
+pub trait Writer {
+    fn to_stdout(&self, output: &[u8]) -> Result<(), String>;
+    fn to_stderr(&self, output: &[u8]) -> Result<(), String>;
+}
+pub struct UserWriter<W: Writer> {
+    writer: W,
+}
+// Для возможности применения Default необходим конкретный тип (ImplWriter)
+// но основные методы реализованы в обобщенном виде для любого типа Writer
+impl UserWriter<ImplWriter> {
+    pub fn new() -> Self {
+        Self {
+            writer: ImplWriter,
+        }
+    }
+}
+impl Default for UserWriter<ImplWriter> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl<W: Writer + Default> UserWriter<W> {
+    pub fn new_with(writer: W) -> Self {
+        Self {
+            writer,
+        }
+    }
+    pub fn call(&self, msg: &str) -> Result<(), String>{
+        self.writer.to_stdout(msg.as_bytes())
+    }
+}
+#[derive(Default)]
+pub struct ImplWriter;
+impl Writer for ImplWriter {
+    fn to_stdout(&self, output: &[u8]) -> Result<(), String> {
+        if !output.is_empty() {
+            let stdout = io::stdout();
+            let handle = stdout.lock();
+            let mut writer = BufWriter::new(handle);
+            writer.write_all(output).map_err(|e|e.to_string())?;
+            writer.flush().map_err(|e|e.to_string())?;
+        }
+        Ok(())
+    }
+    fn to_stderr(&self, output: &[u8]) -> Result<(), String> {
+        if !output.is_empty() {
+            let stderr = io::stderr();
+            let handle = stderr.lock();
+            let mut writer = BufWriter::new(handle);
+            writer.write_all(output).map_err(|e|e.to_string())?;
+            writer.write_all(b"\n").map_err(|e|e.to_string())?;
+            writer.flush().map_err(|e|e.to_string())?;
+        }
+        Ok(())
+    }
+}
+// Вариант использования DI в функциях
+pub fn other_some_di(writer: &impl Writer, msg: &str) -> Result<(), String>{
+    writer.to_stdout(msg.as_bytes())
+}
+pub fn other_some_di_2<W: Writer>(writer: &W, msg: &str) -> Result<(), String>{
+    W::to_stdout(writer, msg.as_bytes())
+}
+
+// Вариант использования DI в методах
+struct SomeEntity;
+impl SomeEntity{
+    fn call(&self, writer: &impl Writer, msg: &str) -> Result<(), String>{
+        writer.to_stdout(msg.as_bytes())
+    }
+    fn call_dyn(&self, writer: &dyn Writer, msg: &str) -> Result<(), String>{
+        writer.to_stdout(msg.as_bytes())
+    }
+    fn call_box(&self, writer: Box<dyn Writer>, msg: &str) -> Result<(), String>{
+        writer.to_stdout(msg.as_bytes())
+    }
+}
+
+// Ленивая инициализация с помощью внутренней изменчивости
+struct LazyDI<W: Writer + Default>(RefCell<Option<W>>); 
+    
+impl<W: Writer + Default> LazyDI<W>{
+    fn call(&self, msg: &str)-> Result<(), String>{
+        if self.0.borrow().is_none(){
+            *self.0.borrow_mut() = Some(W::default());
+        }
+         
+        if let Some(writer) = self.0.borrow().as_ref(){
+            writer.to_stdout(msg.as_bytes());
+        }
+        
+        Ok(()) 
+    }
+}
+
+// Ленивая инициализация с помощью замыкания
+// unimplemented!
+fn main(){
+    let mut user_writer = UserWriter::default();
+    user_writer.call("hello 1\n");
+
+
+    let w = ImplWriter;
+    other_some_di(&w,"hello 2\n");
+    other_some_di_2(&w,"hello 3\n");
+
+    let s = SomeEntity;
+    s.call(&w, "hello 4\n");
+    s.call_dyn(&w, "hello 5\n");
+    s.call_box(Box::new(w), "hello 6\n");
+
+    let l: LazyDI<ImplWriter> = LazyDI(RefCell::new(None));
+    l.call("hello 7\n");
+}
+
+#[cfg(test)]
+mod test_writer{
+    use std::{
+        cell::RefCell,
+        path::{Path, PathBuf},
+        rc::Rc,
+    };
+
+    use super::{Writer, UserWriter};
+
+    pub struct TestImplWriter {
+        pub stdout: Rc<RefCell<Vec<u8>>>,
+        pub stderr: Rc<RefCell<Vec<u8>>>,
+    }
+    impl Default for TestImplWriter {
+        fn default() -> Self {
+            Self {
+                stdout: Rc::new(RefCell::new(Vec::new())),
+                stderr: Rc::new(RefCell::new(Vec::new())),
+            }
+        }
+    }
+    impl TestImplWriter {
+        pub fn set(
+            &mut self,
+            stdout: Rc<RefCell<Vec<u8>>>,
+            stderr: Rc<RefCell<Vec<u8>>>,
+        ) {
+            self.stdout = stdout;
+            self.stderr = stderr;
+        }
+    }
+    impl Writer for TestImplWriter {
+        fn to_stdout(
+            &self,
+            output: &[u8],
+        ) -> Result<(), String> {
+            if !output.is_empty() {
+                self.stdout.borrow_mut().extend_from_slice(output);
+            }
+            Ok(())
+        }
+        fn to_stderr(
+            &self,
+            output: &[u8],
+        ) -> Result<(), String> {
+            if !output.is_empty() {
+                self.stderr.borrow_mut().extend_from_slice(output);
+                self.stderr.borrow_mut().extend_from_slice(b"\n");
+            }
+            Ok(())
+        }
+    }
+
+    #[test]
+    fn test(){
+        let result_stdout = Rc::new(RefCell::new(Vec::new()));
+        let result_stderr = Rc::new(RefCell::new(Vec::new()));
+
+        let mut writer = TestImplWriter::default();
+        writer.set(result_stdout.clone(), result_stderr.clone());
+        let mock_user_writer = UserWriter::new_with(
+            writer,
+        );
+ 
+        mock_user_writer.call("hello\n");
+
+        let guard = result_stdout.borrow();
+        let output_str = String::from_utf8_lossy(&guard);
+        assert_eq!(output_str, "hello\n");
+
+        let guard = result_stderr.borrow();
+        let output_str = String::from_utf8_lossy(&guard);
+        assert_eq!(output_str, "");
+    }
+}
+```
+
+
+
+
 # Квадрант технического долга по Мартину Фаулеру
 
 Мартин Фаулер, известный эксперт в области разработки программного обеспечения, предложил модель квадранта технического долга, которая помогает классифицировать виды технического долга на основе двух критериев:
